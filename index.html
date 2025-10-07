@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MF Research Portal - Modern Mutual Fund Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <span>MF Research Portal</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#research" class="nav-link">Research</a>
+                <a href="#calculators" class="nav-link">Calculators</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline">Login</button>
+                <button class="btn btn-primary">Create Account</button>
+            </div>
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Advanced <span class="gradient-text">Mutual Fund</span> Research
+                </h1>
+                <p class="hero-subtitle">
+                    Analyze, compare, and track mutual fund performance with our comprehensive research tools. 
+                    Make informed investment decisions with real-time data and insights.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-large">
+                        <i class="fas fa-search"></i>
+                        Start Research
+                    </button>
+                    <button class="btn btn-outline btn-large">
+                        <i class="fas fa-play"></i>
+                        Watch Demo
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-area"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section class="research-section" id="research">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Mutual Fund Research</h2>
+                <p class="section-subtitle">Filter and analyze mutual funds based on your investment criteria</p>
+            </div>
+
+            <div class="research-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="amc">Select AMC</label>
+                        <select id="amc" class="form-select">
+                            <option value="">All AMCs</option>
+                            <option value="hdfc">HDFC Mutual Fund</option>
+                            <option value="sbi">SBI Mutual Fund</option>
+                            <option value="icici">ICICI Prudential Mutual Fund</option>
+                            <option value="axis">Axis Mutual Fund</option>
+                            <option value="kotak">Kotak Mahindra Mutual Fund</option>
+                            <option value="nippon">Nippon India Mutual Fund</option>
+                            <option value="quant">Quant Mutual Fund</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Select Category</label>
+                        <select id="category" class="form-select">
+                            <option value="">All Categories</option>
+                            <option value="large-cap">Equity: Large Cap</option>
+                            <option value="mid-cap">Equity: Mid Cap</option>
+                            <option value="small-cap">Equity: Small Cap</option>
+                            <option value="elss">Equity: ELSS</option>
+                            <option value="multi-cap">Equity: Multi Cap</option>
+                            <option value="flexi-cap">Equity: Flexi Cap</option>
+                            <option value="hybrid-aggressive">Hybrid: Aggressive</option>
+                            <option value="debt-short">Debt: Short Duration</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="period">Select Period</label>
+                        <select id="period" class="form-select">
+                            <option value="1">1 Year</option>
+                            <option value="2">2 Years</option>
+                            <option value="3">3 Years</option>
+                            <option value="5">5 Years</option>
+                            <option value="10">10 Years</option>
+                            <option value="inception">Since Inception</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Investment Amount</label>
+                        <select id="amount" class="form-select">
+                            <option value="10000">₹10,000</option>
+                            <option value="25000">₹25,000</option>
+                            <option value="50000">₹50,000</option>
+                            <option value="100000">₹1,00,000</option>
+                            <option value="500000">₹5,00,000</option>
+                            <option value="1000000">₹10,00,000</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-large" id="analyzeBtn">
+                        <i class="fas fa-chart-bar"></i>
+                        Analyze Funds
+                    </button>
+                    <button class="btn btn-outline" id="resetBtn">
+                        <i class="fas fa-refresh"></i>
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results">
+        <div class="container">
+            <div class="results-header">
+                <h3 class="results-title">Analysis Results</h3>
+                <div class="results-meta">
+                    <span class="results-count">Showing 12 funds</span>
+                    <span class="results-date">Data as on: 06-10-2025</span>
+                </div>
+            </div>
+
+            <div class="results-table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Scheme Name</th>
+                            <th>AUM (Cr)</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Invested Amount</th>
+                            <th>Current Value</th>
+                            <th>Annual Return</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <!-- Results will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="results-summary">
+                <div class="summary-card">
+                    <div class="summary-item">
+                        <span class="summary-label">Average Annual Return</span>
+                        <span class="summary-value">16.97%</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Best Performer</span>
+                        <span class="summary-value">Nippon India Small Cap (20.65%)</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Funds Analyzed</span>
+                        <span class="summary-value">12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Our Platform</h2>
+                <p class="section-subtitle">Comprehensive tools for mutual fund analysis and investment decisions</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Real-time Performance</h3>
+                    <p class="feature-description">
+                        Track live returns and performance metrics with up-to-date market data.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3 class="feature-title">Advanced Filtering</h3>
+                    <p class="feature-description">
+                        Filter funds by AMC, category, risk level, and performance criteria.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3 class="feature-title">Investment Calculators</h3>
+                    <p class="feature-description">
+                        SIP, SWP, and lump-sum calculators to plan your investments effectively.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Risk Assessment</h3>
+                    <p class="feature-description">
+                        Comprehensive risk analysis and portfolio diversification insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-chart-line"></i>
+                        <span>MF Research Portal</span>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted partner for mutual fund research and investment analysis.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Research Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">One Time Performance</a></li>
+                        <li><a href="#">SIP Performance</a></li>
+                        <li><a href="#">SWP Analysis</a></li>
+                        <li><a href="#">AMC Wise Analysis</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Calculators</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">SIP Calculator</a></li>
+                        <li><a href="#">SWP Calculator</a></li>
+                        <li><a href="#">Lumpsum Calculator</a></li>
+                        <li><a href="#">Step-up SIP</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        <strong>Disclaimer:</strong> Mutual Fund Investments are subject to market risks. 
+                        Read all scheme related documents carefully before investing. 
+                        Past performance is not indicative of future performance.
+                    </p>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 MF Research Portal. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
