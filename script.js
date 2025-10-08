@@ -134,15 +134,20 @@ const mutualFundData = [
     }
 ];
 
-// DOM Elements
-const analyzeBtn = document.getElementById('analyzeBtn');
-const resetBtn = document.getElementById('resetBtn');
-const resultsTableBody = document.getElementById('resultsTableBody');
-const resultsSection = document.getElementById('results');
-const amcSelect = document.getElementById('amc');
-const categorySelect = document.getElementById('category');
-const periodSelect = document.getElementById('period');
-const amountSelect = document.getElementById('amount');
+// DOM Elements (will be null if elements don't exist, which is fine)
+let analyzeBtn, resetBtn, resultsTableBody, resultsSection, amcSelect, categorySelect, periodSelect, amountSelect;
+
+// Get DOM elements after page loads
+function getDOMElements() {
+    analyzeBtn = document.getElementById('analyzeBtn');
+    resetBtn = document.getElementById('resetBtn');
+    resultsTableBody = document.getElementById('resultsTableBody');
+    resultsSection = document.getElementById('results');
+    amcSelect = document.getElementById('amc');
+    categorySelect = document.getElementById('category');
+    periodSelect = document.getElementById('period');
+    amountSelect = document.getElementById('amount');
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async function() {
@@ -151,6 +156,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function initializeApp() {
     console.log('🚀 Initializing MF Research Portal...');
+    
+    // Get DOM elements first
+    getDOMElements();
     
     // Initialize API Service
     if (window.MFApiService) {
