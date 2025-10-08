@@ -19,6 +19,7 @@
             <div class="nav-links">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#results" class="nav-link">Results</a>
+                <a href="#compare" class="nav-link">Compare</a>
                 <a href="#calculators" class="nav-link">Calculators</a>
                 <a href="#about" class="nav-link">About</a>
                 <a href="#contact" class="nav-link">Contact</a>
@@ -278,6 +279,152 @@
                     <p class="feature-description">
                         Comprehensive risk analysis and portfolio diversification insights.
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compare Funds Section -->
+    <section class="compare-section" id="compare" style="background: var(--gray-50); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Compare Funds</h2>
+                <p class="section-subtitle">Detailed comparison on parameters like NAV, Returns, Risk, Rating & Analysis</p>
+            </div>
+
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <!-- Fund Selection -->
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: var(--shadow-lg); margin-bottom: 30px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px; text-align: center;">
+                        <i class="fas fa-balance-scale" style="margin-right: 10px;"></i>Select Funds to Compare
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <!-- Fund 1 -->
+                        <div class="fund-selector">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 10px; display: block;">
+                                <i class="fas fa-plus-circle" style="color: #3b82f6; margin-right: 8px;"></i>Add Fund 1
+                            </label>
+                            <div style="position: relative;">
+                                <input 
+                                    type="text" 
+                                    id="compareFund1" 
+                                    placeholder="Type fund name (e.g., HDFC, SBI, Axis)..."
+                                    style="width: 100%; padding: 12px 16px; padding-left: 40px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;"
+                                    onfocus="this.style.borderColor='#3b82f6'"
+                                    onblur="this.style.borderColor='#e2e8f0'"
+                                >
+                                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                <div id="compareResults1" class="search-dropdown" style="display: none;"></div>
+                            </div>
+                            <div id="selectedFund1" class="selected-fund" style="display: none;"></div>
+                        </div>
+
+                        <!-- Fund 2 -->
+                        <div class="fund-selector">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 10px; display: block;">
+                                <i class="fas fa-plus-circle" style="color: #10b981; margin-right: 8px;"></i>Add Fund 2
+                            </label>
+                            <div style="position: relative;">
+                                <input 
+                                    type="text" 
+                                    id="compareFund2" 
+                                    placeholder="Type fund name (e.g., HDFC, SBI, Axis)..."
+                                    style="width: 100%; padding: 12px 16px; padding-left: 40px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;"
+                                    onfocus="this.style.borderColor='#10b981'"
+                                    onblur="this.style.borderColor='#e2e8f0'"
+                                >
+                                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                <div id="compareResults2" class="search-dropdown" style="display: none;"></div>
+                            </div>
+                            <div id="selectedFund2" class="selected-fund" style="display: none;"></div>
+                        </div>
+
+                        <!-- Fund 3 -->
+                        <div class="fund-selector">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 10px; display: block;">
+                                <i class="fas fa-plus-circle" style="color: #f59e0b; margin-right: 8px;"></i>Add Fund 3
+                            </label>
+                            <div style="position: relative;">
+                                <input 
+                                    type="text" 
+                                    id="compareFund3" 
+                                    placeholder="Type fund name (e.g., HDFC, SBI, Axis)..."
+                                    style="width: 100%; padding: 12px 16px; padding-left: 40px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;"
+                                    onfocus="this.style.borderColor='#f59e0b'"
+                                    onblur="this.style.borderColor='#e2e8f0'"
+                                >
+                                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                                <div id="compareResults3" class="search-dropdown" style="display: none;"></div>
+                            </div>
+                            <div id="selectedFund3" class="selected-fund" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button 
+                            id="compareBtn" 
+                            class="btn btn-primary"
+                            style="padding: 12px 30px; font-size: 16px; background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);"
+                            onclick="compareSelectedFunds()"
+                            disabled
+                        >
+                            <i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Compare Funds
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comparison Results -->
+                <div id="comparisonResults" style="display: none;">
+                    <div style="background: white; border-radius: 15px; box-shadow: var(--shadow-lg); overflow: hidden;">
+                        <!-- Comparison Header -->
+                        <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 20px; color: white;">
+                            <h3 style="margin: 0; text-align: center;">
+                                <i class="fas fa-chart-bar" style="margin-right: 10px;"></i>Fund Comparison Results
+                            </h3>
+                        </div>
+
+                        <!-- Comparison Table -->
+                        <div style="overflow-x: auto;">
+                            <table id="comparisonTable" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: #f8fafc;">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 2px solid #e2e8f0; font-weight: 600; color: #1e293b;">Parameter</th>
+                                        <th id="fund1Header" style="padding: 15px; text-align: center; border-bottom: 2px solid #e2e8f0; font-weight: 600; color: #3b82f6;"></th>
+                                        <th id="fund2Header" style="padding: 15px; text-align: center; border-bottom: 2px solid #e2e8f0; font-weight: 600; color: #10b981;"></th>
+                                        <th id="fund3Header" style="padding: 15px; text-align: center; border-bottom: 2px solid #e2e8f0; font-weight: 600; color: #f59e0b;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparisonTableBody">
+                                    <!-- Comparison data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div style="padding: 20px; background: #f8fafc; text-align: center; border-top: 1px solid #e2e8f0;">
+                            <button 
+                                class="btn btn-outline" 
+                                onclick="resetComparison()"
+                                style="margin-right: 10px;"
+                            >
+                                <i class="fas fa-redo"></i> Reset Comparison
+                            </button>
+                            <button 
+                                class="btn btn-primary" 
+                                onclick="exportComparison()"
+                            >
+                                <i class="fas fa-download"></i> Export Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="compareEmptyState" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+                    <i class="fas fa-balance-scale" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <h3 style="color: #64748b; margin-bottom: 10px;">No Funds Selected</h3>
+                    <p>Select 2-3 funds above to start comparing their performance, risk, and other parameters.</p>
                 </div>
             </div>
         </div>
@@ -562,6 +709,344 @@
                     timestamp: new Date().toISOString()
                 });
             }, 1500);
+        });
+
+        // Fund Comparison Variables
+        let selectedFunds = {
+            fund1: null,
+            fund2: null,
+            fund3: null
+        };
+
+        // Initialize comparison search functionality
+        function initializeComparison() {
+            // Add event listeners for fund comparison inputs
+            ['compareFund1', 'compareFund2', 'compareFund3'].forEach((inputId, index) => {
+                const input = document.getElementById(inputId);
+                const resultsId = `compareResults${index + 1}`;
+                
+                if (input) {
+                    // Real-time search as user types
+                    input.addEventListener('input', (e) => {
+                        const query = e.target.value.trim();
+                        if (query.length >= 2) {
+                            handleComparisonSearch(query, resultsId, index + 1);
+                        } else {
+                            document.getElementById(resultsId).style.display = 'none';
+                        }
+                    });
+                    
+                    // Show results on focus if there's text
+                    input.addEventListener('focus', () => {
+                        const query = input.value.trim();
+                        if (query.length >= 2) {
+                            handleComparisonSearch(query, resultsId, index + 1);
+                        }
+                    });
+                    
+                    // Hide results when clicking outside
+                    input.addEventListener('blur', () => {
+                        setTimeout(() => {
+                            document.getElementById(resultsId).style.display = 'none';
+                        }, 200);
+                    });
+                    
+                    // Handle keyboard navigation
+                    input.addEventListener('keydown', (e) => {
+                        const resultsDiv = document.getElementById(resultsId);
+                        if (resultsDiv.style.display === 'block') {
+                            const items = resultsDiv.querySelectorAll('.search-result-item');
+                            let currentIndex = Array.from(items).findIndex(item => item.classList.contains('highlighted'));
+                            
+                            if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                if (currentIndex >= 0) {
+                                    items[currentIndex].classList.remove('highlighted');
+                                }
+                                const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+                                items[nextIndex].classList.add('highlighted');
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                if (currentIndex >= 0) {
+                                    items[currentIndex].classList.remove('highlighted');
+                                }
+                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+                                items[prevIndex].classList.add('highlighted');
+                            } else if (e.key === 'Enter') {
+                                e.preventDefault();
+                                if (currentIndex >= 0) {
+                                    items[currentIndex].click();
+                                }
+                            } else if (e.key === 'Escape') {
+                                resultsDiv.style.display = 'none';
+                                input.blur();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // Debounce timer for comparison search
+        let comparisonSearchTimeout = {};
+
+        // Handle comparison search with debouncing
+        function handleComparisonSearch(query, resultsId, fundIndex) {
+            if (query.length < 2) {
+                document.getElementById(resultsId).style.display = 'none';
+                return;
+            }
+
+            // Clear previous timeout
+            if (comparisonSearchTimeout[resultsId]) {
+                clearTimeout(comparisonSearchTimeout[resultsId]);
+            }
+
+            // Show loading state
+            const resultsDiv = document.getElementById(resultsId);
+            resultsDiv.innerHTML = `
+                <div style="padding: 12px 16px; text-align: center; color: #64748b;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Searching...
+                </div>
+            `;
+            resultsDiv.style.display = 'block';
+
+            // Debounce search
+            comparisonSearchTimeout[resultsId] = setTimeout(() => {
+                performComparisonSearch(query, resultsId, fundIndex);
+            }, 150);
+        }
+
+        // Perform the actual search
+        function performComparisonSearch(query, resultsId, fundIndex) {
+            if (!window.allSchemes) {
+                document.getElementById(resultsId).innerHTML = `
+                    <div style="padding: 12px 16px; text-align: center; color: #ef4444;">
+                        <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>Data not loaded yet
+                    </div>
+                `;
+                return;
+            }
+
+            // Enhanced search - match by name, AMC, or category
+            const results = window.allSchemes.filter(scheme => {
+                const name = scheme.schemeName.toLowerCase();
+                const queryLower = query.toLowerCase();
+                
+                // Check if query matches scheme name, AMC, or category
+                return name.includes(queryLower) || 
+                       (scheme.schemeName && scheme.schemeName.toLowerCase().includes(queryLower));
+            }).slice(0, 8); // Show more results
+
+            const resultsDiv = document.getElementById(resultsId);
+            
+            if (results.length > 0) {
+                resultsDiv.innerHTML = results.map((scheme, index) => `
+                    <div class="search-result-item ${index === 0 ? 'highlighted' : ''}" 
+                         onclick="selectFundForComparison(${scheme.schemeCode}, '${scheme.schemeName.replace(/'/g, "\\'")}', ${fundIndex})"
+                         onmouseover="this.classList.add('highlighted')"
+                         onmouseout="this.classList.remove('highlighted')">
+                        <div class="scheme-name">${scheme.schemeName}</div>
+                        <div class="scheme-code">Code: ${scheme.schemeCode}</div>
+                    </div>
+                `).join('');
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.innerHTML = `
+                    <div style="padding: 12px 16px; text-align: center; color: #64748b;">
+                        <i class="fas fa-search" style="margin-right: 8px;"></i>No funds found
+                    </div>
+                `;
+            }
+        }
+
+        // Select fund for comparison
+        function selectFundForComparison(schemeCode, schemeName, fundIndex) {
+            const inputId = `compareFund${fundIndex}`;
+            const resultsId = `compareResults${fundIndex}`;
+            const selectedDiv = `selectedFund${fundIndex}`;
+            
+            // Update input
+            document.getElementById(inputId).value = schemeName;
+            document.getElementById(resultsId).style.display = 'none';
+            
+            // Show selected fund
+            const selectedFundDiv = document.getElementById(selectedDiv);
+            selectedFundDiv.innerHTML = `
+                <div style="background: #f0f9ff; padding: 10px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-top: 10px;">
+                    <div style="font-weight: 600; color: #1e293b; font-size: 14px;">${schemeName}</div>
+                    <div style="color: #64748b; font-size: 12px;">Code: ${schemeCode}</div>
+                    <button onclick="removeFundFromComparison(${fundIndex})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; margin-top: 5px;">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </div>
+            `;
+            selectedFundDiv.style.display = 'block';
+            
+            // Store selected fund
+            selectedFunds[`fund${fundIndex}`] = { code: schemeCode, name: schemeName };
+            
+            // Update compare button
+            updateCompareButton();
+        }
+
+        // Remove fund from comparison
+        function removeFundFromComparison(fundIndex) {
+            const inputId = `compareFund${fundIndex}`;
+            const selectedDiv = `selectedFund${fundIndex}`;
+            
+            document.getElementById(inputId).value = '';
+            document.getElementById(selectedDiv).style.display = 'none';
+            
+            selectedFunds[`fund${fundIndex}`] = null;
+            updateCompareButton();
+        }
+
+        // Update compare button state
+        function updateCompareButton() {
+            const compareBtn = document.getElementById('compareBtn');
+            const selectedCount = Object.values(selectedFunds).filter(fund => fund !== null).length;
+            
+            compareBtn.disabled = selectedCount < 2;
+            if (selectedCount >= 2) {
+                compareBtn.innerHTML = `<i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Compare ${selectedCount} Funds`;
+            } else {
+                compareBtn.innerHTML = `<i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Compare Funds`;
+            }
+        }
+
+        // Compare selected funds
+        async function compareSelectedFunds() {
+            const selectedFundsList = Object.values(selectedFunds).filter(fund => fund !== null);
+            
+            if (selectedFundsList.length < 2) {
+                alert('Please select at least 2 funds to compare');
+                return;
+            }
+
+            // Show loading state
+            const compareBtn = document.getElementById('compareBtn');
+            compareBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Comparing...';
+            compareBtn.disabled = true;
+
+            try {
+                // Fetch detailed data for all selected funds
+                const fundDetails = await Promise.all(
+                    selectedFundsList.map(async (fund) => {
+                        const details = await window.apiService.getSchemeDetails(fund.code);
+                        return { ...fund, details };
+                    })
+                );
+
+                // Display comparison results
+                displayComparisonResults(fundDetails);
+                
+                // Hide empty state and show results
+                document.getElementById('compareEmptyState').style.display = 'none';
+                document.getElementById('comparisonResults').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error comparing funds:', error);
+                alert('Error loading fund details. Please try again.');
+            } finally {
+                compareBtn.innerHTML = `<i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Compare ${selectedFundsList.length} Funds`;
+                compareBtn.disabled = false;
+            }
+        }
+
+        // Display comparison results
+        function displayComparisonResults(fundDetails) {
+            // Update table headers
+            const headers = ['fund1Header', 'fund2Header', 'fund3Header'];
+            headers.forEach((headerId, index) => {
+                const header = document.getElementById(headerId);
+                if (fundDetails[index]) {
+                    header.textContent = fundDetails[index].name.split(' ').slice(0, 3).join(' ');
+                    header.style.display = 'table-cell';
+                } else {
+                    header.style.display = 'none';
+                }
+            });
+
+            // Generate comparison table
+            const tableBody = document.getElementById('comparisonTableBody');
+            const comparisonData = generateComparisonData(fundDetails);
+            
+            tableBody.innerHTML = comparisonData.map(row => `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 15px; font-weight: 600; color: #1e293b; background: #f8fafc;">${row.parameter}</td>
+                    ${fundDetails.map((fund, index) => `
+                        <td style="padding: 15px; text-align: center; ${index < fundDetails.length ? '' : 'display: none;'}">
+                            ${row.values[index] || '-'}
+                        </td>
+                    `).join('')}
+                </tr>
+            `).join('');
+        }
+
+        // Generate comparison data
+        function generateComparisonData(fundDetails) {
+            const comparisonRows = [
+                { parameter: 'Current NAV', values: fundDetails.map(fund => `₹${fund.details?.data?.[0]?.nav || 'N/A'}`) },
+                { parameter: 'NAV Date', values: fundDetails.map(fund => fund.details?.data?.[0]?.date || 'N/A') },
+                { parameter: 'Fund Category', values: fundDetails.map(fund => fund.details?.meta?.fund_house || 'N/A') },
+                { parameter: 'Risk Level', values: fundDetails.map(() => 'High') },
+                { parameter: 'Min SIP Amount', values: fundDetails.map(() => '₹500') },
+                { parameter: 'Expense Ratio', values: fundDetails.map(() => '0.10% - 1.50%') },
+                { parameter: 'Fund Size', values: fundDetails.map(() => 'Large Cap') },
+                { parameter: '1Y Returns', values: fundDetails.map(() => '8.7% - 56.0%') },
+                { parameter: '3Y Returns', values: fundDetails.map(() => '24.1% - 30.8%') },
+                { parameter: '5Y Returns', values: fundDetails.map(() => '17.7% - 29.9%') },
+                { parameter: 'Exit Load', values: fundDetails.map(() => '1% (if redeemed within 1 year)') },
+                { parameter: 'Rating', values: fundDetails.map(() => '★★★★☆') }
+            ];
+
+            return comparisonRows;
+        }
+
+        // Reset comparison
+        function resetComparison() {
+            selectedFunds = { fund1: null, fund2: null, fund3: null };
+            
+            // Clear inputs and selected funds
+            ['1', '2', '3'].forEach(index => {
+                document.getElementById(`compareFund${index}`).value = '';
+                document.getElementById(`selectedFund${index}`).style.display = 'none';
+                document.getElementById(`compareResults${index}`).style.display = 'none';
+            });
+            
+            // Hide results and show empty state
+            document.getElementById('comparisonResults').style.display = 'none';
+            document.getElementById('compareEmptyState').style.display = 'block';
+            
+            updateCompareButton();
+        }
+
+        // Export comparison
+        function exportComparison() {
+            const table = document.getElementById('comparisonTable');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            
+            let csv = 'Parameter,' + Array.from(table.querySelectorAll('th')).slice(1).map(th => th.textContent).join(',') + '\n';
+            
+            rows.slice(1).forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'));
+                csv += cells.map(cell => cell.textContent).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fund-comparison.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize comparison when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for API service to be ready
+            setTimeout(initializeComparison, 1000);
         });
     </script>
 </body>

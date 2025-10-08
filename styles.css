@@ -1353,6 +1353,92 @@ body {
 .hidden { display: none; }
 .visible { display: block; }
 
+/* Fund Comparison Styles */
+.compare-section {
+    position: relative;
+}
+
+.fund-selector {
+    margin-bottom: 20px;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.search-result-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover,
+.search-result-item.highlighted {
+    background-color: #f0f9ff;
+    border-left: 3px solid #3b82f6;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.scheme-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.scheme-code {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.selected-fund {
+    margin-top: 10px;
+}
+
+#comparisonTable {
+    font-size: 14px;
+}
+
+#comparisonTable th {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+#comparisonTable td {
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .fund-selector {
+        margin-bottom: 15px;
+    }
+    
+    #comparisonTable {
+        font-size: 12px;
+    }
+    
+    #comparisonTable th,
+    #comparisonTable td {
+        padding: 10px 8px;
+    }
+}
+
 /* Print Styles */
 @media print {
     .header,
