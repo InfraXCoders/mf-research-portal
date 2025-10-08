@@ -767,6 +767,16 @@ function showSchemeDetailsModal(details) {
                 
                 <div class="modal-section">
                     <h3>
+                        <i class="fas fa-chart-line"></i>
+                        Performance Growth Chart
+                    </h3>
+                    <div class="growth-chart-container">
+                        ${generateGrowthChart(navHistory)}
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>
                         <i class="fas fa-history"></i>
                         NAV History (Last 30 Days)
                     </h3>
@@ -807,11 +817,8 @@ function showSchemeDetailsModal(details) {
                 </div>
                 
                 <div class="modal-actions">
-                    <button class="btn btn-primary" onclick="window.open('https://api.mfapi.in/mf/${details.meta.scheme_code}', '_blank')">
-                        <i class="fas fa-external-link-alt"></i> View Full API Data
-                    </button>
-                    <button class="btn btn-outline" onclick="closeModal()">
-                        <i class="fas fa-times"></i> Close
+                    <button class="btn btn-primary" onclick="closeModal()">
+                        <i class="fas fa-check"></i> Done
                     </button>
                 </div>
             </div>
@@ -823,6 +830,195 @@ function showSchemeDetailsModal(details) {
     
     // Prevent body scroll
     document.body.style.overflow = 'hidden';
+}
+
+function generateGrowthChart(navHistory) {
+    if (!navHistory || navHistory.length === 0) {
+        return '<p style="text-align: center; color: var(--gray-500);">Insufficient data for chart</p>';
+    }
+    
+    const schemeId = 'chart_' + Date.now();
+    
+    // Store NAV history in a data attribute for JavaScript access
+    const navDataJSON = JSON.stringify(navHistory.slice(0, 1825)); // Max 5 years
+    
+    // Get data points for 1, 3, and 5 years
+    const oneYearData = navHistory.slice(0, Math.min(365, navHistory.length));
+    const threeYearData = navHistory.slice(0, Math.min(1095, navHistory.length));
+    const fiveYearData = navHistory.slice(0, Math.min(1825, navHistory.length));
+    
+    // Calculate growth percentages
+    const latestNav = parseFloat(navHistory[0].nav);
+    const oneYearGrowth = oneYearData.length > 0 ? 
+        ((latestNav - parseFloat(oneYearData[oneYearData.length - 1].nav)) / parseFloat(oneYearData[oneYearData.length - 1].nav) * 100).toFixed(2) : 'N/A';
+    const threeYearGrowth = threeYearData.length >= 1095 ? 
+        ((latestNav - parseFloat(threeYearData[threeYearData.length - 1].nav)) / parseFloat(threeYearData[threeYearData.length - 1].nav) * 100).toFixed(2) : 'N/A';
+    const fiveYearGrowth = fiveYearData.length >= 1825 ? 
+        ((latestNav - parseFloat(fiveYearData[fiveYearData.length - 1].nav)) / parseFloat(fiveYearData[fiveYearData.length - 1].nav) * 100).toFixed(2) : 'N/A';
+    
+    return `
+        <div class="chart-description">
+            <i class="fas fa-info-circle"></i>
+            <strong>NAV Data:</strong> Historical Net Asset Value showing fund performance over different time periods
+        </div>
+        
+        <div class="growth-tabs">
+            <div class="growth-tab ${oneYearGrowth !== 'N/A' ? 'active' : 'disabled'}" 
+                 onclick="${oneYearGrowth !== 'N/A' ? `updateChart('${schemeId}', 365)` : ''}"
+                 style="${oneYearGrowth !== 'N/A' ? 'cursor: pointer;' : ''}">
+                <div class="tab-label">1 Year</div>
+                <div class="tab-value ${parseFloat(oneYearGrowth) >= 0 ? 'positive' : 'negative'}">${oneYearGrowth}%</div>
+            </div>
+            <div class="growth-tab ${threeYearGrowth !== 'N/A' ? '' : 'disabled'}"
+                 onclick="${threeYearGrowth !== 'N/A' ? `updateChart('${schemeId}', 1095)` : ''}"
+                 style="${threeYearGrowth !== 'N/A' ? 'cursor: pointer;' : ''}">
+                <div class="tab-label">3 Year</div>
+                <div class="tab-value ${parseFloat(threeYearGrowth) >= 0 ? 'positive' : 'negative'}">${threeYearGrowth}%</div>
+            </div>
+            <div class="growth-tab ${fiveYearGrowth !== 'N/A' ? '' : 'disabled'}"
+                 onclick="${fiveYearGrowth !== 'N/A' ? `updateChart('${schemeId}', 1825)` : ''}"
+                 style="${fiveYearGrowth !== 'N/A' ? 'cursor: pointer;' : ''}">
+                <div class="tab-label">5 Year</div>
+                <div class="tab-value ${parseFloat(fiveYearGrowth) >= 0 ? 'positive' : 'negative'}">${fiveYearGrowth}%</div>
+            </div>
+        </div>
+        
+        <div id="${schemeId}" data-nav='${navDataJSON.replace(/'/g, "&apos;")}'>
+            ${renderChart(oneYearData, 365, schemeId)}
+        </div>
+    `;
+}
+
+function renderChart(data, days, schemeId) {
+    if (!data || data.length < 2) {
+        return '<p style="text-align: center; color: var(--gray-500);">Insufficient data for chart</p>';
+    }
+    
+    // Sample data points for performance
+    const sampleInterval = Math.max(1, Math.floor(data.length / 50));
+    const chartData = data.filter((_, index) => index % sampleInterval === 0).reverse();
+    
+    // Find min and max NAV for scaling
+    const navValues = chartData.map(d => parseFloat(d.nav));
+    const minNav = Math.min(...navValues);
+    const maxNav = Math.max(...navValues);
+    const navRange = maxNav - minNav || 1;
+    
+    // Chart dimensions
+    const padding = 10;
+    const svgWidth = 100;
+    const svgHeight = 70;
+    const chartWidth = svgWidth - padding * 2;
+    const chartHeight = svgHeight - padding * 2;
+    
+    // Generate points
+    const points = chartData.map((item, index) => {
+        const x = padding + (index / (chartData.length - 1)) * chartWidth;
+        const navValue = parseFloat(item.nav);
+        const y = padding + chartHeight - ((navValue - minNav) / navRange) * chartHeight;
+        return `${x},${y}`;
+    }).join(' ');
+    
+    // Y-axis labels (5 levels)
+    const yAxisLabels = Array.from({length: 5}, (_, i) => {
+        const value = minNav + (navRange * (4 - i) / 4);
+        const y = padding + (i / 4) * chartHeight;
+        return { value: value.toFixed(1), y };
+    });
+    
+    // X-axis labels (months)
+    const period = days === 365 ? '1 Year' : days === 1095 ? '3 Years' : '5 Years';
+    const monthLabels = days === 365 ? 
+        ['Now', '9M', '6M', '3M', 'Start'] :
+        days === 1095 ?
+        ['Now', '30M', '24M', '18M', '12M', '6M', 'Start'] :
+        ['Now', '4Y', '3Y', '2Y', '1Y', 'Start'];
+    
+    return `
+        <svg viewBox="0 0 ${svgWidth} ${svgHeight}" class="growth-chart" preserveAspectRatio="xMidYMid meet">
+            <defs>
+                <linearGradient id="chartGradient_${schemeId}" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.4" />
+                    <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.05" />
+                </linearGradient>
+            </defs>
+            
+            <!-- Y-axis -->
+            <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${svgHeight - padding}" stroke="#94a3b8" stroke-width="0.3"/>
+            
+            <!-- X-axis -->
+            <line x1="${padding}" y1="${svgHeight - padding}" x2="${svgWidth - padding}" y2="${svgHeight - padding}" stroke="#94a3b8" stroke-width="0.3"/>
+            
+            <!-- Grid lines with Y-axis labels -->
+            ${yAxisLabels.map(label => `
+                <line x1="${padding}" y1="${label.y}" x2="${svgWidth - padding}" y2="${label.y}" stroke="#e2e8f0" stroke-width="0.15" opacity="0.5"/>
+                <text x="${padding - 1}" y="${label.y + 0.8}" font-size="2" fill="#64748b" text-anchor="end">₹${label.value}</text>
+            `).join('')}
+            
+            <!-- X-axis month markers -->
+            ${monthLabels.map((label, index) => {
+                const x = padding + (index / (monthLabels.length - 1)) * chartWidth;
+                return `
+                    <line x1="${x}" y1="${svgHeight - padding}" x2="${x}" y2="${svgHeight - padding + 1}" stroke="#94a3b8" stroke-width="0.3"/>
+                    <text x="${x}" y="${svgHeight - padding + 3.5}" font-size="2.2" fill="#64748b" text-anchor="middle">${label}</text>
+                `;
+            }).join('')}
+            
+            <!-- Area under curve -->
+            <polygon 
+                points="${points} ${svgWidth - padding},${svgHeight - padding} ${padding},${svgHeight - padding}" 
+                fill="url(#chartGradient_${schemeId})"
+            />
+            
+            <!-- Line -->
+            <polyline
+                points="${points}"
+                fill="none"
+                stroke="#10b981"
+                stroke-width="0.6"
+            />
+            
+            <!-- Data points -->
+            ${chartData.map((item, index) => {
+                const x = padding + (index / (chartData.length - 1)) * chartWidth;
+                const navValue = parseFloat(item.nav);
+                const y = padding + chartHeight - ((navValue - minNav) / navRange) * chartHeight;
+                return `<circle cx="${x}" cy="${y}" r="0.5" fill="#059669">
+                    <title>${item.date}: ₹${item.nav}</title>
+                </circle>`;
+            }).join('')}
+        </svg>
+        
+        <div class="chart-legend">
+            <span>📈 ${period} NAV Trend (${chartData.length} data points)</span>
+            <span>Range: ₹${minNav.toFixed(2)} - ₹${maxNav.toFixed(2)}</span>
+        </div>
+    `;
+}
+
+// Update chart when tab is clicked
+function updateChart(schemeId, days) {
+    const container = document.getElementById(schemeId);
+    if (!container) return;
+    
+    // Get stored NAV history
+    const navDataJSON = container.getAttribute('data-nav');
+    if (!navDataJSON) return;
+    
+    const navHistory = JSON.parse(navDataJSON);
+    const data = navHistory.slice(0, Math.min(days, navHistory.length));
+    
+    // Update active tab
+    const tabs = container.previousElementSibling.querySelectorAll('.growth-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    const tabIndex = days === 365 ? 0 : days === 1095 ? 1 : 2;
+    if (tabs[tabIndex]) {
+        tabs[tabIndex].classList.add('active');
+    }
+    
+    // Re-render chart
+    container.innerHTML = renderChart(data, days, schemeId);
 }
 
 function closeModal(event) {
@@ -1133,7 +1329,7 @@ function displayFundDetails(details) {
                 ${oneYearReturn}${oneYearReturn !== 'N/A' ? '%' : ''}
             </td>
             <td>
-                <button class="btn btn-outline btn-sm" onclick="viewFullDetails('${details.meta.scheme_code}')">
+                <button class="btn btn-outline btn-sm" onclick="viewDetails('${escapeHtml(details.meta.scheme_name)}')">
                     <i class="fas fa-eye"></i> View
                 </button>
             </td>
@@ -1149,9 +1345,7 @@ function displayFundDetails(details) {
     }
 }
 
-function viewFullDetails(schemeCode) {
-    window.open(`https://api.mfapi.in/mf/${schemeCode}`, '_blank');
-}
+// viewFullDetails removed - now using viewDetails with modal popup instead
 
 function handleSearchKeyboard(event) {
     const searchResults = document.getElementById('searchResults');
