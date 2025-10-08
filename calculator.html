@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Calculator - MF Research Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .page-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background: #1e293b;
+            color: white;
+            padding: 20px 0;
+        }
+        
+        .sidebar-title {
+            padding: 0 20px 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #60a5fa;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        
+        .sidebar-menu li {
+            margin: 0;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover {
+            background: #334155;
+            color: white;
+            border-left-color: #3b82f6;
+        }
+        
+        .sidebar-menu a.active {
+            background: #334155;
+            color: #60a5fa;
+            border-left-color: #60a5fa;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #2563eb;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 30px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        
+        .tab-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        .tab-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+        
+        .calculator-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+        
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .input-section {
+            padding: 40px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .result-section {
+            padding: 40px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .breakdown-section {
+            padding: 40px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .breakdown-table-container {
+            overflow-x: auto;
+        }
+        
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .breakdown-table th {
+            background: #f1f5f9;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #334155;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .breakdown-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        
+        .breakdown-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .chart-container-pie {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .chart-legend-pie {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #1e293b;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .calculate-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .result-title {
+            color: #1e293b;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .result-item.highlight {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-left-color: #1e40af;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+        
+        .result-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .result-item.highlight .result-label {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .result-item.highlight .result-value {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .result-value {
+                font-size: 1.4rem;
+            }
+        }
+        
+        .info-banner {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .info-banner strong {
+            color: #1e40af;
+        }
+        
+        .calculator-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <i class="fas fa-calculator"></i> Calculators
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="switchTab('sip'); return false;">
+                    <i class="fas fa-chart-line"></i> MF Calculator
+                </a></li>
+                <li><a href="#" onclick="switchTab('annual-sip'); return false;">
+                    <i class="fas fa-calendar-alt"></i> Annual SIP
+                </a></li>
+                <li><a href="#" onclick="switchTab('loan-emi'); return false;">
+                    <i class="fas fa-home"></i> Loan EMI
+                </a></li>
+                <li><a href="#" onclick="switchTab('goal'); return false;">
+                    <i class="fas fa-bullseye"></i> Goal Based SIP
+                </a></li>
+                <li><a href="#" onclick="switchTab('step-up'); return false;">
+                    <i class="fas fa-arrow-trend-up"></i> SIP Top Up
+                </a></li>
+                <li><a href="#" onclick="switchTab('swp'); return false;">
+                    <i class="fas fa-wallet"></i> SWP (Pension)
+                </a></li>
+                <li><a href="index.html" style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a></li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="container">
+                <!-- Tabs -->
+                <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('sip')">
+                <i class="fas fa-chart-line"></i> SIP
+            </button>
+            <button class="tab-btn" onclick="switchTab('lumpsum')">
+                <i class="fas fa-coins"></i> Lumpsum
+            </button>
+            <button class="tab-btn" onclick="switchTab('swp')">
+                <i class="fas fa-wallet"></i> SWP (Pension)
+            </button>
+            <button class="tab-btn" onclick="switchTab('goal')">
+                <i class="fas fa-bullseye"></i> Goal
+            </button>
+        </div>
+        
+        <!-- SIP Calculator -->
+        <div id="sip-calculator" class="calculator-container">
+            <div class="calculator-content">
+                <div class="top-section">
+                    <div class="input-section">
+                    <div class="info-banner">
+                        <strong>💡 SIP (Systematic Investment Plan)</strong><br>
+                        Invest a fixed amount regularly every month. Perfect for salaried individuals to build wealth gradually.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Monthly SIP Amount</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="sip-amount" value="5000" min="500" step="500" placeholder="Enter monthly amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>No. of Years</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="sip-years" value="10" min="1" max="30" placeholder="Enter years">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="sip-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return %">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateSIP()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Investment Summary</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Amount Invested</span>
+                        <span class="result-value" id="sip-invested">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Maturity Value</span>
+                        <span class="result-value" id="sip-maturity">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Wealth Gain</span>
+                        <span class="result-value" id="sip-gain">Rs. 0</span>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- Breakdown Section -->
+                <div class="breakdown-section">
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-table-container">
+                            <table class="breakdown-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>SIP Amt/Month</th>
+                                        <th>Total Invested</th>
+                                        <th>Interest Amt/Year</th>
+                                        <th>Maturity Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sip-breakdown-tbody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 20px; color: #94a3b8;">
+                                            Click Calculate to see breakdown
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="chart-container-pie">
+                            <svg class="pie-chart" viewBox="0 0 200 200" id="sip-pie-chart">
+                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                            </svg>
+                            <div class="chart-legend-pie" id="sip-pie-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #3b82f6;"></div>
+                                    <span>Invested</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #10b981;"></div>
+                                    <span>Returns</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lumpsum Calculator -->
+        <div id="lumpsum-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="top-section">
+                    <div class="input-section">
+                    <div class="info-banner">
+                        <strong>💰 Lumpsum Investment</strong><br>
+                        Invest a large amount once. Ideal for bonuses, inheritance, or accumulated savings.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Investment Amount</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="lumpsum-amount" value="100000" min="1000" step="1000" placeholder="Enter amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>No. of Years</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="lumpsum-years" value="5" min="1" max="30" placeholder="Enter years">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="lumpsum-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return %">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateLumpsum()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Investment Summary</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Amount Invested</span>
+                        <span class="result-value" id="lumpsum-invested">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Maturity Value</span>
+                        <span class="result-value" id="lumpsum-maturity">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Wealth Gain</span>
+                        <span class="result-value" id="lumpsum-gain">Rs. 0</span>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- Breakdown Section -->
+                <div class="breakdown-section">
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-table-container">
+                            <table class="breakdown-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Invested Amount</th>
+                                        <th>Interest Earned</th>
+                                        <th>Maturity Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lumpsum-breakdown-tbody">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; padding: 20px; color: #94a3b8;">
+                                            Click Calculate to see breakdown
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="chart-container-pie">
+                            <svg class="pie-chart" viewBox="0 0 200 200" id="lumpsum-pie-chart">
+                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                            </svg>
+                            <div class="chart-legend-pie">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #3b82f6;"></div>
+                                    <span>Invested</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #10b981;"></div>
+                                    <span>Returns</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SWP Calculator -->
+        <div id="swp-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="input-section">
+                    <div class="info-banner">
+                        <strong>💸 SWP (Systematic Withdrawal Plan)</strong><br>
+                        Withdraw a fixed amount regularly while your investment continues to grow. Perfect for retirement pension.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Total Investment</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="swp-amount" value="1000000" min="10000" step="10000" placeholder="Enter total amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Monthly Withdrawal</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="swp-withdrawal" value="10000" min="500" step="500" placeholder="Monthly withdrawal">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>No. of Years</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="swp-years" value="15" min="1" max="40" placeholder="Enter years">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="swp-return" value="8" min="1" max="50" step="0.1" placeholder="Expected return %">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateSWP()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Withdrawal Summary</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Initial Investment</span>
+                        <span class="result-value" id="swp-initial">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Withdrawn</span>
+                        <span class="result-value" id="swp-withdrawn">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Remaining Balance</span>
+                        <span class="result-value" id="swp-balance">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loan EMI Calculator -->
+        <div id="loan-emi-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="input-section">
+                    <div class="info-banner">
+                        <strong>🏠 Loan EMI Calculator</strong><br>
+                        Calculate monthly EMI for home, car, or personal loans.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Loan Amount</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="loan-amount" value="2000000" min="10000" step="10000" placeholder="Enter loan amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Loan Tenure (years)</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="loan-years" value="20" min="1" max="30" placeholder="Enter tenure">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Interest Rate (%)</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="loan-rate" value="8.5" min="1" max="20" step="0.1" placeholder="Interest rate">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateLoanEMI()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">EMI Summary</h3>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Monthly Payment</span>
+                        <span class="result-value" id="loan-emi">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Interest</span>
+                        <span class="result-value" id="loan-interest">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Payment</span>
+                        <span class="result-value" id="loan-total">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Annual SIP Calculator -->
+        <div id="annual-sip-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="input-section">
+                    <div class="info-banner">
+                        <strong>📅 Annual SIP Calculator</strong><br>
+                        Calculate returns on yearly investments instead of monthly.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Investment</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="annual-sip-amount" value="60000" min="1000" step="1000" placeholder="Yearly amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>No. of Years</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="annual-sip-years" value="10" min="1" max="30" placeholder="Enter years">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="annual-sip-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateAnnualSIP()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Annual SIP Summary</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Invested</span>
+                        <span class="result-value" id="annual-sip-invested">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Maturity Value</span>
+                        <span class="result-value" id="annual-sip-maturity">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Wealth Gain</span>
+                        <span class="result-value" id="annual-sip-gain">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step-up SIP Calculator -->
+        <div id="step-up-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="input-section">
+                    <div class="info-banner">
+                        <strong>📈 Step-up SIP Calculator</strong><br>
+                        Increase your SIP amount every year to boost returns.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Initial Monthly SIP</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="stepup-amount" value="5000" min="500" step="500" placeholder="Starting amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Increase %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="stepup-increase" value="10" min="0" max="50" step="1" placeholder="Yearly increase">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>No. of Years</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="stepup-years" value="10" min="1" max="30" placeholder="Enter years">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Annual Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="stepup-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateStepUpSIP()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Step-up SIP Summary</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Invested</span>
+                        <span class="result-value" id="stepup-invested">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Maturity Value</span>
+                        <span class="result-value" id="stepup-maturity">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Wealth Gain</span>
+                        <span class="result-value" id="stepup-gain">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Goal Calculator -->
+        <div id="goal-calculator" class="calculator-container calculator-hidden">
+            <div class="calculator-content">
+                <div class="input-section">
+                    <div class="info-banner">
+                        <strong>🎯 Goal-Based Investment</strong><br>
+                        Calculate how much to invest monthly to reach your financial goal (car, house, education, etc.)
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Target Amount</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="goal-target" value="1000000" min="10000" step="10000" placeholder="Your goal amount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Time Period (Years)</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="goal-years" value="10" min="1" max="30" placeholder="Years to achieve">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <span>Expected Return %</span>
+                            <span>:</span>
+                        </label>
+                        <input type="number" id="goal-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return %">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateGoal()">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+                
+                <div class="result-section">
+                    <h3 class="result-title">Goal Plan</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Target Amount</span>
+                        <span class="result-value" id="goal-target-result">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <span class="result-label">Monthly SIP Required</span>
+                        <span class="result-value" id="goal-monthly">Rs. 0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Investment</span>
+                        <span class="result-value" id="goal-invested">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="api-config.js"></script>
+    <script src="api-service.js"></script>
+    <script>
+        // Initialize
+        async function init() {
+            await MFApiService.initialize();
+            calculateSIP(); // Calculate default values
+        }
+        
+        init();
+        
+        // Switch tabs
+        function switchTab(type) {
+            // Update sidebar menu
+            const menuLinks = document.querySelectorAll('.sidebar-menu a');
+            menuLinks.forEach(link => link.classList.remove('active'));
+            
+            // Update button states
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Hide all calculators
+            document.querySelectorAll('.calculator-container').forEach(calc => {
+                calc.classList.add('calculator-hidden');
+            });
+            
+            // Show selected calculator
+            const selectedCalc = document.getElementById(type + '-calculator');
+            if (selectedCalc) {
+                selectedCalc.classList.remove('calculator-hidden');
+            }
+            
+            // Activate sidebar based on type
+            const sidebarIndex = type === 'sip' ? 0 : type === 'annual-sip' ? 1 : type === 'loan-emi' ? 2 : type === 'goal' ? 3 : type === 'step-up' ? 4 : 5;
+            if (menuLinks[sidebarIndex]) {
+                menuLinks[sidebarIndex].classList.add('active');
+            }
+            
+            // Activate button tab
+            const buttonIndex = type === 'sip' ? 0 : type === 'lumpsum' ? 1 : type === 'swp' ? 2 : 3;
+            if (buttons[buttonIndex]) {
+                buttons[buttonIndex].classList.add('active');
+            }
+            
+            // Calculate default for the selected calculator
+            if (type === 'sip') calculateSIP();
+            else if (type === 'lumpsum') calculateLumpsum();
+            else if (type === 'swp') calculateSWP();
+            else if (type === 'goal') calculateGoal();
+            else if (type === 'loan-emi') calculateLoanEMI();
+            else if (type === 'annual-sip') calculateAnnualSIP();
+            else if (type === 'step-up') calculateStepUpSIP();
+        }
+        
+        // Calculate SIP
+        function calculateSIP() {
+            const monthlyAmount = parseFloat(document.getElementById('sip-amount').value) || 5000;
+            const years = parseInt(document.getElementById('sip-years').value) || 10;
+            const annualReturn = parseFloat(document.getElementById('sip-return').value) || 12;
+            
+            const result = MFApiService.calculateSIPReturns(monthlyAmount, annualReturn, years);
+            
+            document.getElementById('sip-invested').textContent = 'Rs. ' + formatNumber(result.invested);
+            document.getElementById('sip-maturity').textContent = 'Rs. ' + formatNumber(result.current);
+            document.getElementById('sip-gain').textContent = 'Rs. ' + formatNumber(result.gain);
+            
+            // Generate year-wise breakdown
+            generateSIPBreakdown(monthlyAmount, annualReturn, years);
+            
+            // Generate pie chart
+            generatePieChart('sip-pie-chart', result.invested, result.gain);
+        }
+        
+        // Generate SIP year-wise breakdown
+        function generateSIPBreakdown(monthlyAmount, annualReturn, totalYears) {
+            const tbody = document.getElementById('sip-breakdown-tbody');
+            const monthlyRate = annualReturn / 12 / 100;
+            
+            let html = '';
+            let cumulativeInvested = 0;
+            let previousMaturityValue = 0;
+            
+            for (let year = 1; year <= totalYears; year++) {
+                const monthsCompleted = year * 12;
+                cumulativeInvested = monthlyAmount * monthsCompleted;
+                
+                // Calculate maturity value for this year
+                let maturityValue = 0;
+                for (let month = 1; month <= monthsCompleted; month++) {
+                    const monthsRemaining = monthsCompleted - month + 1;
+                    maturityValue += monthlyAmount * Math.pow(1 + monthlyRate, monthsRemaining);
+                }
+                
+                const interestThisYear = maturityValue - cumulativeInvested - (previousMaturityValue - (cumulativeInvested - monthlyAmount * 12));
+                const yearlyInterest = maturityValue - cumulativeInvested;
+                
+                html += `
+                    <tr>
+                        <td><strong>Year ${year}</strong></td>
+                        <td>${formatNumber(monthlyAmount)}</td>
+                        <td>${formatNumber(cumulativeInvested)}</td>
+                        <td>${formatNumber(yearlyInterest)}</td>
+                        <td><strong>${formatNumber(maturityValue)}</strong></td>
+                    </tr>
+                `;
+                
+                previousMaturityValue = maturityValue;
+            }
+            
+            tbody.innerHTML = html;
+        }
+        
+        // Generate pie chart
+        function generatePieChart(chartId, invested, returns) {
+            const chart = document.getElementById(chartId);
+            if (!chart) return;
+            
+            const total = invested + returns;
+            const investedPercent = (invested / total) * 100;
+            const returnsPercent = (returns / total) * 100;
+            
+            // Calculate pie chart angles
+            const investedAngle = (investedPercent / 100) * 360;
+            const returnsAngle = 360 - investedAngle;
+            
+            // Create pie slices using SVG paths
+            const radius = 80;
+            const centerX = 100;
+            const centerY = 100;
+            
+            // First slice (Invested - Blue)
+            const slice1End = polarToCartesian(centerX, centerY, radius, investedAngle);
+            const largeArc1 = investedAngle > 180 ? 1 : 0;
+            
+            const pathInvested = `
+                M ${centerX},${centerY}
+                L ${centerX},${centerY - radius}
+                A ${radius},${radius} 0 ${largeArc1} 1 ${slice1End.x},${slice1End.y}
+                Z
+            `;
+            
+            // Second slice (Returns - Green)
+            const pathReturns = `
+                M ${centerX},${centerY}
+                L ${slice1End.x},${slice1End.y}
+                A ${radius},${radius} 0 ${returnsAngle > 180 ? 1 : 0} 1 ${centerX},${centerY - radius}
+                Z
+            `;
+            
+            chart.innerHTML = `
+                <path d="${pathInvested}" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                <path d="${pathReturns}" fill="#10b981" stroke="white" stroke-width="2"/>
+                <text x="${centerX}" y="${centerY - 10}" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">
+                    ${investedPercent.toFixed(0)}% / ${returnsPercent.toFixed(0)}%
+                </text>
+                <text x="${centerX}" y="${centerY + 10}" text-anchor="middle" font-size="12" fill="#64748b">
+                    Invested / Returns
+                </text>
+            `;
+        }
+        
+        // Helper function for pie chart
+        function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+            const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+            return {
+                x: centerX + (radius * Math.cos(angleInRadians)),
+                y: centerY + (radius * Math.sin(angleInRadians))
+            };
+        }
+        
+        // Calculate Lumpsum
+        function calculateLumpsum() {
+            const amount = parseFloat(document.getElementById('lumpsum-amount').value) || 100000;
+            const years = parseInt(document.getElementById('lumpsum-years').value) || 5;
+            const annualReturn = parseFloat(document.getElementById('lumpsum-return').value) || 12;
+            
+            const result = MFApiService.calculateInvestmentGrowth(amount, annualReturn, years);
+            
+            document.getElementById('lumpsum-invested').textContent = 'Rs. ' + formatNumber(result.invested);
+            document.getElementById('lumpsum-maturity').textContent = 'Rs. ' + formatNumber(result.current);
+            document.getElementById('lumpsum-gain').textContent = 'Rs. ' + formatNumber(result.gain);
+            
+            // Generate year-wise breakdown
+            generateLumpsumBreakdown(amount, annualReturn, years);
+            
+            // Generate pie chart
+            generatePieChart('lumpsum-pie-chart', result.invested, result.gain);
+        }
+        
+        // Generate Lumpsum year-wise breakdown
+        function generateLumpsumBreakdown(amount, annualReturn, totalYears) {
+            const tbody = document.getElementById('lumpsum-breakdown-tbody');
+            const rate = annualReturn / 100;
+            
+            let html = '';
+            
+            for (let year = 1; year <= totalYears; year++) {
+                const maturityValue = amount * Math.pow(1 + rate, year);
+                const interestEarned = maturityValue - amount;
+                
+                html += `
+                    <tr>
+                        <td><strong>Year ${year}</strong></td>
+                        <td>${formatNumber(amount)}</td>
+                        <td>${formatNumber(interestEarned)}</td>
+                        <td><strong>${formatNumber(maturityValue)}</strong></td>
+                    </tr>
+                `;
+            }
+            
+            tbody.innerHTML = html;
+        }
+        
+        // Calculate SWP
+        function calculateSWP() {
+            const initialAmount = parseFloat(document.getElementById('swp-amount').value) || 1000000;
+            const monthlyWithdrawal = parseFloat(document.getElementById('swp-withdrawal').value) || 10000;
+            const years = parseInt(document.getElementById('swp-years').value) || 15;
+            const annualReturn = parseFloat(document.getElementById('swp-return').value) || 8;
+            
+            const months = years * 12;
+            const monthlyRate = annualReturn / 12 / 100;
+            let balance = initialAmount;
+            let totalWithdrawn = 0;
+            
+            for (let i = 0; i < months; i++) {
+                balance = balance * (1 + monthlyRate) - monthlyWithdrawal;
+                totalWithdrawn += monthlyWithdrawal;
+                
+                if (balance < 0) {
+                    balance = 0;
+                    break;
+                }
+            }
+            
+            document.getElementById('swp-initial').textContent = 'Rs. ' + formatNumber(initialAmount);
+            document.getElementById('swp-withdrawn').textContent = 'Rs. ' + formatNumber(totalWithdrawn);
+            document.getElementById('swp-balance').textContent = 'Rs. ' + formatNumber(Math.max(0, balance));
+        }
+        
+        // Calculate Goal
+        function calculateGoal() {
+            const targetAmount = parseFloat(document.getElementById('goal-target').value) || 1000000;
+            const years = parseInt(document.getElementById('goal-years').value) || 10;
+            const annualReturn = parseFloat(document.getElementById('goal-return').value) || 12;
+            
+            const months = years * 12;
+            const monthlyRate = annualReturn / 12 / 100;
+            
+            // Calculate monthly SIP required using future value formula
+            const monthlyRequired = targetAmount * monthlyRate / (Math.pow(1 + monthlyRate, months) - 1);
+            const totalInvestment = monthlyRequired * months;
+            
+            document.getElementById('goal-target-result').textContent = 'Rs. ' + formatNumber(targetAmount);
+            document.getElementById('goal-monthly').textContent = 'Rs. ' + formatNumber(monthlyRequired);
+            document.getElementById('goal-invested').textContent = 'Rs. ' + formatNumber(totalInvestment);
+        }
+        
+        // Calculate Loan EMI
+        function calculateLoanEMI() {
+            const principal = parseFloat(document.getElementById('loan-amount').value) || 2000000;
+            const years = parseInt(document.getElementById('loan-years').value) || 20;
+            const annualRate = parseFloat(document.getElementById('loan-rate').value) || 8.5;
+            
+            const months = years * 12;
+            const monthlyRate = annualRate / 12 / 100;
+            
+            // EMI = [P x R x (1+R)^N] / [(1+R)^N-1]
+            const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                        (Math.pow(1 + monthlyRate, months) - 1);
+            
+            const totalPayment = emi * months;
+            const totalInterest = totalPayment - principal;
+            
+            document.getElementById('loan-emi').textContent = 'Rs. ' + formatNumber(emi);
+            document.getElementById('loan-interest').textContent = 'Rs. ' + formatNumber(totalInterest);
+            document.getElementById('loan-total').textContent = 'Rs. ' + formatNumber(totalPayment);
+        }
+        
+        // Calculate Annual SIP
+        function calculateAnnualSIP() {
+            const annualAmount = parseFloat(document.getElementById('annual-sip-amount').value) || 60000;
+            const years = parseInt(document.getElementById('annual-sip-years').value) || 10;
+            const annualReturn = parseFloat(document.getElementById('annual-sip-return').value) || 12;
+            
+            const rate = annualReturn / 100;
+            let futureValue = 0;
+            
+            for (let i = 0; i < years; i++) {
+                futureValue += annualAmount * Math.pow(1 + rate, years - i);
+            }
+            
+            const totalInvested = annualAmount * years;
+            const gain = futureValue - totalInvested;
+            
+            document.getElementById('annual-sip-invested').textContent = 'Rs. ' + formatNumber(totalInvested);
+            document.getElementById('annual-sip-maturity').textContent = 'Rs. ' + formatNumber(futureValue);
+            document.getElementById('annual-sip-gain').textContent = 'Rs. ' + formatNumber(gain);
+        }
+        
+        // Calculate Step-up SIP
+        function calculateStepUpSIP() {
+            const initialAmount = parseFloat(document.getElementById('stepup-amount').value) || 5000;
+            const annualIncrease = parseFloat(document.getElementById('stepup-increase').value) || 10;
+            const years = parseInt(document.getElementById('stepup-years').value) || 10;
+            const annualReturn = parseFloat(document.getElementById('stepup-return').value) || 12;
+            
+            const monthlyRate = annualReturn / 12 / 100;
+            let futureValue = 0;
+            let totalInvested = 0;
+            let currentMonthlyAmount = initialAmount;
+            
+            for (let year = 0; year < years; year++) {
+                for (let month = 0; month < 12; month++) {
+                    const monthsRemaining = (years - year) * 12 - month;
+                    futureValue += currentMonthlyAmount * Math.pow(1 + monthlyRate, monthsRemaining);
+                    totalInvested += currentMonthlyAmount;
+                }
+                currentMonthlyAmount *= (1 + annualIncrease / 100);
+            }
+            
+            const gain = futureValue - totalInvested;
+            
+            document.getElementById('stepup-invested').textContent = 'Rs. ' + formatNumber(totalInvested);
+            document.getElementById('stepup-maturity').textContent = 'Rs. ' + formatNumber(futureValue);
+            document.getElementById('stepup-gain').textContent = 'Rs. ' + formatNumber(gain);
+        }
+        
+        // Format number
+        function formatNumber(num) {
+            return Math.round(num).toLocaleString('en-IN');
+        }
+        
+        // Auto-calculate on input
+        document.addEventListener('DOMContentLoaded', function() {
+            // SIP inputs
+            ['sip-amount', 'sip-years', 'sip-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateSIP);
+                }
+            });
+            
+            // Lumpsum inputs
+            ['lumpsum-amount', 'lumpsum-years', 'lumpsum-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateLumpsum);
+                }
+            });
+            
+            // SWP inputs
+            ['swp-amount', 'swp-withdrawal', 'swp-years', 'swp-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateSWP);
+                }
+            });
+            
+            // Goal inputs
+            ['goal-target', 'goal-years', 'goal-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateGoal);
+                }
+            });
+            
+            // Loan EMI inputs
+            ['loan-amount', 'loan-years', 'loan-rate'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateLoanEMI);
+                }
+            });
+            
+            // Annual SIP inputs
+            ['annual-sip-amount', 'annual-sip-years', 'annual-sip-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateAnnualSIP);
+                }
+            });
+            
+            // Step-up SIP inputs
+            ['stepup-amount', 'stepup-increase', 'stepup-years', 'stepup-return'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateStepUpSIP);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
