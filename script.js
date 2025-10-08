@@ -619,67 +619,7 @@ function calculateCurrentValue(investedAmount, annualReturn, period) {
     return investedAmount * Math.pow(1 + returnRate, years);
 }
 
-function displayResults(data) {
-    if (!resultsTableBody) return;
-    
-    // Clear existing results
-    resultsTableBody.innerHTML = '';
-    
-    if (data.length === 0) {
-        resultsTableBody.innerHTML = `
-            <tr>
-                <td colspan="8" class="text-center" style="padding: 2rem; color: var(--gray-500);">
-                    <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                    No funds found matching your criteria
-                </td>
-            </tr>
-        `;
-        return;
-    }
-    
-    // Sort by annual return (descending)
-    data.sort((a, b) => b.annualReturn - a.annualReturn);
-    
-    // Display results
-    data.forEach((fund, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>
-                <a href="#" class="scheme-name">${fund.schemeName}</a>
-            </td>
-            <td>${formatNumber(fund.aum)} Cr</td>
-            <td>${fund.from}</td>
-            <td>${fund.to}</td>
-            <td>₹${formatNumber(fund.investedAmount)}</td>
-            <td>₹${formatNumber(fund.currentValue)}</td>
-            <td class="${fund.annualReturn >= 0 ? 'return-positive' : 'return-negative'}">
-                ${fund.annualReturn.toFixed(2)}%
-            </td>
-            <td>
-                <button class="btn btn-outline btn-sm" onclick="viewDetails('${fund.schemeName}')">
-                    <i class="fas fa-eye"></i> View
-                </button>
-            </td>
-        `;
-        resultsTableBody.appendChild(row);
-    });
-    
-    // Update summary
-    updateSummary(data);
-}
-
-function updateSummary(data) {
-    const avgReturn = data.reduce((sum, fund) => sum + fund.annualReturn, 0) / data.length;
-    const bestFund = data[0];
-    
-    // Update summary elements if they exist
-    const summaryElements = document.querySelectorAll('.summary-value');
-    if (summaryElements.length >= 3) {
-        summaryElements[0].textContent = `${avgReturn.toFixed(2)}%`;
-        summaryElements[1].textContent = `${bestFund.schemeName.split(' ')[0]} (${bestFund.annualReturn.toFixed(2)}%)`;
-        summaryElements[2].textContent = data.length.toString();
-    }
-}
+// Old displayResults function removed - now using displayAnalysisResults instead
 
 function formatNumber(num) {
     if (num >= 10000000) {
