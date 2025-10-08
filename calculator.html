@@ -21,14 +21,21 @@
         
         .page-container {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 260px 1fr;
             min-height: 100vh;
+            gap: 0;
         }
         
         .sidebar {
             background: #1e293b;
             color: white;
             padding: 20px 0;
+        }
+        
+        .main-content {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
         }
         
         .sidebar-title {
@@ -83,8 +90,10 @@
         }
         
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 30px 40px;
         }
         
         @media (max-width: 768px) {
@@ -124,10 +133,12 @@
         
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
             justify-content: center;
             flex-wrap: wrap;
+            border-bottom: 2px solid #e2e8f0;
         }
         
         .tab-btn {
@@ -158,6 +169,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.07);
             overflow: hidden;
+            width: 100%;
+            max-width: 100%;
         }
         
         .calculator-content {
@@ -759,12 +772,39 @@
                         <span class="result-label">Remaining Balance</span>
                         <span class="result-value" id="swp-balance">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="swp-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #ef4444;"></div>
+                                <span>Withdrawn</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Remaining</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-area"></i> Withdrawal Projection</h3>
+                        <svg class="line-graph" id="swp-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -785,21 +825,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="swp-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #ef4444;"></div>
-                                    <span>Withdrawn</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Remaining</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -862,12 +887,39 @@
                         <span class="result-label">Total Payment</span>
                         <span class="result-value" id="loan-total">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="loan-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Principal</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #ef4444;"></div>
+                                <span>Interest</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise EMI Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-line"></i> Loan Repayment Projection</h3>
+                        <svg class="line-graph" id="loan-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise EMI Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -888,21 +940,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="loan-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Principal</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #ef4444;"></div>
-                                    <span>Interest</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -965,12 +1002,39 @@
                         <span class="result-label">Wealth Gain</span>
                         <span class="result-value" id="annual-sip-gain">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="annual-sip-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Invested</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Returns</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-area"></i> Annual Investment Growth</h3>
+                        <svg class="line-graph" id="annual-sip-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -985,21 +1049,6 @@
                                 </thead>
                                 <tbody id="annual-sip-breakdown-tbody"></tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="annual-sip-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Invested</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Returns</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
