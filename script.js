@@ -633,7 +633,9 @@ function formatNumber(num) {
 }
 
 async function viewDetails(schemeName) {
-    console.log(`Viewing details for: ${schemeName}`);
+    console.log(`🔍 viewDetails called for: ${schemeName}`);
+    console.log(`📊 Function type: ${typeof viewDetails}`);
+    console.log(`🎯 This should show modal, not open URL`);
     
     // Show loading notification
     showNotification(`Loading details for ${schemeName}...`, 'info');
@@ -667,6 +669,9 @@ async function viewDetails(schemeName) {
 }
 
 function showSchemeDetailsModal(details) {
+    console.log('🎨 Creating modal for scheme:', details.meta?.scheme_name);
+    console.log('📊 Details object:', details);
+    
     // Calculate CAGR since inception
     const navHistory = details.data || [];
     let cagrSinceInception = 'N/A';
