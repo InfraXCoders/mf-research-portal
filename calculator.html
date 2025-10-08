@@ -637,12 +637,39 @@
                         <span class="result-label">Wealth Gain</span>
                         <span class="result-value" id="lumpsum-gain">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="lumpsum-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Invested</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Returns</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-line"></i> Growth Projection</h3>
+                        <svg class="line-graph" id="lumpsum-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -662,21 +689,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="lumpsum-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Invested</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Returns</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1498,10 +1510,13 @@
             document.getElementById('lumpsum-gain').textContent = 'Rs. ' + formatNumber(result.gain);
             
             // Generate year-wise breakdown
-            generateLumpsumBreakdown(amount, annualReturn, years);
+            const breakdownData = generateLumpsumBreakdown(amount, annualReturn, years);
             
             // Generate pie chart
             generatePieChart('lumpsum-pie-chart', result.invested, result.gain);
+            
+            // Generate line graph
+            generateLineGraph('lumpsum-line-graph', breakdownData, 'Lumpsum Growth Over Time');
         }
         
         // Generate Lumpsum year-wise breakdown
@@ -1510,10 +1525,17 @@
             const rate = annualReturn / 100;
             
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 const maturityValue = amount * Math.pow(1 + rate, year);
                 const interestEarned = maturityValue - amount;
+                
+                chartData.push({
+                    year: year,
+                    invested: amount,
+                    value: maturityValue
+                });
                 
                 html += `
                     <tr>
@@ -1526,6 +1548,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Calculate SWP
