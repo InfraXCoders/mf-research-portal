@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Monitor - Real-time Dashboard</title>
+    <style>
+        /* Login Screen Styles */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        
+        .login-overlay.hidden {
+            display: none;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-box h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .login-box .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            border: 1px solid #fcc;
+            animation: shake 0.5s;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .login-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+    </style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #00ff88;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .monitor-section {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .monitor-section h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .api-log {
+            background: #0f1419;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .log-entry {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            border-left: 3px solid #00ff88;
+            background: rgba(0,255,136,0.05);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .log-entry.error {
+            border-left-color: #ff4444;
+            background: rgba(255,68,68,0.05);
+        }
+        
+        .log-entry.warning {
+            border-left-color: #ffaa00;
+            background: rgba(255,170,0,0.05);
+        }
+        
+        .timestamp {
+            color: #888;
+            font-size: 11px;
+        }
+        
+        .endpoint {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+        
+        .status-success {
+            color: #00ff88;
+        }
+        
+        .status-error {
+            color: #ff4444;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        button.danger {
+            background: #ff4444;
+        }
+        
+        button.success {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .chart-container {
+            height: 200px;
+            background: #0f1419;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            overflow-x: auto;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            min-width: 20px;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            transition: height 0.3s;
+            position: relative;
+        }
+        
+        .chart-bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .performance-table th,
+        .performance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        .performance-table th {
+            background: #0f1419;
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        .performance-table tr:hover {
+            background: rgba(0,255,136,0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .badge.fast {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .badge.medium {
+            background: #ffaa00;
+            color: #000;
+        }
+        
+        .badge.slow {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>🔒 API Monitor Access</h2>
+            <p class="subtitle">Please login to view the dashboard</p>
+            
+            <div class="error-message" id="errorMessage">
+                Invalid username or password
+            </div>
+            
+            <form class="login-form" id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    🔓 Login
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>🔐 Protected Dashboard</p>
+                <p style="margin-top: 10px;">Default credentials for demo:</p>
+                <p><strong>Username:</strong> admin | <strong>Password:</strong> admin123</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Button (hidden until logged in) -->
+    <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="handleLogout()">
+        🚪 Logout
+    </button>
+    
+    <div class="container" id="mainContent" style="display: none;">
+        <h1>📊 API Monitor Dashboard</h1>
+        <p class="subtitle">Real-time monitoring of API calls • <span class="live-indicator"></span> Live</p>
+        
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total API Calls</div>
+                <div class="stat-value" id="totalCalls">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Successful Calls</div>
+                <div class="stat-value" id="successCalls">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Failed Calls</div>
+                <div class="stat-value" id="failedCalls">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Response Time</div>
+                <div class="stat-value" id="avgTime">0ms</div>
+            </div>
+        </div>
+        
+        <!-- Response Time Chart -->
+        <div class="monitor-section">
+            <h2>⚡ Response Time Chart</h2>
+            <div class="chart-container" id="chartContainer">
+                <!-- Bars will be added dynamically -->
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="monitor-section">
+            <h2>🎮 Controls</h2>
+            <div class="controls">
+                <button onclick="testAPI()">Test API Call</button>
+                <button onclick="loadSchemes()">Load All Schemes</button>
+                <button onclick="getSchemeDetails()">Get Scheme Details</button>
+                <button class="success" onclick="exportLogs()">Export Logs</button>
+                <button class="danger" onclick="clearLogs()">Clear Logs</button>
+            </div>
+        </div>
+        
+        <!-- API Logs -->
+        <div class="monitor-section">
+            <h2>📝 API Call Logs</h2>
+            <div class="api-log" id="apiLog">
+                <div class="log-entry">
+                    <span class="timestamp">[Ready]</span> 
+                    <span class="status-success">✓</span> 
+                    Monitor initialized - Ready to track API calls
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Details -->
+        <div class="monitor-section">
+            <h2>📈 Performance Details</h2>
+            <table class="performance-table">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Calls</th>
+                        <th>Success Rate</th>
+                        <th>Avg Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="performanceTable">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #888;">
+                            No data yet. Make some API calls to see statistics.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="api-config.js"></script>
+    <script src="api-service.js"></script>
+    <script>
+        // ==================== AUTHENTICATION ====================
+        
+        // User credentials (Change these to your desired username/password)
+        const VALID_CREDENTIALS = {
+            username: 'admin',
+            password: 'admin123'  // Change this password!
+        };
+        
+        // Alternative: Support multiple users
+        const VALID_USERS = [
+            { username: 'admin', password: 'admin123' },
+            { username: 'gagandeep', password: 'secure@2025' },
+            { username: 'infraxcoders', password: 'InfraX@123' }
+        ];
+        
+        // Check if user is already logged in
+        function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem('apiMonitorAuth');
+            
+            if (isLoggedIn === 'true') {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        }
+        
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Check credentials against all valid users
+            const isValid = VALID_USERS.some(user => 
+                user.username === username && user.password === password
+            );
+            
+            if (isValid) {
+                // Login successful
+                sessionStorage.setItem('apiMonitorAuth', 'true');
+                sessionStorage.setItem('apiMonitorUser', username);
+                errorMsg.classList.remove('show');
+                showDashboard();
+                
+                // Log successful login
+                logMessage(`✓ User "${username}" logged in successfully`, 'success');
+            } else {
+                // Login failed
+                errorMsg.classList.add('show');
+                
+                // Clear password field
+                document.getElementById('password').value = '';
+                
+                // Focus back to username
+                document.getElementById('username').focus();
+                
+                // Log failed attempt
+                console.warn('Failed login attempt');
+            }
+            
+            return false;
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            const username = sessionStorage.getItem('apiMonitorUser');
+            
+            if (confirm('Are you sure you want to logout?')) {
+                logMessage(`✓ User "${username}" logged out`, 'info');
+                
+                sessionStorage.removeItem('apiMonitorAuth');
+                sessionStorage.removeItem('apiMonitorUser');
+                
+                showLogin();
+                
+                // Clear sensitive data
+                clearLogs();
+            }
+        }
+        
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'block';
+            
+            // Show username in title
+            const username = sessionStorage.getItem('apiMonitorUser');
+            if (username) {
+                const subtitle = document.querySelector('.subtitle');
+                subtitle.innerHTML = `Real-time monitoring of API calls • <span class="live-indicator"></span> Live • Logged in as: <strong>${username}</strong>`;
+            }
+        }
+        
+        // Show login screen
+        function showLogin() {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').classList.remove('show');
+            
+            // Focus on username
+            setTimeout(() => {
+                document.getElementById('username').focus();
+            }, 500);
+        }
+        
+        // Auto-logout after 30 minutes of inactivity
+        let inactivityTimeout;
+        function resetInactivityTimeout() {
+            clearTimeout(inactivityTimeout);
+            
+            // 30 minutes = 1800000 ms
+            inactivityTimeout = setTimeout(() => {
+                const isLoggedIn = sessionStorage.getItem('apiMonitorAuth');
+                if (isLoggedIn === 'true') {
+                    alert('Session expired due to inactivity. Please login again.');
+                    handleLogout();
+                }
+            }, 1800000);
+        }
+        
+        // Track user activity
+        ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimeout);
+        });
+        
+        // Initialize authentication on page load
+        window.addEventListener('load', () => {
+            checkAuth();
+            resetInactivityTimeout();
+        });
+        
+        // ==================== MONITOR STATE ====================
+        
+        // Monitor state
+        const monitor = {
+            calls: [],
+            stats: {
+                total: 0,
+                success: 0,
+                failed: 0,
+                responseTimes: []
+            }
+        };
+        
+        // Initialize
+        async function init() {
+            await MFApiService.initialize();
+            logMessage('✓ API Service initialized', 'success');
+            
+            // Intercept fetch to monitor all API calls
+            interceptFetch();
+        }
+        
+        init();
+        
+        // Intercept fetch calls
+        function interceptFetch() {
+            const originalFetch = window.fetch;
+            
+            window.fetch = async function(...args) {
+                const url = args[0];
+                const startTime = Date.now();
+                
+                try {
+                    const response = await originalFetch.apply(this, args);
+                    const responseTime = Date.now() - startTime;
+                    
+                    logAPICall(url, response.status, responseTime, true);
+                    updateStats(true, responseTime);
+                    
+                    return response;
+                } catch (error) {
+                    const responseTime = Date.now() - startTime;
+                    logAPICall(url, 'Error', responseTime, false);
+                    updateStats(false, responseTime);
+                    throw error;
+                }
+            };
+        }
+        
+        // Log API call
+        function logAPICall(url, status, time, success) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logClass = success ? '' : 'error';
+            const statusClass = success ? 'status-success' : 'status-error';
+            const icon = success ? '✓' : '✗';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${logClass}`;
+            logEntry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span class="${statusClass}">${icon}</span>
+                <span class="endpoint">${extractEndpoint(url)}</span>
+                <span style="color: #888;">→</span>
+                <span class="${statusClass}">${status}</span>
+                <span style="color: #888;">(${time}ms)</span>
+            `;
+            
+            const logContainer = document.getElementById('apiLog');
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Keep only last 50 logs
+            while (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+            
+            // Store call
+            monitor.calls.push({
+                url,
+                status,
+                time,
+                success,
+                timestamp: new Date()
+            });
+        }
+        
+        // Update statistics
+        function updateStats(success, time) {
+            monitor.stats.total++;
+            if (success) monitor.stats.success++;
+            else monitor.stats.failed++;
+            monitor.stats.responseTimes.push(time);
+            
+            // Update display
+            document.getElementById('totalCalls').textContent = monitor.stats.total;
+            document.getElementById('successCalls').textContent = monitor.stats.success;
+            document.getElementById('failedCalls').textContent = monitor.stats.failed;
+            
+            const avgTime = monitor.stats.responseTimes.reduce((a, b) => a + b, 0) / monitor.stats.responseTimes.length;
+            document.getElementById('avgTime').textContent = Math.round(avgTime) + 'ms';
+            
+            // Update chart
+            updateChart(time);
+            updatePerformanceTable();
+        }
+        
+        // Update chart
+        function updateChart(time) {
+            const chartContainer = document.getElementById('chartContainer');
+            
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar';
+            bar.style.height = Math.min(time / 10, 100) + '%';
+            bar.setAttribute('data-value', time + 'ms');
+            
+            chartContainer.appendChild(bar);
+            
+            // Keep only last 30 bars
+            while (chartContainer.children.length > 30) {
+                chartContainer.removeChild(chartContainer.firstChild);
+            }
+        }
+        
+        // Update performance table
+        function updatePerformanceTable() {
+            const endpoints = {};
+            
+            monitor.calls.forEach(call => {
+                const endpoint = extractEndpoint(call.url);
+                if (!endpoints[endpoint]) {
+                    endpoints[endpoint] = {
+                        total: 0,
+                        success: 0,
+                        times: []
+                    };
+                }
+                endpoints[endpoint].total++;
+                if (call.success) endpoints[endpoint].success++;
+                endpoints[endpoint].times.push(call.time);
+            });
+            
+            const tbody = document.getElementById('performanceTable');
+            tbody.innerHTML = '';
+            
+            for (const [endpoint, data] of Object.entries(endpoints)) {
+                const avgTime = data.times.reduce((a, b) => a + b, 0) / data.times.length;
+                const successRate = (data.success / data.total * 100).toFixed(1);
+                
+                let badge = 'fast';
+                if (avgTime > 2000) badge = 'slow';
+                else if (avgTime > 1000) badge = 'medium';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${endpoint}</td>
+                    <td>${data.total}</td>
+                    <td>${successRate}%</td>
+                    <td>${Math.round(avgTime)}ms</td>
+                    <td><span class="badge ${badge}">${badge.toUpperCase()}</span></td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+        
+        // Extract endpoint name
+        function extractEndpoint(url) {
+            try {
+                const urlObj = new URL(url);
+                return urlObj.pathname.split('/').filter(p => p).join('/');
+            } catch {
+                return url;
+            }
+        }
+        
+        // Log message
+        function logMessage(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logClass = type === 'error' ? 'error' : type === 'warning' ? 'warning' : '';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${logClass}`;
+            logEntry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                ${message}
+            `;
+            
+            const logContainer = document.getElementById('apiLog');
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+        }
+        
+        // Test functions
+        async function testAPI() {
+            logMessage('Testing API connection...', 'info');
+            await MFApiService.getLatestNAV('119551');
+        }
+        
+        async function loadSchemes() {
+            logMessage('Loading all schemes...', 'info');
+            await MFApiService.getAllSchemes();
+        }
+        
+        async function getSchemeDetails() {
+            logMessage('Fetching scheme details...', 'info');
+            await MFApiService.getSchemeDetails('119551');
+        }
+        
+        // Export logs
+        function exportLogs() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                stats: monitor.stats,
+                calls: monitor.calls
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `api-monitor-${Date.now()}.json`;
+            a.click();
+            
+            logMessage('✓ Logs exported successfully', 'success');
+        }
+        
+        // Clear logs
+        function clearLogs() {
+            if (confirm('Clear all logs and statistics?')) {
+                monitor.calls = [];
+                monitor.stats = {
+                    total: 0,
+                    success: 0,
+                    failed: 0,
+                    responseTimes: []
+                };
+                
+                document.getElementById('apiLog').innerHTML = `
+                    <div class="log-entry">
+                        <span class="timestamp">[Cleared]</span> 
+                        <span class="status-success">✓</span> 
+                        Logs cleared - Ready to track new calls
+                    </div>
+                `;
+                
+                document.getElementById('totalCalls').textContent = '0';
+                document.getElementById('successCalls').textContent = '0';
+                document.getElementById('failedCalls').textContent = '0';
+                document.getElementById('avgTime').textContent = '0ms';
+                document.getElementById('chartContainer').innerHTML = '';
+                document.getElementById('performanceTable').innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #888;">
+                            No data yet. Make some API calls to see statistics.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

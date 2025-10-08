@@ -145,11 +145,24 @@ const periodSelect = document.getElementById('period');
 const amountSelect = document.getElementById('amount');
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+document.addEventListener('DOMContentLoaded', async function() {
+    await initializeApp();
 });
 
-function initializeApp() {
+async function initializeApp() {
+    console.log('🚀 Initializing MF Research Portal...');
+    
+    // Initialize API Service
+    if (window.MFApiService) {
+        await window.MFApiService.initialize();
+        console.log('✅ API Service initialized');
+        
+        // Try to load real-time data
+        await loadRealTimeData();
+    } else {
+        console.warn('⚠️ API Service not available, using sample data');
+    }
+    
     // Add event listeners
     analyzeBtn.addEventListener('click', handleAnalyze);
     resetBtn.addEventListener('click', handleReset);
@@ -183,6 +196,138 @@ function initializeApp() {
     
     // Initialize with default data
     displayResults(mutualFundData);
+    
+    console.log('✅ Application initialized');
+}
+
+// Load real-time data from API
+async function loadRealTimeData() {
+    try {
+        console.log('📡 Loading real-time mutual fund data...');
+        
+        // Show loading indicator
+        showGlobalLoading(true);
+        
+        // Fetch all schemes from MFApi.in
+        const schemes = await window.MFApiService.getAllSchemes();
+        
+        if (schemes && schemes.length > 0) {
+            console.log(`✅ Loaded ${schemes.length} schemes from API`);
+            
+            // Update AMC dropdown with real data
+            updateAMCDropdown(schemes);
+            
+            // Store for later use
+            window.realTimeSchemes = schemes;
+        }
+        
+        // Load specific scheme details for popular funds
+        const popularSchemeCodes = ['119551', '120503', '112090', '118989'];
+        const detailedSchemes = [];
+        
+        for (const code of popularSchemeCodes) {
+            const details = await window.MFApiService.getSchemeDetails(code);
+            if (details) {
+                detailedSchemes.push(details);
+            }
+        }
+        
+        if (detailedSchemes.length > 0) {
+            console.log(`✅ Loaded ${detailedSchemes.length} detailed schemes`);
+            window.realTimeDetailedData = detailedSchemes;
+        }
+        
+        showGlobalLoading(false);
+        showNotification('Real-time data loaded successfully!', 'success');
+        
+    } catch (error) {
+        console.error('❌ Error loading real-time data:', error);
+        showGlobalLoading(false);
+        showNotification('Using sample data. Real-time data unavailable.', 'info');
+    }
+}
+
+// Update AMC dropdown with real data
+function updateAMCDropdown(schemes) {
+    const amcSelect = document.getElementById('amc');
+    if (!amcSelect) return;
+    
+    // Get unique AMCs
+    const amcs = [...new Set(schemes.map(s => s.amc))].filter(amc => amc !== 'Other');
+    amcs.sort();
+    
+    // Clear existing options (except "All AMCs")
+    while (amcSelect.options.length > 1) {
+        amcSelect.remove(1);
+    }
+    
+    // Add real AMCs
+    amcs.forEach(amc => {
+        const option = document.createElement('option');
+        option.value = amc.toLowerCase().replace(/\s+/g, '-');
+        option.textContent = amc;
+        amcSelect.appendChild(option);
+    });
+    
+    console.log(`✅ Updated AMC dropdown with ${amcs.length} AMCs`);
+}
+
+// Show global loading indicator
+function showGlobalLoading(show) {
+    let loader = document.getElementById('global-loader');
+    
+    if (show && !loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-loader';
+        loader.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(37, 99, 235, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading real-time data...';
+        document.body.appendChild(loader);
+    } else if (!show && loader) {
+        loader.remove();
+    }
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+    notification.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 function handleScroll() {
