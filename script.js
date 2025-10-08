@@ -163,9 +163,13 @@ async function initializeApp() {
         console.warn('⚠️ API Service not available, using sample data');
     }
     
-    // Add event listeners
-    analyzeBtn.addEventListener('click', handleAnalyze);
-    resetBtn.addEventListener('click', handleReset);
+    // Add event listeners (only if elements exist)
+    if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', handleAnalyze);
+    }
+    if (resetBtn) {
+        resetBtn.addEventListener('click', handleReset);
+    }
     
     // Initialize search functionality
     initializeSearch();
