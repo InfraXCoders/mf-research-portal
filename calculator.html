@@ -191,10 +191,31 @@
             border-top: 1px solid #e2e8f0;
         }
         
+        .line-graph-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+        
+        .line-graph {
+            width: 100%;
+            height: 350px;
+        }
+        
+        .graph-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .breakdown-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
+            display: block;
             margin-top: 20px;
         }
         
@@ -228,20 +249,26 @@
         }
         
         .chart-container-pie {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            margin-top: 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
         
         .pie-chart {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
         }
         
         .chart-legend-pie {
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
         
         .legend-item {
@@ -495,12 +522,39 @@
                         <span class="result-label">Wealth Gain</span>
                         <span class="result-value" id="sip-gain">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="sip-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Invested</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Returns</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-area"></i> Growth Projection</h3>
+                        <svg class="line-graph" id="sip-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -521,21 +575,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="sip-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie" id="sip-pie-legend">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Invested</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Returns</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1227,10 +1266,13 @@
             document.getElementById('sip-gain').textContent = 'Rs. ' + formatNumber(result.gain);
             
             // Generate year-wise breakdown
-            generateSIPBreakdown(monthlyAmount, annualReturn, years);
+            const breakdownData = generateSIPBreakdown(monthlyAmount, annualReturn, years);
             
             // Generate pie chart
             generatePieChart('sip-pie-chart', result.invested, result.gain);
+            
+            // Generate line graph
+            generateLineGraph('sip-line-graph', breakdownData, 'SIP Growth Over Time');
         }
         
         // Generate SIP year-wise breakdown
@@ -1241,6 +1283,7 @@
             let html = '';
             let cumulativeInvested = 0;
             let previousMaturityValue = 0;
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 const monthsCompleted = year * 12;
@@ -1256,6 +1299,12 @@
                 const interestThisYear = maturityValue - cumulativeInvested - (previousMaturityValue - (cumulativeInvested - monthlyAmount * 12));
                 const yearlyInterest = maturityValue - cumulativeInvested;
                 
+                chartData.push({
+                    year: year,
+                    invested: cumulativeInvested,
+                    value: maturityValue
+                });
+                
                 html += `
                     <tr>
                         <td><strong>Year ${year}</strong></td>
@@ -1270,6 +1319,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Generate pie chart
@@ -1330,6 +1380,109 @@
                 x: centerX + (radius * Math.cos(angleInRadians)),
                 y: centerY + (radius * Math.sin(angleInRadians))
             };
+        }
+        
+        // Generate line graph
+        function generateLineGraph(svgId, data, title) {
+            const svg = document.getElementById(svgId);
+            if (!svg || !data || data.length === 0) return;
+            
+            const width = 800;
+            const height = 300;
+            const padding = 60;
+            const graphWidth = width - padding * 2;
+            const graphHeight = height - padding * 2;
+            
+            // Find max values
+            const maxValue = Math.max(...data.map(d => d.value));
+            const maxInvested = Math.max(...data.map(d => d.invested));
+            const maxY = Math.max(maxValue, maxInvested);
+            
+            // Generate path for invested line
+            let investedPath = '';
+            data.forEach((d, i) => {
+                const x = padding + (i / (data.length - 1)) * graphWidth;
+                const y = padding + graphHeight - (d.invested / maxY) * graphHeight;
+                investedPath += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+            });
+            
+            // Generate path for maturity value line
+            let valuePath = '';
+            data.forEach((d, i) => {
+                const x = padding + (i / (data.length - 1)) * graphWidth;
+                const y = padding + graphHeight - (d.value / maxY) * graphHeight;
+                valuePath += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+            });
+            
+            // Generate area fill for value
+            let areaPath = valuePath;
+            const lastX = padding + graphWidth;
+            const bottomY = padding + graphHeight;
+            areaPath += ` L ${lastX} ${bottomY} L ${padding} ${bottomY} Z`;
+            
+            // Generate grid lines and labels
+            let gridLines = '';
+            let yLabels = '';
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (i / 5) * graphHeight;
+                const value = maxY - (i / 5) * maxY;
+                gridLines += `<line x1="${padding}" y1="${y}" x2="${padding + graphWidth}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>`;
+                yLabels += `<text x="${padding - 10}" y="${y + 5}" text-anchor="end" font-size="12" fill="#64748b">₹${formatNumber(value)}</text>`;
+            }
+            
+            // Generate x-axis labels
+            let xLabels = '';
+            data.forEach((d, i) => {
+                if (i % Math.ceil(data.length / 10) === 0 || i === data.length - 1) {
+                    const x = padding + (i / (data.length - 1)) * graphWidth;
+                    xLabels += `<text x="${x}" y="${padding + graphHeight + 20}" text-anchor="middle" font-size="12" fill="#64748b">Yr ${d.year}</text>`;
+                }
+            });
+            
+            svg.innerHTML = `
+                <!-- Grid -->
+                ${gridLines}
+                
+                <!-- Area fill -->
+                <path d="${areaPath}" fill="url(#gradient)" opacity="0.2"/>
+                
+                <!-- Gradient -->
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Invested line -->
+                <path d="${investedPath}" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                
+                <!-- Value line -->
+                <path d="${valuePath}" stroke="#10b981" stroke-width="3" fill="none"/>
+                
+                <!-- Axes -->
+                <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${padding + graphHeight}" stroke="#1e293b" stroke-width="2"/>
+                <line x1="${padding}" y1="${padding + graphHeight}" x2="${padding + graphWidth}" y2="${padding + graphHeight}" stroke="#1e293b" stroke-width="2"/>
+                
+                <!-- Labels -->
+                ${yLabels}
+                ${xLabels}
+                
+                <!-- Y-axis label -->
+                <text x="20" y="${padding + graphHeight / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b" transform="rotate(-90, 20, ${padding + graphHeight / 2})">Amount (₹)</text>
+                
+                <!-- X-axis label -->
+                <text x="${padding + graphWidth / 2}" y="${height - 10}" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Years</text>
+                
+                <!-- Legend -->
+                <g transform="translate(${width - 180}, ${padding})">
+                    <rect x="0" y="0" width="15" height="3" fill="#3b82f6"/>
+                    <text x="20" y="5" font-size="12" fill="#1e293b">Invested</text>
+                    
+                    <rect x="0" y="20" width="15" height="3" fill="#10b981"/>
+                    <text x="20" y="25" font-size="12" fill="#1e293b">Maturity Value</text>
+                </g>
+            `;
         }
         
         // Calculate Lumpsum
