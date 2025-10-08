@@ -59,6 +59,42 @@
         .header .subtitle {
             color: var(--text-secondary);
             font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .calculator-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .selector-btn {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: auto;
+        }
+        
+        .selector-btn:hover {
+            border-color: var(--accent-blue);
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        
+        .selector-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--secondary-blue));
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
         }
         
         .back-link {
@@ -77,10 +113,10 @@
         }
         
         .calculators-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         .calculator-card {
@@ -90,12 +126,8 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             border: 1px solid var(--border-color);
             transition: all 0.3s;
-        }
-        
-        .calculator-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 70px rgba(59, 130, 246, 0.3);
-            border-color: var(--accent-blue);
+            width: 100%;
+            max-width: 800px;
         }
         
         .calculator-card h2 {
@@ -401,23 +433,45 @@
         </a>
         
         <div class="header">
-            <h1>💰 Investment Calculators</h1>
+            <h1>💰 Investment Calculator</h1>
             <p class="subtitle">Calculate returns with real mutual fund data</p>
+            
+            <!-- Calculator Type Selector -->
+            <div class="calculator-selector">
+                <button class="selector-btn active" onclick="switchCalculator('lumpsum')">
+                    <i class="fas fa-coins"></i>
+                    Lumpsum Calculator
+                </button>
+                <button class="selector-btn" onclick="switchCalculator('sip')">
+                    <i class="fas fa-chart-line"></i>
+                    SIP Calculator
+                </button>
+            </div>
         </div>
         
         <div class="calculators-grid">
             <!-- Lumpsum Calculator -->
-            <div class="calculator-card">
-                <h2>
-                    <i class="fas fa-coins"></i>
-                    Lumpsum Calculator
-                </h2>
-                <p class="description">
-                    Calculate returns on one-time investment using real mutual fund historical returns or custom rate.
-                </p>
+            <div class="calculator-card" id="lumpsum-calculator" style="border-left: 5px solid #f59e0b;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);">
+                        <i class="fas fa-hand-holding-usd" style="font-size: 2.5rem; color: white;"></i>
+                    </div>
+                    <h2 style="color: #fbbf24; margin-bottom: 10px;">
+                        Lumpsum Calculator
+                    </h2>
+                    <p class="description" style="margin-bottom: 20px;">
+                        <strong>One-time investment</strong> - Invest a large amount once and watch it grow
+                    </p>
+                </div>
+                
+                <div class="info-box" style="background: rgba(245, 158, 11, 0.1); border-color: #f59e0b;">
+                    <p style="margin-bottom: 10px;"><strong>💡 What is Lumpsum?</strong></p>
+                    <p>Invest a <strong>single large amount</strong> (like ₹1,00,000) at once. Perfect for bonuses, inheritance, or savings.</p>
+                    <p style="margin-top: 10px;"><strong>Example:</strong> Invest ₹1,00,000 today → Get ₹1,76,234 after 5 years @ 12%</p>
+                </div>
                 
                 <div class="info-box">
-                    <p><i class="fas fa-info-circle"></i> Select a mutual fund to use its actual returns, or enter a custom return rate.</p>
+                    <p><i class="fas fa-search"></i> Select a mutual fund to use its actual returns, or enter a custom return rate below.</p>
                 </div>
                 
                 <!-- Mutual Fund Selector -->
@@ -438,23 +492,23 @@
                 <div id="lumpsum-selected" class="selected-mf" style="display: none;"></div>
                 
                 <div class="form-group">
-                    <label>Investment Amount (₹)</label>
-                    <input type="number" id="lumpsum-amount" value="100000" step="1000" min="1000">
+                    <label>💰 One-Time Investment Amount (₹)</label>
+                    <input type="number" id="lumpsum-amount" value="100000" step="1000" min="1000" placeholder="e.g., 1,00,000">
                 </div>
                 
                 <div class="form-group">
-                    <label>Expected Annual Return (%)</label>
-                    <input type="number" id="lumpsum-return" value="12" step="0.1" min="0" max="100">
+                    <label>📈 Expected Annual Return (%)</label>
+                    <input type="number" id="lumpsum-return" value="12" step="0.1" min="0" max="100" placeholder="e.g., 12">
                 </div>
                 
                 <div class="form-group">
-                    <label>Investment Period (Years)</label>
-                    <input type="number" id="lumpsum-years" value="5" min="1" max="30">
+                    <label>⏱️ Investment Period (Years)</label>
+                    <input type="number" id="lumpsum-years" value="5" min="1" max="30" placeholder="e.g., 5">
                 </div>
                 
-                <button onclick="calculateLumpsum()">
+                <button onclick="calculateLumpsum()" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                     <i class="fas fa-calculator"></i>
-                    Calculate Returns
+                    Calculate Lumpsum Returns
                 </button>
                 
                 <div id="lumpsum-results" class="results-card">
@@ -465,17 +519,30 @@
             </div>
             
             <!-- SIP Calculator -->
-            <div class="calculator-card">
-                <h2>
-                    <i class="fas fa-chart-line"></i>
-                    SIP Calculator
-                </h2>
-                <p class="description">
-                    Calculate returns on Systematic Investment Plan (monthly investments) with real mutual fund data.
-                </p>
+            <div class="calculator-card" id="sip-calculator" style="display: none; border-left: 5px solid #10b981;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
+                        <i class="fas fa-chart-line" style="font-size: 2.5rem; color: white;"></i>
+                    </div>
+                    <h2 style="color: #34d399; margin-bottom: 10px;">
+                        SIP Calculator
+                    </h2>
+                    <p class="description" style="margin-bottom: 20px;">
+                        <strong>Monthly investments</strong> - Invest small amounts regularly every month
+                    </p>
+                </div>
+                
+                <div class="info-box" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981;">
+                    <p style="margin-bottom: 10px;"><strong>💡 What is SIP?</strong></p>
+                    <p>Systematic Investment Plan - Invest a <strong>fixed amount every month</strong> (like ₹5,000/month). Perfect for salaried individuals.</p>
+                    <p style="margin-top: 10px;"><strong>Example:</strong> Invest ₹5,000/month → Total invested ₹3,00,000 → Get ₹4,11,223 after 5 years @ 12%</p>
+                    <p style="margin-top: 10px; padding: 10px; background: rgba(16, 185, 129, 0.2); border-radius: 5px;">
+                        <strong>✨ Benefit:</strong> Rupee cost averaging - Buy more units when price is low, fewer when high!
+                    </p>
+                </div>
                 
                 <div class="info-box">
-                    <p><i class="fas fa-info-circle"></i> Select a mutual fund to use its actual returns, or enter a custom return rate.</p>
+                    <p><i class="fas fa-search"></i> Select a mutual fund to use its actual returns, or enter a custom return rate below.</p>
                 </div>
                 
                 <!-- Mutual Fund Selector -->
@@ -496,23 +563,23 @@
                 <div id="sip-selected" class="selected-mf" style="display: none;"></div>
                 
                 <div class="form-group">
-                    <label>Monthly Investment (₹)</label>
-                    <input type="number" id="sip-amount" value="5000" step="500" min="500">
+                    <label>💵 Monthly Investment Amount (₹)</label>
+                    <input type="number" id="sip-amount" value="5000" step="500" min="500" placeholder="e.g., 5,000 per month">
                 </div>
                 
                 <div class="form-group">
-                    <label>Expected Annual Return (%)</label>
-                    <input type="number" id="sip-return" value="12" step="0.1" min="0" max="100">
+                    <label>📈 Expected Annual Return (%)</label>
+                    <input type="number" id="sip-return" value="12" step="0.1" min="0" max="100" placeholder="e.g., 12">
                 </div>
                 
                 <div class="form-group">
-                    <label>Investment Period (Years)</label>
-                    <input type="number" id="sip-years" value="10" min="1" max="30">
+                    <label>⏱️ Investment Period (Years)</label>
+                    <input type="number" id="sip-years" value="10" min="1" max="30" placeholder="e.g., 10">
                 </div>
                 
-                <button onclick="calculateSIP()">
+                <button onclick="calculateSIP()" style="background: linear-gradient(135deg, #10b981, #059669);">
                     <i class="fas fa-calculator"></i>
-                    Calculate Returns
+                    Calculate SIP Returns
                 </button>
                 
                 <div id="sip-results" class="results-card">
@@ -664,19 +731,19 @@
             }
             
             gridDiv.innerHTML = `
-                <div class="result-box">
-                    <div class="result-label">Amount Invested</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <div class="result-label">💰 Invested Once</div>
                     <div class="result-value">₹${formatNumber(result.invested)}</div>
                 </div>
-                <div class="result-box">
-                    <div class="result-label">Maturity Value</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: 3px solid #fbbf24;">
+                    <div class="result-label">💎 Maturity Value</div>
                     <div class="result-value">₹${formatNumber(result.current)}</div>
-                    <div class="result-subtext">${years} years @ ${returnRate}%</div>
+                    <div class="result-subtext">After ${years} years @ ${returnRate}%</div>
                 </div>
-                <div class="result-box">
-                    <div class="result-label">Wealth Gain</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <div class="result-label">✨ Wealth Gain</div>
                     <div class="result-value">₹${formatNumber(result.gain)}</div>
-                    <div class="result-subtext">${result.gainPercent.toFixed(2)}% gain</div>
+                    <div class="result-subtext">${result.gainPercent.toFixed(2)}% total gain</div>
                 </div>
             `;
             
@@ -707,20 +774,20 @@
             }
             
             gridDiv.innerHTML = `
-                <div class="result-box">
-                    <div class="result-label">Total Invested</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <div class="result-label">💵 Total Invested (Monthly)</div>
                     <div class="result-value">₹${formatNumber(result.invested)}</div>
-                    <div class="result-subtext">${monthlyAmount.toLocaleString()}/month × ${years * 12} months</div>
+                    <div class="result-subtext">₹${monthlyAmount.toLocaleString()}/month × ${years * 12} months</div>
                 </div>
-                <div class="result-box">
-                    <div class="result-label">Maturity Value</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #10b981, #059669); border: 3px solid #34d399;">
+                    <div class="result-label">💎 Maturity Value</div>
                     <div class="result-value">₹${formatNumber(result.current)}</div>
-                    <div class="result-subtext">${years} years @ ${returnRate}%</div>
+                    <div class="result-subtext">After ${years} years @ ${returnRate}%</div>
                 </div>
-                <div class="result-box">
-                    <div class="result-label">Wealth Gain</div>
+                <div class="result-box" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                    <div class="result-label">✨ Wealth Created</div>
                     <div class="result-value">₹${formatNumber(result.gain)}</div>
-                    <div class="result-subtext">${result.gainPercent.toFixed(2)}% gain</div>
+                    <div class="result-subtext">${result.gainPercent.toFixed(2)}% total gain</div>
                 </div>
             `;
             
@@ -748,6 +815,34 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
+        }
+        
+        // Switch between calculators
+        function switchCalculator(type) {
+            const lumpsumCalc = document.getElementById('lumpsum-calculator');
+            const sipCalc = document.getElementById('sip-calculator');
+            const buttons = document.querySelectorAll('.selector-btn');
+            
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (type === 'lumpsum') {
+                lumpsumCalc.style.display = 'block';
+                sipCalc.style.display = 'none';
+                buttons[0].classList.add('active');
+            } else {
+                lumpsumCalc.style.display = 'none';
+                sipCalc.style.display = 'block';
+                buttons[1].classList.add('active');
+            }
+            
+            // Smooth scroll to calculator
+            setTimeout(() => {
+                document.querySelector('.calculator-card').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
         }
     </script>
 </body>
