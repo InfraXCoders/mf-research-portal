@@ -384,6 +384,36 @@
                             </h3>
                         </div>
 
+                        <!-- Growth Chart Section -->
+                        <div style="padding: 20px; border-bottom: 1px solid #e2e8f0;">
+                            <h4 style="margin: 0 0 15px 0; color: #1e293b; font-size: 16px;">Performance Growth Chart</h4>
+                            
+                            <!-- Time Period Tabs -->
+                            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                                <button class="chart-tab active" onclick="updateComparisonChart('1Y')" data-period="1Y">
+                                    1Y
+                                </button>
+                                <button class="chart-tab" onclick="updateComparisonChart('3Y')" data-period="3Y">
+                                    3Y
+                                </button>
+                                <button class="chart-tab" onclick="updateComparisonChart('5Y')" data-period="5Y">
+                                    5Y
+                                </button>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <svg id="comparisonChart" width="100%" height="300" viewBox="0 0 800 300">
+                                    <!-- Chart will be generated here -->
+                                </svg>
+                            </div>
+                            
+                            <!-- Legend -->
+                            <div id="comparisonChartLegend" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                                <!-- Legend will be populated here -->
+                            </div>
+                        </div>
+
                         <!-- Comparison Table -->
                         <div style="overflow-x: auto;">
                             <table id="comparisonTable" style="width: 100%; border-collapse: collapse;">
@@ -721,6 +751,7 @@
             fund2: null,
             fund3: null
         };
+        let currentComparisonData = null;
 
         // Initialize comparison search functionality
         function initializeComparison() {
@@ -957,8 +988,14 @@
                     })
                 );
 
+                // Store comparison data for chart updates
+                currentComparisonData = fundDetails;
+                
                 // Display comparison results
                 displayComparisonResults(fundDetails);
+                
+                // Generate initial chart (1Y)
+                generateComparisonChart('1Y');
                 
                 // Hide empty state and show results
                 document.getElementById('compareEmptyState').style.display = 'none';
@@ -1182,6 +1219,116 @@
             a.download = 'fund-comparison.csv';
             a.click();
             window.URL.revokeObjectURL(url);
+        }
+
+        // Generate comparison chart
+        function generateComparisonChart(period) {
+            if (!currentComparisonData || currentComparisonData.length === 0) return;
+            
+            const svg = document.getElementById('comparisonChart');
+            const legend = document.getElementById('comparisonChartLegend');
+            
+            // Clear previous chart
+            svg.innerHTML = '';
+            legend.innerHTML = '';
+            
+            // Chart dimensions
+            const width = 800;
+            const height = 300;
+            const padding = 60;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+            
+            // Colors for different funds
+            const colors = ['#10b981', '#3b82f6', '#f59e0b'];
+            
+            // Generate chart data for each fund
+            const chartData = currentComparisonData.map((fund, index) => {
+                const data = fund.details?.data || [];
+                let days = 252; // Default to 1 year
+                
+                if (period === '3Y') days = 756;
+                if (period === '5Y') days = 1260;
+                
+                // Take the last 'days' data points
+                const periodData = data.slice(0, Math.min(days, data.length));
+                
+                if (periodData.length < 2) return null;
+                
+                // Calculate growth percentage
+                const startValue = parseFloat(periodData[periodData.length - 1].nav);
+                const endValue = parseFloat(periodData[0].nav);
+                const growth = ((endValue - startValue) / startValue * 100);
+                
+                return {
+                    name: fund.name.split(' ').slice(0, 3).join(' '),
+                    growth: growth.toFixed(1),
+                    color: colors[index],
+                    data: periodData.map((point, i) => ({
+                        x: (i / (periodData.length - 1)) * chartWidth,
+                        y: ((parseFloat(point.nav) - startValue) / startValue) * 100
+                    }))
+                };
+            }).filter(item => item !== null);
+            
+            if (chartData.length === 0) {
+                svg.innerHTML = '<text x="400" y="150" text-anchor="middle" fill="#64748b">No data available for selected period</text>';
+                return;
+            }
+            
+            // Draw chart background
+            svg.innerHTML = `
+                <rect x="${padding}" y="${padding}" width="${chartWidth}" height="${chartHeight}" fill="#f8fafc" stroke="#e2e8f0"/>
+                
+                <!-- Grid lines -->
+                ${Array.from({length: 5}, (_, i) => {
+                    const y = padding + (i * chartHeight / 4);
+                    return `<line x1="${padding}" y1="${y}" x2="${padding + chartWidth}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="2,2"/>`;
+                }).join('')}
+                
+                <!-- Axes -->
+                <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${padding + chartHeight}" stroke="#1e293b" stroke-width="2"/>
+                <line x1="${padding}" y1="${padding + chartHeight}" x2="${padding + chartWidth}" y2="${padding + chartHeight}" stroke="#1e293b" stroke-width="2"/>
+                
+                <!-- Chart content will be added here -->
+            `;
+            
+            // Draw lines for each fund
+            chartData.forEach(fund => {
+                const pathData = fund.data.map(point => {
+                    const x = padding + point.x;
+                    const y = padding + chartHeight - ((point.y + 100) / 200) * chartHeight;
+                    return `${fund.data.indexOf(point) === 0 ? 'M' : 'L'} ${x} ${y}`;
+                }).join(' ');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathData);
+                path.setAttribute('stroke', fund.color);
+                path.setAttribute('stroke-width', '3');
+                path.setAttribute('fill', 'none');
+                svg.appendChild(path);
+                
+                // Add legend
+                const legendItem = document.createElement('div');
+                legendItem.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 5px 0;';
+                legendItem.innerHTML = `
+                    <div style="width: 20px; height: 3px; background: ${fund.color}; border-radius: 2px;"></div>
+                    <span style="font-size: 14px; font-weight: 600; color: #1e293b;">${fund.name} Growth: ${fund.growth}%</span>
+                `;
+                legend.appendChild(legendItem);
+            });
+        }
+        
+        // Update comparison chart
+        function updateComparisonChart(period) {
+            // Update active tab
+            document.querySelectorAll('.chart-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-period="${period}"]`).classList.add('active');
+            
+            // Regenerate chart with new period
+            generateComparisonChart(period);
         }
 
         // Initialize comparison when DOM is loaded
