@@ -445,9 +445,6 @@
                 <li><a href="#" onclick="switchTab('loan-emi'); return false;">
                     <i class="fas fa-home"></i> Loan EMI
                 </a></li>
-                <li><a href="#" onclick="switchTab('goal'); return false;">
-                    <i class="fas fa-bullseye"></i> Goal Based SIP
-                </a></li>
                 <li><a href="#" onclick="switchTab('step-up'); return false;">
                     <i class="fas fa-arrow-trend-up"></i> SIP Top Up
                 </a></li>
@@ -473,9 +470,6 @@
             </button>
             <button class="tab-btn" onclick="switchTab('swp')">
                 <i class="fas fa-wallet"></i> SWP (Pension)
-            </button>
-            <button class="tab-btn" onclick="switchTab('goal')">
-                <i class="fas fa-bullseye"></i> Goal
             </button>
         </div>
         
@@ -1172,114 +1166,6 @@
             </div>
         </div>
         
-        <!-- Goal Calculator -->
-        <div id="goal-calculator" class="calculator-container calculator-hidden">
-            <div class="calculator-content">
-                <div class="top-section">
-                    <div class="input-section">
-                    <div class="info-banner">
-                        <strong>🎯 Goal-Based Investment</strong><br>
-                        Calculate how much to invest monthly to reach your financial goal (car, house, education, etc.)
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <span>Target Amount</span>
-                            <span>:</span>
-                        </label>
-                        <input type="number" id="goal-target" value="1000000" min="10000" step="10000" placeholder="Your goal amount">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <span>Time Period (Years)</span>
-                            <span>:</span>
-                        </label>
-                        <input type="number" id="goal-years" value="10" min="1" max="30" placeholder="Years to achieve">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <span>Expected Return %</span>
-                            <span>:</span>
-                        </label>
-                        <input type="number" id="goal-return" value="12" min="1" max="50" step="0.1" placeholder="Expected return %">
-                    </div>
-                    
-                    <button class="calculate-btn" onclick="calculateGoal()">
-                        <i class="fas fa-calculator"></i> Calculate
-                    </button>
-                </div>
-                
-                <div class="result-section">
-                    <h3 class="result-title">Goal Plan</h3>
-                    
-                    <div class="result-item">
-                        <span class="result-label">Target Amount</span>
-                        <span class="result-value" id="goal-target-result">Rs. 0</span>
-                    </div>
-                    
-                    <div class="result-item highlight">
-                        <span class="result-label">Monthly SIP Required</span>
-                        <span class="result-value" id="goal-monthly">Rs. 0</span>
-                    </div>
-                    
-                    <div class="result-item">
-                        <span class="result-label">Total Investment</span>
-                        <span class="result-value" id="goal-invested">Rs. 0</span>
-                    </div>
-                    
-                    <!-- Pie Chart Below Results -->
-                    <div class="chart-container-pie">
-                        <svg class="pie-chart" viewBox="0 0 200 200" id="goal-pie-chart">
-                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                        </svg>
-                        <div class="chart-legend-pie">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: #3b82f6;"></div>
-                                <span>Invested</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: #10b981;"></div>
-                                <span>Returns</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
-                <!-- Breakdown Section -->
-                <div class="breakdown-section">
-                    <!-- Line Graph -->
-                    <div class="line-graph-container">
-                        <h3 class="graph-title"><i class="fas fa-bullseye"></i> Goal Achievement Projection</h3>
-                        <svg class="line-graph" id="goal-line-graph" viewBox="0 0 800 300">
-                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
-                                Click Calculate to see graph
-                            </text>
-                        </svg>
-                    </div>
-                    
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
-                    <div class="breakdown-grid">
-                        <div class="breakdown-table-container">
-                            <table class="breakdown-table">
-                                <thead>
-                                    <tr>
-                                        <th>Year</th>
-                                        <th>Monthly SIP</th>
-                                        <th>Total Invested</th>
-                                        <th>Interest Earned</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="goal-breakdown-tbody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
             </div>
         </div>
     </div>
@@ -1317,14 +1203,14 @@
             }
             
             // Activate sidebar based on type
-            const sidebarIndex = type === 'sip' ? 0 : type === 'annual-sip' ? 1 : type === 'loan-emi' ? 2 : type === 'goal' ? 3 : type === 'step-up' ? 4 : 5;
+            const sidebarIndex = type === 'sip' ? 0 : type === 'annual-sip' ? 1 : type === 'loan-emi' ? 2 : type === 'step-up' ? 3 : 4;
             if (menuLinks[sidebarIndex]) {
                 menuLinks[sidebarIndex].classList.add('active');
             }
             
             // Activate button tab
-            const buttonIndex = type === 'sip' ? 0 : type === 'lumpsum' ? 1 : type === 'swp' ? 2 : 3;
-            if (buttons[buttonIndex]) {
+            const buttonIndex = type === 'sip' ? 0 : type === 'lumpsum' ? 1 : type === 'swp' ? 2 : -1;
+            if (buttonIndex >= 0 && buttons[buttonIndex]) {
                 buttons[buttonIndex].classList.add('active');
             }
             
@@ -1332,7 +1218,6 @@
             if (type === 'sip') calculateSIP();
             else if (type === 'lumpsum') calculateLumpsum();
             else if (type === 'swp') calculateSWP();
-            else if (type === 'goal') calculateGoal();
             else if (type === 'loan-emi') calculateLoanEMI();
             else if (type === 'annual-sip') calculateAnnualSIP();
             else if (type === 'step-up') calculateStepUpSIP();
@@ -1468,7 +1353,7 @@
         }
         
         // Generate line graph
-        function generateLineGraph(svgId, data, title) {
+        function generateLineGraph(svgId, data, title, label1 = 'Invested', label2 = 'Maturity Value') {
             const svg = document.getElementById(svgId);
             if (!svg || !data || data.length === 0) return;
             
@@ -1554,7 +1439,7 @@
                 ${xLabels}
                 
                 <!-- Y-axis label -->
-                <text x="20" y="${padding + graphHeight / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b" transform="rotate(-90, 20, ${padding + graphHeight / 2})">Amount (₹)</text>
+                <text x="15" y="${padding + graphHeight / 2}" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b" transform="rotate(-90, 15, ${padding + graphHeight / 2})">Amount (₹)</text>
                 
                 <!-- X-axis label -->
                 <text x="${padding + graphWidth / 2}" y="${height - 10}" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Years</text>
@@ -1562,10 +1447,10 @@
                 <!-- Legend -->
                 <g transform="translate(${width - 180}, ${padding})">
                     <rect x="0" y="0" width="15" height="3" fill="#3b82f6"/>
-                    <text x="20" y="5" font-size="12" fill="#1e293b">Invested</text>
+                    <text x="20" y="5" font-size="12" fill="#1e293b">${label1}</text>
                     
                     <rect x="0" y="20" width="15" height="3" fill="#10b981"/>
-                    <text x="20" y="25" font-size="12" fill="#1e293b">Maturity Value</text>
+                    <text x="20" y="25" font-size="12" fill="#1e293b">${label2}</text>
                 </g>
             `;
         }
@@ -1708,72 +1593,6 @@
             return chartData;
         }
         
-        // Calculate Goal
-        function calculateGoal() {
-            const targetAmount = parseFloat(document.getElementById('goal-target').value) || 1000000;
-            const years = parseInt(document.getElementById('goal-years').value) || 10;
-            const annualReturn = parseFloat(document.getElementById('goal-return').value) || 12;
-            
-            const months = years * 12;
-            const monthlyRate = annualReturn / 12 / 100;
-            
-            // Calculate monthly SIP required using future value formula
-            const monthlyRequired = targetAmount * monthlyRate / (Math.pow(1 + monthlyRate, months) - 1);
-            const totalInvestment = monthlyRequired * months;
-            
-            document.getElementById('goal-target-result').textContent = 'Rs. ' + formatNumber(targetAmount);
-            document.getElementById('goal-monthly').textContent = 'Rs. ' + formatNumber(monthlyRequired);
-            document.getElementById('goal-invested').textContent = 'Rs. ' + formatNumber(totalInvestment);
-            
-            // Generate breakdown
-            const breakdownData = generateGoalBreakdown(monthlyRequired, annualReturn, years, targetAmount);
-            
-            // Generate pie chart
-            generatePieChart('goal-pie-chart', totalInvestment, targetAmount - totalInvestment);
-            
-            // Generate line graph
-            generateLineGraph('goal-line-graph', breakdownData, 'Goal Achievement');
-        }
-        
-        // Generate Goal year-wise breakdown
-        function generateGoalBreakdown(monthly, rate, totalYears, target) {
-            const tbody = document.getElementById('goal-breakdown-tbody');
-            const monthlyRate = rate / 12 / 100;
-            let html = '';
-            const chartData = [];
-            
-            for (let year = 1; year <= totalYears; year++) {
-                const monthsCompleted = year * 12;
-                const invested = monthly * monthsCompleted;
-                
-                let value = 0;
-                for (let month = 1; month <= monthsCompleted; month++) {
-                    value += monthly * Math.pow(1 + monthlyRate, monthsCompleted - month + 1);
-                }
-                
-                const interest = value - invested;
-                
-                chartData.push({
-                    year: year,
-                    invested: invested,
-                    value: value
-                });
-                
-                html += `
-                    <tr>
-                        <td><strong>Year ${year}</strong></td>
-                        <td>${formatNumber(monthly)}</td>
-                        <td>${formatNumber(invested)}</td>
-                        <td>${formatNumber(interest)}</td>
-                        <td><strong>${formatNumber(value)}</strong></td>
-                    </tr>
-                `;
-            }
-            
-            tbody.innerHTML = html;
-            return chartData;
-        }
-        
         // Calculate Loan EMI
         function calculateLoanEMI() {
             const principal = parseFloat(document.getElementById('loan-amount').value) || 2000000;
@@ -1801,7 +1620,7 @@
             generatePieChart('loan-pie-chart', principal, totalInterest, '#3b82f6', '#ef4444');
             
             // Generate line graph
-            generateLineGraph('loan-line-graph', breakdownData, 'Loan Repayment');
+            generateLineGraph('loan-line-graph', breakdownData, 'Loan Repayment', 'Principal', 'Interest');
         }
         
         // Generate Loan EMI year-wise breakdown
