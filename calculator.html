@@ -1119,12 +1119,39 @@
                         <span class="result-label">Wealth Gain</span>
                         <span class="result-value" id="stepup-gain">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="stepup-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Invested</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Returns</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-chart-area"></i> Step-up SIP Growth Projection</h3>
+                        <svg class="line-graph" id="stepup-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -1139,21 +1166,6 @@
                                 </thead>
                                 <tbody id="stepup-breakdown-tbody"></tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="stepup-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Invested</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Returns</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1216,12 +1228,39 @@
                         <span class="result-label">Total Investment</span>
                         <span class="result-value" id="goal-invested">Rs. 0</span>
                     </div>
+                    
+                    <!-- Pie Chart Below Results -->
+                    <div class="chart-container-pie">
+                        <svg class="pie-chart" viewBox="0 0 200 200" id="goal-pie-chart">
+                            <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
+                        </svg>
+                        <div class="chart-legend-pie">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>Invested</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #10b981;"></div>
+                                <span>Returns</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
                 <!-- Breakdown Section -->
                 <div class="breakdown-section">
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;">Year-wise Breakdown</h3>
+                    <!-- Line Graph -->
+                    <div class="line-graph-container">
+                        <h3 class="graph-title"><i class="fas fa-bullseye"></i> Goal Achievement Projection</h3>
+                        <svg class="line-graph" id="goal-line-graph" viewBox="0 0 800 300">
+                            <text x="400" y="150" text-anchor="middle" fill="#94a3b8" font-size="16">
+                                Click Calculate to see graph
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise Breakdown</h3>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -1236,21 +1275,6 @@
                                 </thead>
                                 <tbody id="goal-breakdown-tbody"></tbody>
                             </table>
-                        </div>
-                        <div class="chart-container-pie">
-                            <svg class="pie-chart" viewBox="0 0 200 200" id="goal-pie-chart">
-                                <circle cx="100" cy="100" r="80" fill="#e2e8f0"/>
-                            </svg>
-                            <div class="chart-legend-pie">
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #3b82f6;"></div>
-                                    <span>Invested</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color" style="background: #10b981;"></div>
-                                    <span>Returns</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1627,10 +1651,13 @@
             document.getElementById('swp-balance').textContent = 'Rs. ' + formatNumber(Math.max(0, balance));
             
             // Generate breakdown
-            generateSWPBreakdown(initialAmount, monthlyWithdrawal, annualReturn, years);
+            const breakdownData = generateSWPBreakdown(initialAmount, monthlyWithdrawal, annualReturn, years);
             
             // Generate pie chart
             generatePieChart('swp-pie-chart', totalWithdrawn, Math.max(0, balance), '#ef4444', '#10b981');
+            
+            // Generate line graph
+            generateLineGraph('swp-line-graph', breakdownData, 'SWP Projection');
         }
         
         // Generate SWP year-wise breakdown
@@ -1639,6 +1666,7 @@
             const monthlyRate = rate / 12 / 100;
             let balance = initial;
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 let yearStart = balance;
@@ -1657,6 +1685,12 @@
                     }
                 }
                 
+                chartData.push({
+                    year: year,
+                    invested: year * withdrawal * 12,
+                    value: balance
+                });
+                
                 html += `
                     <tr>
                         <td><strong>Year ${year}</strong></td>
@@ -1671,6 +1705,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Calculate Goal
@@ -1691,10 +1726,13 @@
             document.getElementById('goal-invested').textContent = 'Rs. ' + formatNumber(totalInvestment);
             
             // Generate breakdown
-            generateGoalBreakdown(monthlyRequired, annualReturn, years, targetAmount);
+            const breakdownData = generateGoalBreakdown(monthlyRequired, annualReturn, years, targetAmount);
             
             // Generate pie chart
             generatePieChart('goal-pie-chart', totalInvestment, targetAmount - totalInvestment);
+            
+            // Generate line graph
+            generateLineGraph('goal-line-graph', breakdownData, 'Goal Achievement');
         }
         
         // Generate Goal year-wise breakdown
@@ -1702,6 +1740,7 @@
             const tbody = document.getElementById('goal-breakdown-tbody');
             const monthlyRate = rate / 12 / 100;
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 const monthsCompleted = year * 12;
@@ -1713,6 +1752,12 @@
                 }
                 
                 const interest = value - invested;
+                
+                chartData.push({
+                    year: year,
+                    invested: invested,
+                    value: value
+                });
                 
                 html += `
                     <tr>
@@ -1726,6 +1771,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Calculate Loan EMI
@@ -1749,10 +1795,13 @@
             document.getElementById('loan-total').textContent = 'Rs. ' + formatNumber(totalPayment);
             
             // Generate breakdown
-            generateLoanBreakdown(principal, emi, annualRate, years);
+            const breakdownData = generateLoanBreakdown(principal, emi, annualRate, years);
             
             // Generate pie chart
             generatePieChart('loan-pie-chart', principal, totalInterest, '#3b82f6', '#ef4444');
+            
+            // Generate line graph
+            generateLineGraph('loan-line-graph', breakdownData, 'Loan Repayment');
         }
         
         // Generate Loan EMI year-wise breakdown
@@ -1761,6 +1810,7 @@
             const monthlyRate = rate / 12 / 100;
             let outstanding = principal;
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 let yearPrincipal = 0;
@@ -1777,6 +1827,12 @@
                     if (outstanding < 0) outstanding = 0;
                 }
                 
+                chartData.push({
+                    year: year,
+                    invested: principal - outstanding,
+                    value: outstanding
+                });
+                
                 html += `
                     <tr>
                         <td><strong>Year ${year}</strong></td>
@@ -1789,6 +1845,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Calculate Annual SIP
@@ -1812,10 +1869,13 @@
             document.getElementById('annual-sip-gain').textContent = 'Rs. ' + formatNumber(gain);
             
             // Generate breakdown
-            generateAnnualSIPBreakdown(annualAmount, annualReturn, years);
+            const breakdownData = generateAnnualSIPBreakdown(annualAmount, annualReturn, years);
             
             // Generate pie chart
             generatePieChart('annual-sip-pie-chart', totalInvested, gain);
+            
+            // Generate line graph
+            generateLineGraph('annual-sip-line-graph', breakdownData, 'Annual SIP Growth');
         }
         
         // Generate Annual SIP breakdown
@@ -1823,6 +1883,7 @@
             const tbody = document.getElementById('annual-sip-breakdown-tbody');
             const annualRate = rate / 100;
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 const invested = annual * year;
@@ -1833,6 +1894,12 @@
                 }
                 
                 const interest = value - invested;
+                
+                chartData.push({
+                    year: year,
+                    invested: invested,
+                    value: value
+                });
                 
                 html += `
                     <tr>
@@ -1846,6 +1913,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Calculate Step-up SIP
@@ -1876,10 +1944,13 @@
             document.getElementById('stepup-gain').textContent = 'Rs. ' + formatNumber(gain);
             
             // Generate breakdown
-            generateStepUpBreakdown(initialAmount, annualIncrease, annualReturn, years);
+            const breakdownData = generateStepUpBreakdown(initialAmount, annualIncrease, annualReturn, years);
             
             // Generate pie chart
             generatePieChart('stepup-pie-chart', totalInvested, gain);
+            
+            // Generate line graph
+            generateLineGraph('stepup-line-graph', breakdownData, 'Step-up SIP Growth');
         }
         
         // Generate Step-up SIP breakdown
@@ -1888,6 +1959,7 @@
             const monthlyRate = rate / 12 / 100;
             let currentMonthly = initial;
             let html = '';
+            const chartData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 const yearlyInvested = currentMonthly * 12;
@@ -1913,6 +1985,12 @@
                 
                 const interest = value - totalInvested;
                 
+                chartData.push({
+                    year: year,
+                    invested: totalInvested,
+                    value: value
+                });
+                
                 html += `
                     <tr>
                         <td><strong>Year ${year}</strong></td>
@@ -1927,6 +2005,7 @@
             }
             
             tbody.innerHTML = html;
+            return chartData;
         }
         
         // Format number
