@@ -1468,6 +1468,63 @@ body {
     }
 }
 
+/* Hero Chart Animations */
+.chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Hero Chart Line Animations */
+.chart-line-1, .chart-line-2, .chart-line-3 {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2s ease-in-out forwards;
+}
+
+.chart-line-1 { animation-delay: 0.5s; }
+.chart-line-2 { animation-delay: 1s; }
+.chart-line-3 { animation-delay: 1.5s; }
+
+@keyframes drawLine {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Hero Chart Data Point Animations */
+.data-point {
+    opacity: 0;
+    animation: fadeInPoint 0.5s ease-in-out forwards;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.data-point:nth-child(1) { animation-delay: 2s; }
+.data-point:nth-child(2) { animation-delay: 2.2s; }
+.data-point:nth-child(3) { animation-delay: 2.4s; }
+
+@keyframes fadeInPoint {
+    to {
+        opacity: 1;
+    }
+}
+
+.data-point:hover {
+    transform: scale(1.5);
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
 /* Print Styles */
 @media print {
     .header,
