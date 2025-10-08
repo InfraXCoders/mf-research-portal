@@ -720,12 +720,18 @@
 
         // Initialize comparison search functionality
         function initializeComparison() {
+            console.log('🔧 Setting up comparison search functionality...');
+            
+            // Check if data is available
+            const hasData = window.realTimeSchemes && window.realTimeSchemes.length > 0;
+            console.log('📊 Data available:', hasData, 'Schemes:', window.realTimeSchemes?.length || 0);
+            
             // Add event listeners for fund comparison inputs
             ['compareFund1', 'compareFund2', 'compareFund3'].forEach((inputId, index) => {
                 const input = document.getElementById(inputId);
                 const resultsId = `compareResults${index + 1}`;
                 
-                if (input) {
+                if (input && !input.hasAttribute('data-initialized')) {
                     // Real-time search as user types
                     input.addEventListener('input', (e) => {
                         const query = e.target.value.trim();
@@ -783,8 +789,14 @@
                             }
                         }
                     });
+                    
+                    // Mark as initialized to prevent duplicate listeners
+                    input.setAttribute('data-initialized', 'true');
+                    console.log(`✅ Initialized comparison input: ${inputId}`);
                 }
             });
+            
+            console.log('✅ Comparison functionality initialized');
         }
 
         // Debounce timer for comparison search
@@ -819,7 +831,10 @@
 
         // Perform the actual search
         function performComparisonSearch(query, resultsId, fundIndex) {
-            if (!window.allSchemes) {
+            // Use the correct data source
+            const allSchemes = window.realTimeSchemes || window.allSchemes || [];
+            
+            if (allSchemes.length === 0) {
                 document.getElementById(resultsId).innerHTML = `
                     <div style="padding: 12px 16px; text-align: center; color: #ef4444;">
                         <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>Data not loaded yet
@@ -829,7 +844,7 @@
             }
 
             // Enhanced search - match by name, AMC, or category
-            const results = window.allSchemes.filter(scheme => {
+            const results = allSchemes.filter(scheme => {
                 const name = scheme.schemeName.toLowerCase();
                 const queryLower = query.toLowerCase();
                 
@@ -1046,7 +1061,16 @@
         // Initialize comparison when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             // Wait for API service to be ready
-            setTimeout(initializeComparison, 1000);
+            setTimeout(() => {
+                console.log('🔄 Initializing comparison on DOM ready...');
+                initializeComparison();
+            }, 1000);
+        });
+
+        // Also initialize when API data is loaded
+        window.addEventListener('apiDataLoaded', (event) => {
+            console.log('🔄 API data loaded, initializing comparison...', event.detail?.schemes?.length || 0, 'schemes');
+            initializeComparison();
         });
     </script>
 </body>

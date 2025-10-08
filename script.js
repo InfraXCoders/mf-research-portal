@@ -245,6 +245,11 @@ async function loadRealTimeData() {
             
             // Store for later use
             window.realTimeSchemes = schemes;
+            
+            // Dispatch event to notify that API data is loaded
+            window.dispatchEvent(new CustomEvent('apiDataLoaded', { 
+                detail: { schemes: schemes } 
+            }));
         }
         
         // Load specific scheme details for popular funds
