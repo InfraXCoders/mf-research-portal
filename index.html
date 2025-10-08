@@ -18,7 +18,7 @@
             </div>
             <div class="nav-links">
                 <a href="#home" class="nav-link active">Home</a>
-                <a href="#research" class="nav-link">Research</a>
+                <a href="#results" class="nav-link">Results</a>
                 <a href="#calculators" class="nav-link">Calculators</a>
                 <a href="#about" class="nav-link">About</a>
             </div>
@@ -108,80 +108,23 @@
         </div>
     </section>
 
-    <!-- Research Section -->
-    <section class="research-section" id="research">
+    <!-- Search Section -->
+    <section class="search-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Mutual Fund Research</h2>
-                <p class="section-subtitle">Filter and analyze mutual funds based on your investment criteria</p>
-            </div>
-
-            <div class="research-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="amc">Select AMC</label>
-                        <select id="amc" class="form-select">
-                            <option value="">All AMCs</option>
-                            <option value="hdfc">HDFC Mutual Fund</option>
-                            <option value="sbi">SBI Mutual Fund</option>
-                            <option value="icici">ICICI Prudential Mutual Fund</option>
-                            <option value="axis">Axis Mutual Fund</option>
-                            <option value="kotak">Kotak Mahindra Mutual Fund</option>
-                            <option value="nippon">Nippon India Mutual Fund</option>
-                            <option value="quant">Quant Mutual Fund</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="category">Select Category</label>
-                        <select id="category" class="form-select">
-                            <option value="">All Categories</option>
-                            <option value="large-cap">Equity: Large Cap</option>
-                            <option value="mid-cap">Equity: Mid Cap</option>
-                            <option value="small-cap">Equity: Small Cap</option>
-                            <option value="elss">Equity: ELSS</option>
-                            <option value="multi-cap">Equity: Multi Cap</option>
-                            <option value="flexi-cap">Equity: Flexi Cap</option>
-                            <option value="hybrid-aggressive">Hybrid: Aggressive</option>
-                            <option value="debt-short">Debt: Short Duration</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="period">Select Period</label>
-                        <select id="period" class="form-select">
-                            <option value="1">1 Year</option>
-                            <option value="2">2 Years</option>
-                            <option value="3">3 Years</option>
-                            <option value="5">5 Years</option>
-                            <option value="10">10 Years</option>
-                            <option value="inception">Since Inception</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="amount">Investment Amount</label>
-                        <select id="amount" class="form-select">
-                            <option value="10000">₹10,000</option>
-                            <option value="25000">₹25,000</option>
-                            <option value="50000">₹50,000</option>
-                            <option value="100000">₹1,00,000</option>
-                            <option value="500000">₹5,00,000</option>
-                            <option value="1000000">₹10,00,000</option>
-                        </select>
-                    </div>
+            <div class="search-container">
+                <h2 class="search-title">Find Your Mutual Fund</h2>
+                <div class="search-box-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="fundSearch" 
+                        class="search-box" 
+                        placeholder="Start typing the mutual fund name..."
+                        autocomplete="off"
+                    >
+                    <div class="search-results" id="searchResults"></div>
                 </div>
-
-                <div class="form-actions">
-                    <button class="btn btn-primary btn-large" id="analyzeBtn">
-                        <i class="fas fa-chart-bar"></i>
-                        Analyze Funds
-                    </button>
-                    <button class="btn btn-outline" id="resetBtn">
-                        <i class="fas fa-refresh"></i>
-                        Reset Filters
-                    </button>
-                </div>
+                <p class="search-hint">Search from 37,000+ mutual fund schemes</p>
             </div>
         </div>
     </section>
@@ -191,9 +134,9 @@
         <div class="container">
             <div class="results-header">
                 <h3 class="results-title">Analysis Results</h3>
-                <div class="results-meta">
-                    <span class="results-count">Showing 12 funds</span>
-                    <span class="results-date">Data as on: 06-10-2025</span>
+                <div class="results-meta" id="resultsMeta" style="display: none;">
+                    <span class="results-count" id="resultsCount"></span>
+                    <span class="results-date" id="resultsDate"></span>
                 </div>
             </div>
 
@@ -253,7 +196,7 @@
                     <p class="feature-description">
                         Calculate returns on systematic investment plans with monthly contributions.
                     </p>
-                    <a href="test-calculators.html" class="btn btn-primary" style="text-decoration: none; margin-top: 15px;">
+                    <a href="calculators.html" class="btn btn-primary" style="text-decoration: none; margin-top: 15px;">
                         Try Calculator
                     </a>
                 </div>
@@ -266,7 +209,7 @@
                     <p class="feature-description">
                         Calculate returns on one-time investments with compound interest.
                     </p>
-                    <a href="test-calculators.html" class="btn btn-primary" style="text-decoration: none; margin-top: 15px;">
+                    <a href="calculators.html" class="btn btn-primary" style="text-decoration: none; margin-top: 15px;">
                         Try Calculator
                     </a>
                 </div>
@@ -371,9 +314,6 @@
                     </ul>
 
                     <div style="margin-top: 30px; padding: 20px; background: var(--gray-50); border-radius: 10px;">
-                        <p style="color: var(--gray-700); text-align: center; margin-bottom: 10px;">
-                            <strong>Data Source:</strong> MFApi.in
-                        </p>
                         <p style="color: var(--gray-600); text-align: center; font-size: 14px;">
                             All data is fetched in real-time from reliable sources and updated regularly.
                         </p>
