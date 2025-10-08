@@ -21,6 +21,7 @@
                 <a href="#results" class="nav-link">Results</a>
                 <a href="#calculators" class="nav-link">Calculators</a>
                 <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </div>
             <div class="nav-actions">
                 <a href="api-monitor.html" class="btn btn-outline" style="text-decoration: none;" title="API Monitoring Dashboard">
@@ -325,6 +326,127 @@
         </div>
     </section>
 
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: white;">Get In Touch</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Have questions? We'd love to hear from you.</p>
+            </div>
+
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <form id="contactForm" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px;">
+                                <i class="fas fa-user" style="margin-right: 8px; color: #3b82f6;"></i>Full Name *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="contactName" 
+                                required 
+                                placeholder="Enter your full name"
+                                style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; transition: all 0.3s;"
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            >
+                        </div>
+
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px;">
+                                <i class="fas fa-envelope" style="margin-right: 8px; color: #3b82f6;"></i>Email Address *
+                            </label>
+                            <input 
+                                type="email" 
+                                id="contactEmail" 
+                                required 
+                                placeholder="your.email@example.com"
+                                style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; transition: all 0.3s;"
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            >
+                        </div>
+
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px;">
+                                <i class="fas fa-phone" style="margin-right: 8px; color: #3b82f6;"></i>Phone Number
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="contactPhone" 
+                                placeholder="+91 9876543210"
+                                style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; transition: all 0.3s;"
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            >
+                        </div>
+
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px;">
+                                <i class="fas fa-tag" style="margin-right: 8px; color: #3b82f6;"></i>Subject *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="contactSubject" 
+                                required 
+                                placeholder="What is this regarding?"
+                                style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; transition: all 0.3s;"
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            >
+                        </div>
+
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px;">
+                                <i class="fas fa-comment-dots" style="margin-right: 8px; color: #3b82f6;"></i>Message *
+                            </label>
+                            <textarea 
+                                id="contactMessage" 
+                                required 
+                                rows="5" 
+                                placeholder="Tell us more about your inquiry..."
+                                style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; resize: vertical; font-family: inherit; transition: all 0.3s;"
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary btn-large" 
+                            style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border: none; padding: 15px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(37,99,235,0.3)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Send Message
+                        </button>
+
+                        <div id="formMessage" style="display: none; padding: 15px; border-radius: 8px; text-align: center; font-weight: 600; margin-top: 10px;"></div>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+                    <div style="color: white;">
+                        <i class="fas fa-envelope" style="font-size: 24px; margin-bottom: 10px; color: rgba(255,255,255,0.9);"></i>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.8;">Email Us</p>
+                        <p style="margin: 5px 0 0; font-weight: 600;">info@mfportal.com</p>
+                    </div>
+                    <div style="color: white;">
+                        <i class="fas fa-phone" style="font-size: 24px; margin-bottom: 10px; color: rgba(255,255,255,0.9);"></i>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.8;">Call Us</p>
+                        <p style="margin: 5px 0 0; font-weight: 600;">+91 12345 67890</p>
+                    </div>
+                    <div style="color: white;">
+                        <i class="fas fa-map-marker-alt" style="font-size: 24px; margin-bottom: 10px; color: rgba(255,255,255,0.9);"></i>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.8;">Visit Us</p>
+                        <p style="margin: 5px 0 0; font-weight: 600;">Mumbai, India</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -348,30 +470,30 @@
                 <div class="footer-section">
                     <h4 class="footer-title">Research Tools</h4>
                     <ul class="footer-links">
-                        <li><a href="#">One Time Performance</a></li>
-                        <li><a href="#">SIP Performance</a></li>
-                        <li><a href="#">SWP Analysis</a></li>
-                        <li><a href="#">AMC Wise Analysis</a></li>
+                        <li><a href="#results">One Time Performance</a></li>
+                        <li><a href="#results">SIP Performance</a></li>
+                        <li><a href="#results">SWP Analysis</a></li>
+                        <li><a href="#results">AMC Wise Analysis</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
                     <h4 class="footer-title">Calculators</h4>
                     <ul class="footer-links">
-                        <li><a href="#">SIP Calculator</a></li>
-                        <li><a href="#">SWP Calculator</a></li>
-                        <li><a href="#">Lumpsum Calculator</a></li>
-                        <li><a href="#">Step-up SIP</a></li>
+                        <li><a href="calculator.html">SIP Calculator</a></li>
+                        <li><a href="calculator.html">SWP Calculator</a></li>
+                        <li><a href="calculator.html">Lumpsum Calculator</a></li>
+                        <li><a href="calculator.html">Step-up SIP</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
                     <h4 class="footer-title">Support</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#about">Help Center</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#about">Privacy Policy</a></li>
+                        <li><a href="#about">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -394,5 +516,53 @@
     <script src="api-config.js?v=1759931600"></script>
     <script src="api-service.js?v=1759931600"></script>
     <script src="script.js?v=1759931600"></script>
+    
+    <script>
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formMessage = document.getElementById('formMessage');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Get form values
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const phone = document.getElementById('contactPhone').value;
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Sending...';
+            
+            // Simulate sending (replace with actual backend API call)
+            setTimeout(() => {
+                // Show success message
+                formMessage.style.display = 'block';
+                formMessage.style.background = '#10b981';
+                formMessage.style.color = 'white';
+                formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully. We\'ll get back to you soon.';
+                
+                // Reset form
+                e.target.reset();
+                
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Send Message';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+                
+                // Log form data (in production, send to backend)
+                console.log('Contact Form Submitted:', {
+                    name, email, phone, subject, message, 
+                    timestamp: new Date().toISOString()
+                });
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
