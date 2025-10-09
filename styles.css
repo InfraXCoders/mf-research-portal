@@ -748,10 +748,50 @@ body {
     .nav-links,
     .nav-actions {
         display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: var(--spacing-4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        gap: var(--spacing-3);
+        animation: slideDown 0.3s ease-out;
+    }
+    
+    .nav-links.mobile-active,
+    .nav-actions.mobile-active {
+        display: flex;
+    }
+    
+    .nav-links {
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .nav-actions {
+        top: auto;
+        border-top: 1px solid var(--gray-200);
+    }
+    
+    .nav-actions.mobile-active {
+        top: 280px;
     }
     
     .mobile-menu-toggle {
         display: block;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
     .hero-title {

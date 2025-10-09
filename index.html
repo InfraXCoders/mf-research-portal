@@ -47,14 +47,10 @@
                     Make informed investment decisions with real-time data and insights.
                 </p>
                 <div class="hero-actions">
-                    <button class="btn btn-primary btn-large">
-                        <i class="fas fa-search"></i>
-                        Start Research
-                    </button>
-                    <button class="btn btn-outline btn-large">
+                    <a href="#learning" class="btn btn-outline btn-large" style="text-decoration: none;">
                         <i class="fas fa-play"></i>
                         Watch Demo
-                    </button>
+                    </a>
                 </div>
             </div>
             <div class="hero-visual">
@@ -197,13 +193,6 @@
                         <!-- Results will be populated by JavaScript -->
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Empty State -->
-            <div class="empty-state" id="emptyState" style="text-align: center; padding: 60px 20px;">
-                <i class="fas fa-chart-line" style="font-size: 64px; color: #cbd5e1; margin-bottom: 20px;"></i>
-                <h3 style="color: #475569; margin-bottom: 10px; font-size: 24px;">Ready to analyze mutual funds!</h3>
-                <p style="color: #94a3b8; font-size: 16px;">Use the search bar above or select filters and click "Analyze Funds" to see results</p>
             </div>
 
         </div>
@@ -451,21 +440,21 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-search"></i>
                     </div>
-                    <h3 class="feature-title">Real-time Performance</h3>
+                    <h3 class="feature-title">Smart Search & Analysis</h3>
                     <p class="feature-description">
-                        Track live returns and performance metrics with up-to-date market data.
+                        Search from 37,000+ mutual fund schemes with real-time NAV data and detailed performance analysis.
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-filter"></i>
+                        <i class="fas fa-balance-scale"></i>
                     </div>
-                    <h3 class="feature-title">Advanced Filtering</h3>
+                    <h3 class="feature-title">Fund Comparison Tool</h3>
                     <p class="feature-description">
-                        Filter funds by AMC, category, risk level, and performance criteria.
+                        Compare up to 3 funds side-by-side with detailed parameters like returns, risk, NAV, and interactive growth charts.
                     </p>
                 </div>
 
@@ -475,17 +464,37 @@
                     </div>
                     <h3 class="feature-title">Investment Calculators</h3>
                     <p class="feature-description">
-                        SIP, SWP, and lump-sum calculators to plan your investments effectively.
+                        SIP, Lumpsum, SWP, Annual SIP, Step-up SIP, and Loan EMI calculators with visual breakdowns and projections.
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-graduation-cap"></i>
                     </div>
-                    <h3 class="feature-title">Risk Assessment</h3>
+                    <h3 class="feature-title">MF Learning Hub</h3>
                     <p class="feature-description">
-                        Comprehensive risk analysis and portfolio diversification insights.
+                        Learn from expert video tutorials covering MF basics, buying, selling, strategies, and tax planning.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Interactive Charts</h3>
+                    <p class="feature-description">
+                        Visual growth projections, year-wise breakdowns, pie charts, and dynamic graphs for better insights.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Mobile Responsive</h3>
+                    <p class="feature-description">
+                        Seamless experience across all devices with optimized mobile navigation and touch-friendly interface.
                     </p>
                 </div>
             </div>
@@ -948,6 +957,42 @@
     <script src="script.js?v=1759931600"></script>
     
     <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            const navActions = document.querySelector('.nav-actions');
+            
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('mobile-active');
+                    navActions.classList.toggle('mobile-active');
+                    
+                    // Change icon
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-bars')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+                
+                // Close mobile menu when clicking on a nav link
+                const allNavLinks = document.querySelectorAll('.nav-link');
+                allNavLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('mobile-active');
+                        navActions.classList.remove('mobile-active');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    });
+                });
+            }
+        });
+
         // Learning Video Filter Function
         function filterLearningVideos(category) {
             const videos = document.querySelectorAll('.video-card');
