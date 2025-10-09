@@ -745,8 +745,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .nav-links,
-    .nav-actions {
+    .nav-links {
         display: none;
         position: fixed;
         top: 70px;
@@ -761,22 +760,8 @@ body {
         animation: slideDown 0.3s ease-out;
     }
     
-    .nav-links.mobile-active,
-    .nav-actions.mobile-active {
+    .nav-links.mobile-active {
         display: flex;
-    }
-    
-    .nav-links {
-        border-bottom: 1px solid var(--gray-200);
-    }
-    
-    .nav-actions {
-        top: auto;
-        border-top: 1px solid var(--gray-200);
-    }
-    
-    .nav-actions.mobile-active {
-        top: 280px;
     }
     
     .mobile-menu-toggle {
