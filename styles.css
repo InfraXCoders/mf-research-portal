@@ -7,13 +7,13 @@
 
 :root {
     /* Colors */
-    --primary-color: #2563eb;
-    --primary-dark: #1d4ed8;
+    --primary-color: #dc2626;
+    --primary-dark: #b91c1c;
     --secondary-color: #64748b;
-    --accent-color: #f59e0b;
+    --accent-color: #f87171;
     --success-color: #10b981;
     --warning-color: #f59e0b;
-    --error-color: #ef4444;
+    --error-color: #dc2626;
     
     /* Neutral Colors */
     --white: #ffffff;
@@ -345,7 +345,7 @@ body {
 .search-box:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1), var(--shadow-xl);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1), var(--shadow-xl);
     transform: translateY(-2px);
 }
 
@@ -480,7 +480,7 @@ body {
 .form-select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .form-actions {
