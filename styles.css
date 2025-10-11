@@ -1552,6 +1552,27 @@ body {
     border-top-right-radius: 15px;
 }
 
+/* Stock Tables - Same styling as MF tables */
+#bseStocksContainer table,
+#nseStocksContainer table {
+    font-family: inherit;
+}
+
+#bseStocksContainer table tr:hover,
+#nseStocksContainer table tr:hover {
+    background-color: #f8fafc;
+}
+
+#bseStocksContainer table thead tr th:first-child,
+#nseStocksContainer table thead tr th:first-child {
+    border-top-left-radius: 15px;
+}
+
+#bseStocksContainer table thead tr th:last-child,
+#nseStocksContainer table thead tr th:last-child {
+    border-top-right-radius: 15px;
+}
+
 .top-performing-section .spinner {
     border: 3px solid #f3f4f6;
     border-top: 3px solid var(--primary-color);
@@ -1754,6 +1775,44 @@ body {
     }
     
     .top-performing-section table td button {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
+    
+    /* Stock Tables Mobile */
+    #bseStocksContainer,
+    #nseStocksContainer {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0;
+    }
+    
+    #bseStocksContainer table,
+    #nseStocksContainer table {
+        min-width: 900px;
+    }
+    
+    #bseStocksContainer table th,
+    #nseStocksContainer table th {
+        font-size: 11px !important;
+        padding: 12px 6px !important;
+    }
+    
+    #bseStocksContainer table td,
+    #nseStocksContainer table td {
+        font-size: 11px !important;
+        padding: 10px 6px !important;
+    }
+    
+    #bseStocksContainer table td:nth-child(2),
+    #nseStocksContainer table td:nth-child(2) {
+        min-width: 150px;
+        max-width: 180px;
+        font-size: 12px !important;
+    }
+    
+    #bseStocksContainer table td button,
+    #nseStocksContainer table td button {
         padding: 6px 10px !important;
         font-size: 11px !important;
     }

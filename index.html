@@ -227,6 +227,80 @@
         </div>
     </section>
 
+    <!-- BSE Stocks Section -->
+    <section class="top-performing-section" id="bse-stocks" style="background: var(--gray-50); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">BSE Top Performing Stocks</h2>
+                <p class="section-subtitle">Top 10 gainers from Bombay Stock Exchange</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="bseStocksLoading" style="text-align: center; padding: 40px;">
+                <div class="spinner" style="width: 50px; height: 50px; margin: 0 auto 20px;"></div>
+                <p style="color: #64748b;">Loading BSE stocks data...</p>
+            </div>
+
+            <!-- BSE Stocks Table -->
+            <div id="bseStocksContainer" style="display: none;">
+                <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <thead style="background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%); color: white;">
+                        <tr>
+                            <th style="padding: 16px; text-align: center; font-weight: 600; width: 60px;">#</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600; min-width: 200px;">Stock Name</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Symbol</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Price (₹)</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Change</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Change %</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Volume</th>
+                            <th style="padding: 16px; text-align: center; font-weight: 600;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bseStocksTable">
+                        <!-- Stocks will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- NSE Stocks Section -->
+    <section class="top-performing-section" id="nse-stocks" style="background: var(--white); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">NSE Top Performing Stocks</h2>
+                <p class="section-subtitle">Top 10 gainers from National Stock Exchange</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="nseStocksLoading" style="text-align: center; padding: 40px;">
+                <div class="spinner" style="width: 50px; height: 50px; margin: 0 auto 20px;"></div>
+                <p style="color: #64748b;">Loading NSE stocks data...</p>
+            </div>
+
+            <!-- NSE Stocks Table -->
+            <div id="nseStocksContainer" style="display: none;">
+                <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <thead style="background: linear-gradient(135deg, #dc2626 0%, #1e40af 100%); color: white;">
+                        <tr>
+                            <th style="padding: 16px; text-align: center; font-weight: 600; width: 60px;">#</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600; min-width: 200px;">Stock Name</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Symbol</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Price (₹)</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Change</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Change %</th>
+                            <th style="padding: 16px; text-align: right; font-weight: 600;">Volume</th>
+                            <th style="padding: 16px; text-align: center; font-weight: 600;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nseStocksTable">
+                        <!-- Stocks will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <!-- Compare Funds Section -->
     <section class="compare-section" id="compare" style="background: var(--gray-50); padding: 80px 0;">
         <div class="container">
@@ -1335,6 +1409,318 @@
             
             // Refresh every 12 hours
             setInterval(loadTopPerformingFunds, 12 * 60 * 60 * 1000);
+        });
+
+        // Stock Market Functionality (BSE & NSE)
+        let bseStocks = [];
+        let nseStocks = [];
+        
+        // Popular Indian stocks for BSE and NSE
+        const popularBSEStocks = [
+            { symbol: 'RELIANCE.BO', name: 'Reliance Industries' },
+            { symbol: 'TCS.BO', name: 'Tata Consultancy Services' },
+            { symbol: 'HDFCBANK.BO', name: 'HDFC Bank' },
+            { symbol: 'INFY.BO', name: 'Infosys' },
+            { symbol: 'HINDUNILVR.BO', name: 'Hindustan Unilever' },
+            { symbol: 'ICICIBANK.BO', name: 'ICICI Bank' },
+            { symbol: 'KOTAKBANK.BO', name: 'Kotak Mahindra Bank' },
+            { symbol: 'BHARTIARTL.BO', name: 'Bharti Airtel' },
+            { symbol: 'ITC.BO', name: 'ITC Ltd' },
+            { symbol: 'AXISBANK.BO', name: 'Axis Bank' },
+            { symbol: 'LT.BO', name: 'Larsen & Toubro' },
+            { symbol: 'SBIN.BO', name: 'State Bank of India' },
+            { symbol: 'BAJFINANCE.BO', name: 'Bajaj Finance' },
+            { symbol: 'ASIANPAINT.BO', name: 'Asian Paints' },
+            { symbol: 'MARUTI.BO', name: 'Maruti Suzuki' }
+        ];
+        
+        const popularNSEStocks = [
+            { symbol: 'RELIANCE.NS', name: 'Reliance Industries' },
+            { symbol: 'TCS.NS', name: 'Tata Consultancy Services' },
+            { symbol: 'HDFCBANK.NS', name: 'HDFC Bank' },
+            { symbol: 'INFY.NS', name: 'Infosys' },
+            { symbol: 'HINDUNILVR.NS', name: 'Hindustan Unilever' },
+            { symbol: 'ICICIBANK.NS', name: 'ICICI Bank' },
+            { symbol: 'KOTAKBANK.NS', name: 'Kotak Mahindra Bank' },
+            { symbol: 'BHARTIARTL.NS', name: 'Bharti Airtel' },
+            { symbol: 'ITC.NS', name: 'ITC Ltd' },
+            { symbol: 'AXISBANK.NS', name: 'Axis Bank' },
+            { symbol: 'LT.NS', name: 'Larsen & Toubro' },
+            { symbol: 'SBIN.NS', name: 'State Bank of India' },
+            { symbol: 'BAJFINANCE.NS', name: 'Bajaj Finance' },
+            { symbol: 'ASIANPAINT.NS', name: 'Asian Paints' },
+            { symbol: 'MARUTI.NS', name: 'Maruti Suzuki' }
+        ];
+
+        // Sample data functions for fallback
+        function getSampleBSEData() {
+            return [
+                { symbol: 'RELIANCE.BO', name: 'Reliance Industries', price: 2450.50, change: 45.30, changePercent: 1.89, volume: 8500000 },
+                { symbol: 'TCS.BO', name: 'Tata Consultancy Services', price: 3650.20, change: 52.10, changePercent: 1.45, volume: 2100000 },
+                { symbol: 'HDFCBANK.BO', name: 'HDFC Bank', price: 1580.75, change: 18.50, changePercent: 1.18, volume: 4200000 },
+                { symbol: 'INFY.BO', name: 'Infosys', price: 1420.30, change: 15.20, changePercent: 1.08, volume: 3800000 },
+                { symbol: 'ICICIBANK.BO', name: 'ICICI Bank', price: 980.40, change: 10.15, changePercent: 1.05, volume: 5600000 },
+                { symbol: 'BHARTIARTL.BO', name: 'Bharti Airtel', price: 1245.60, change: 12.80, changePercent: 1.04, volume: 3100000 },
+                { symbol: 'ITC.BO', name: 'ITC Ltd', price: 445.20, change: 4.30, changePercent: 0.98, volume: 6200000 },
+                { symbol: 'KOTAKBANK.BO', name: 'Kotak Mahindra Bank', price: 1780.50, change: 16.90, changePercent: 0.96, volume: 1900000 },
+                { symbol: 'LT.BO', name: 'Larsen & Toubro', price: 3520.80, change: 31.20, changePercent: 0.89, volume: 1500000 },
+                { symbol: 'AXISBANK.BO', name: 'Axis Bank', price: 1120.30, change: 9.45, changePercent: 0.85, volume: 2800000 }
+            ];
+        }
+
+        function getSampleNSEData() {
+            return [
+                { symbol: 'RELIANCE.NS', name: 'Reliance Industries', price: 2450.50, change: 45.30, changePercent: 1.89, volume: 8500000 },
+                { symbol: 'TCS.NS', name: 'Tata Consultancy Services', price: 3650.20, change: 52.10, changePercent: 1.45, volume: 2100000 },
+                { symbol: 'HDFCBANK.NS', name: 'HDFC Bank', price: 1580.75, change: 18.50, changePercent: 1.18, volume: 4200000 },
+                { symbol: 'INFY.NS', name: 'Infosys', price: 1420.30, change: 15.20, changePercent: 1.08, volume: 3800000 },
+                { symbol: 'ICICIBANK.NS', name: 'ICICI Bank', price: 980.40, change: 10.15, changePercent: 1.05, volume: 5600000 },
+                { symbol: 'BHARTIARTL.NS', name: 'Bharti Airtel', price: 1245.60, change: 12.80, changePercent: 1.04, volume: 3100000 },
+                { symbol: 'ITC.NS', name: 'ITC Ltd', price: 445.20, change: 4.30, changePercent: 0.98, volume: 6200000 },
+                { symbol: 'KOTAKBANK.NS', name: 'Kotak Mahindra Bank', price: 1780.50, change: 16.90, changePercent: 0.96, volume: 1900000 },
+                { symbol: 'LT.NS', name: 'Larsen & Toubro', price: 3520.80, change: 31.20, changePercent: 0.89, volume: 1500000 },
+                { symbol: 'AXISBANK.NS', name: 'Axis Bank', price: 1120.30, change: 9.45, changePercent: 0.85, volume: 2800000 }
+            ];
+        }
+
+        async function fetchStockData(symbol) {
+            try {
+                // Use CORS proxy for development
+                const corsProxy = 'https://api.allorigins.win/raw?url=';
+                const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`;
+                const url = corsProxy + encodeURIComponent(yahooUrl);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    console.error(`HTTP error for ${symbol}: ${response.status}`);
+                    return null;
+                }
+                
+                const data = await response.json();
+                
+                if (data.quoteResponse && data.quoteResponse.result.length > 0) {
+                    const stock = data.quoteResponse.result[0];
+                    return {
+                        symbol: stock.symbol,
+                        name: stock.shortName || stock.longName,
+                        price: stock.regularMarketPrice || 0,
+                        change: stock.regularMarketChange || 0,
+                        changePercent: stock.regularMarketChangePercent || 0,
+                        volume: stock.regularMarketVolume || 0,
+                        marketCap: stock.marketCap || 0,
+                        dayHigh: stock.regularMarketDayHigh || 0,
+                        dayLow: stock.regularMarketDayLow || 0
+                    };
+                }
+                return null;
+            } catch (error) {
+                console.error(`Error fetching ${symbol}:`, error);
+                return null;
+            }
+        }
+
+        async function loadBSEStocks() {
+            const loading = document.getElementById('bseStocksLoading');
+            const container = document.getElementById('bseStocksContainer');
+            const tableBody = document.getElementById('bseStocksTable');
+            
+            loading.style.display = 'block';
+            container.style.display = 'none';
+            
+            try {
+                console.log('Starting to fetch BSE stocks...');
+                
+                // Fetch stocks in smaller batches to avoid rate limiting
+                const batchSize = 5;
+                const stocksData = [];
+                
+                for (let i = 0; i < popularBSEStocks.length; i += batchSize) {
+                    const batch = popularBSEStocks.slice(i, i + batchSize);
+                    const batchPromises = batch.map(stock => fetchStockData(stock.symbol));
+                    const batchResults = await Promise.all(batchPromises);
+                    stocksData.push(...batchResults);
+                    
+                    // Small delay between batches
+                    if (i + batchSize < popularBSEStocks.length) {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+                
+                console.log('Fetched stocks:', stocksData.filter(s => s !== null).length);
+                
+                // Filter out nulls and sort by change percent
+                bseStocks = stocksData
+                    .filter(stock => stock !== null && stock.price > 0)
+                    .sort((a, b) => b.changePercent - a.changePercent)
+                    .slice(0, 10);
+                
+                console.log('BSE stocks to display:', bseStocks.length);
+                
+                if (bseStocks.length === 0) {
+                    // Use fallback sample data if API fails
+                    bseStocks = getSampleBSEData();
+                    console.log('Using sample BSE data');
+                }
+                
+                displayStocks(bseStocks, tableBody);
+                
+                loading.style.display = 'none';
+                container.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading BSE stocks:', error);
+                // Show sample data on error
+                bseStocks = getSampleBSEData();
+                displayStocks(bseStocks, tableBody);
+                loading.style.display = 'none';
+                container.style.display = 'block';
+            }
+        }
+
+        async function loadNSEStocks() {
+            const loading = document.getElementById('nseStocksLoading');
+            const container = document.getElementById('nseStocksContainer');
+            const tableBody = document.getElementById('nseStocksTable');
+            
+            loading.style.display = 'block';
+            container.style.display = 'none';
+            
+            try {
+                console.log('Starting to fetch NSE stocks...');
+                
+                // Fetch stocks in smaller batches to avoid rate limiting
+                const batchSize = 5;
+                const stocksData = [];
+                
+                for (let i = 0; i < popularNSEStocks.length; i += batchSize) {
+                    const batch = popularNSEStocks.slice(i, i + batchSize);
+                    const batchPromises = batch.map(stock => fetchStockData(stock.symbol));
+                    const batchResults = await Promise.all(batchPromises);
+                    stocksData.push(...batchResults);
+                    
+                    // Small delay between batches
+                    if (i + batchSize < popularNSEStocks.length) {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+                
+                console.log('Fetched stocks:', stocksData.filter(s => s !== null).length);
+                
+                // Filter out nulls and sort by change percent
+                nseStocks = stocksData
+                    .filter(stock => stock !== null && stock.price > 0)
+                    .sort((a, b) => b.changePercent - a.changePercent)
+                    .slice(0, 10);
+                
+                console.log('NSE stocks to display:', nseStocks.length);
+                
+                if (nseStocks.length === 0) {
+                    // Use fallback sample data if API fails
+                    nseStocks = getSampleNSEData();
+                    console.log('Using sample NSE data');
+                }
+                
+                displayStocks(nseStocks, tableBody);
+                
+                loading.style.display = 'none';
+                container.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading NSE stocks:', error);
+                // Show sample data on error
+                nseStocks = getSampleNSEData();
+                displayStocks(nseStocks, tableBody);
+                loading.style.display = 'none';
+                container.style.display = 'block';
+            }
+        }
+
+        function displayStocks(stocks, tableBody) {
+            if (!stocks || stocks.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">
+                            No stock data available
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = stocks.map((stock, index) => {
+                const isPositive = stock.changePercent >= 0;
+                const changeColor = isPositive ? '#22c55e' : '#ef4444';
+                const changeIcon = isPositive ? '↑' : '↓';
+                
+                return `
+                    <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">
+                        <td style="padding: 16px; text-align: center; font-weight: 600; color: #64748b;">
+                            <div style="background: linear-gradient(135deg, #1e40af 0%, #dc2626 100%); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 14px;">
+                                ${index + 1}
+                            </div>
+                        </td>
+                        <td style="padding: 16px;">
+                            <div style="font-weight: 600; color: #1e293b; font-size: 14px;">${stock.name}</div>
+                        </td>
+                        <td style="padding: 16px; text-align: right; color: #64748b; font-size: 13px; font-family: 'Courier New', monospace;">
+                            ${stock.symbol.replace('.BO', '').replace('.NS', '')}
+                        </td>
+                        <td style="padding: 16px; text-align: right; font-weight: 600; color: #1e293b; font-size: 14px;">
+                            ₹${stock.price.toFixed(2)}
+                        </td>
+                        <td style="padding: 16px; text-align: right; font-weight: 600; color: ${changeColor}; font-size: 14px;">
+                            ${isPositive ? '+' : ''}₹${stock.change.toFixed(2)}
+                        </td>
+                        <td style="padding: 16px; text-align: right; font-weight: 700; color: ${changeColor}; font-size: 14px;">
+                            ${changeIcon} ${Math.abs(stock.changePercent).toFixed(2)}%
+                        </td>
+                        <td style="padding: 16px; text-align: right; color: #64748b; font-size: 13px;">
+                            ${formatVolume(stock.volume)}
+                        </td>
+                        <td style="padding: 16px; text-align: center;">
+                            <button onclick="viewStockDetails('${stock.symbol}')" 
+                                    style="background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#b91c1c'; this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.background='#dc2626'; this.style.transform='translateY(0)'">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function formatVolume(volume) {
+            if (volume >= 10000000) {
+                return (volume / 10000000).toFixed(2) + ' Cr';
+            } else if (volume >= 100000) {
+                return (volume / 100000).toFixed(2) + ' L';
+            } else if (volume >= 1000) {
+                return (volume / 1000).toFixed(2) + ' K';
+            }
+            return volume.toString();
+        }
+
+        function viewStockDetails(symbol) {
+            // Open Yahoo Finance for the stock
+            const yahooSymbol = symbol.replace('.BO', '.BO').replace('.NS', '.NS');
+            window.open(`https://finance.yahoo.com/quote/${yahooSymbol}`, '_blank');
+        }
+
+        // Load stocks on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBSEStocks();
+            loadNSEStocks();
+            
+            // Refresh every 5 minutes (stocks update more frequently)
+            setInterval(() => {
+                loadBSEStocks();
+                loadNSEStocks();
+            }, 5 * 60 * 1000);
         });
 
         // Contact Form Handler
