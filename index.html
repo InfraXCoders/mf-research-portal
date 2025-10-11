@@ -1417,6 +1417,10 @@
         let bseStocks = [];
         let nseStocks = [];
         
+        // Twelve Data API Configuration
+        const TWELVE_DATA_API_KEY = 'c2dc1be40d0e4a3ab306560479a4211e'; // Replace with your actual API key
+        const STOCK_CACHE_DURATION = 12 * 60 * 60 * 1000; // 12 hours cache (same as MF)
+        
         // Popular Indian stocks for BSE and NSE
         const popularBSEStocks = [
             { symbol: 'RELIANCE.BO', name: 'Reliance Industries' },
@@ -1487,17 +1491,14 @@
 
         async function fetchStockData(symbol) {
             try {
-                // Use CORS proxy for development
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`;
-                const url = corsProxy + encodeURIComponent(yahooUrl);
+                // Extract symbol without exchange suffix for Twelve Data API
+                const cleanSymbol = symbol.replace('.BO', '').replace('.NS', '');
+                const exchange = symbol.includes('.BO') ? 'BSE' : 'NSE';
                 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
+                // Twelve Data API endpoint
+                const url = `https://api.twelvedata.com/quote?symbol=${cleanSymbol}&exchange=${exchange}&apikey=${TWELVE_DATA_API_KEY}`;
+                
+                const response = await fetch(url);
                 
                 if (!response.ok) {
                     console.error(`HTTP error for ${symbol}: ${response.status}`);
@@ -1506,20 +1507,29 @@
                 
                 const data = await response.json();
                 
-                if (data.quoteResponse && data.quoteResponse.result.length > 0) {
-                    const stock = data.quoteResponse.result[0];
+                // Check if API returned valid data
+                if (data && data.symbol && !data.code) {
+                    const previousClose = parseFloat(data.previous_close) || 0;
+                    const currentPrice = parseFloat(data.close) || 0;
+                    const change = currentPrice - previousClose;
+                    const changePercent = previousClose > 0 ? ((change / previousClose) * 100) : 0;
+                    
                     return {
-                        symbol: stock.symbol,
-                        name: stock.shortName || stock.longName,
-                        price: stock.regularMarketPrice || 0,
-                        change: stock.regularMarketChange || 0,
-                        changePercent: stock.regularMarketChangePercent || 0,
-                        volume: stock.regularMarketVolume || 0,
-                        marketCap: stock.marketCap || 0,
-                        dayHigh: stock.regularMarketDayHigh || 0,
-                        dayLow: stock.regularMarketDayLow || 0
+                        symbol: symbol,
+                        name: data.name || cleanSymbol,
+                        price: currentPrice,
+                        change: change,
+                        changePercent: changePercent,
+                        volume: parseInt(data.volume) || 0,
+                        marketCap: 0, // Not available in basic quote
+                        dayHigh: parseFloat(data.high) || 0,
+                        dayLow: parseFloat(data.low) || 0,
+                        open: parseFloat(data.open) || 0,
+                        previousClose: previousClose
                     };
                 }
+                
+                console.warn(`Invalid data for ${symbol}:`, data);
                 return null;
             } catch (error) {
                 console.error(`Error fetching ${symbol}:`, error);
@@ -1536,25 +1546,42 @@
             container.style.display = 'none';
             
             try {
-                console.log('Starting to fetch BSE stocks...');
+                // Check cache first (12-hour cache to minimize API usage)
+                const cachedData = localStorage.getItem('bseStocks');
+                const cacheTime = localStorage.getItem('bseStocksTime');
+                const now = new Date().getTime();
                 
-                // Fetch stocks in smaller batches to avoid rate limiting
-                const batchSize = 5;
+                if (cachedData && cacheTime && (now - parseInt(cacheTime)) < STOCK_CACHE_DURATION) {
+                    console.log('✅ Using cached BSE stocks data');
+                    bseStocks = JSON.parse(cachedData);
+                    displayStocks(bseStocks, tableBody);
+                    loading.style.display = 'none';
+                    container.style.display = 'block';
+                    return;
+                }
+                
+                console.log('📡 Fetching fresh BSE stocks data...');
+                
+                // Fetch only top 10 stocks to minimize API calls (10 calls instead of 15)
+                const topStocksToFetch = popularBSEStocks.slice(0, 10);
+                
+                // Fetch in batches with delay to respect rate limits
+                const batchSize = 3; // 3 stocks at a time
                 const stocksData = [];
                 
-                for (let i = 0; i < popularBSEStocks.length; i += batchSize) {
-                    const batch = popularBSEStocks.slice(i, i + batchSize);
+                for (let i = 0; i < topStocksToFetch.length; i += batchSize) {
+                    const batch = topStocksToFetch.slice(i, i + batchSize);
                     const batchPromises = batch.map(stock => fetchStockData(stock.symbol));
                     const batchResults = await Promise.all(batchPromises);
                     stocksData.push(...batchResults);
                     
-                    // Small delay between batches
-                    if (i + batchSize < popularBSEStocks.length) {
-                        await new Promise(resolve => setTimeout(resolve, 500));
+                    // 1 second delay between batches to avoid rate limiting
+                    if (i + batchSize < topStocksToFetch.length) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                     }
                 }
                 
-                console.log('Fetched stocks:', stocksData.filter(s => s !== null).length);
+                console.log('✅ Fetched BSE stocks:', stocksData.filter(s => s !== null).length);
                 
                 // Filter out nulls and sort by change percent
                 bseStocks = stocksData
@@ -1562,12 +1589,15 @@
                     .sort((a, b) => b.changePercent - a.changePercent)
                     .slice(0, 10);
                 
-                console.log('BSE stocks to display:', bseStocks.length);
-                
-                if (bseStocks.length === 0) {
+                if (bseStocks.length > 0) {
+                    // Cache the data for 12 hours
+                    localStorage.setItem('bseStocks', JSON.stringify(bseStocks));
+                    localStorage.setItem('bseStocksTime', now.toString());
+                    console.log('💾 Cached BSE stocks for 12 hours');
+                } else {
                     // Use fallback sample data if API fails
                     bseStocks = getSampleBSEData();
-                    console.log('Using sample BSE data');
+                    console.log('⚠️ Using sample BSE data (API failed)');
                 }
                 
                 displayStocks(bseStocks, tableBody);
@@ -1575,7 +1605,7 @@
                 loading.style.display = 'none';
                 container.style.display = 'block';
             } catch (error) {
-                console.error('Error loading BSE stocks:', error);
+                console.error('❌ Error loading BSE stocks:', error);
                 // Show sample data on error
                 bseStocks = getSampleBSEData();
                 displayStocks(bseStocks, tableBody);
@@ -1593,25 +1623,42 @@
             container.style.display = 'none';
             
             try {
-                console.log('Starting to fetch NSE stocks...');
+                // Check cache first (12-hour cache to minimize API usage)
+                const cachedData = localStorage.getItem('nseStocks');
+                const cacheTime = localStorage.getItem('nseStocksTime');
+                const now = new Date().getTime();
                 
-                // Fetch stocks in smaller batches to avoid rate limiting
-                const batchSize = 5;
+                if (cachedData && cacheTime && (now - parseInt(cacheTime)) < STOCK_CACHE_DURATION) {
+                    console.log('✅ Using cached NSE stocks data');
+                    nseStocks = JSON.parse(cachedData);
+                    displayStocks(nseStocks, tableBody);
+                    loading.style.display = 'none';
+                    container.style.display = 'block';
+                    return;
+                }
+                
+                console.log('📡 Fetching fresh NSE stocks data...');
+                
+                // Fetch only top 10 stocks to minimize API calls (10 calls instead of 15)
+                const topStocksToFetch = popularNSEStocks.slice(0, 10);
+                
+                // Fetch in batches with delay to respect rate limits
+                const batchSize = 3; // 3 stocks at a time
                 const stocksData = [];
                 
-                for (let i = 0; i < popularNSEStocks.length; i += batchSize) {
-                    const batch = popularNSEStocks.slice(i, i + batchSize);
+                for (let i = 0; i < topStocksToFetch.length; i += batchSize) {
+                    const batch = topStocksToFetch.slice(i, i + batchSize);
                     const batchPromises = batch.map(stock => fetchStockData(stock.symbol));
                     const batchResults = await Promise.all(batchPromises);
                     stocksData.push(...batchResults);
                     
-                    // Small delay between batches
-                    if (i + batchSize < popularNSEStocks.length) {
-                        await new Promise(resolve => setTimeout(resolve, 500));
+                    // 1 second delay between batches to avoid rate limiting
+                    if (i + batchSize < topStocksToFetch.length) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                     }
                 }
                 
-                console.log('Fetched stocks:', stocksData.filter(s => s !== null).length);
+                console.log('✅ Fetched NSE stocks:', stocksData.filter(s => s !== null).length);
                 
                 // Filter out nulls and sort by change percent
                 nseStocks = stocksData
@@ -1619,12 +1666,15 @@
                     .sort((a, b) => b.changePercent - a.changePercent)
                     .slice(0, 10);
                 
-                console.log('NSE stocks to display:', nseStocks.length);
-                
-                if (nseStocks.length === 0) {
+                if (nseStocks.length > 0) {
+                    // Cache the data for 12 hours
+                    localStorage.setItem('nseStocks', JSON.stringify(nseStocks));
+                    localStorage.setItem('nseStocksTime', now.toString());
+                    console.log('💾 Cached NSE stocks for 12 hours');
+                } else {
                     // Use fallback sample data if API fails
                     nseStocks = getSampleNSEData();
-                    console.log('Using sample NSE data');
+                    console.log('⚠️ Using sample NSE data (API failed)');
                 }
                 
                 displayStocks(nseStocks, tableBody);
@@ -1632,7 +1682,7 @@
                 loading.style.display = 'none';
                 container.style.display = 'block';
             } catch (error) {
-                console.error('Error loading NSE stocks:', error);
+                console.error('❌ Error loading NSE stocks:', error);
                 // Show sample data on error
                 nseStocks = getSampleNSEData();
                 displayStocks(nseStocks, tableBody);
@@ -1718,11 +1768,12 @@
             loadBSEStocks();
             loadNSEStocks();
             
-            // Refresh every 5 minutes (stocks update more frequently)
+            // Refresh every 12 hours (same as mutual funds to minimize API usage)
+            // With cache, this will only make API calls every 12 hours
             setInterval(() => {
                 loadBSEStocks();
                 loadNSEStocks();
-            }, 5 * 60 * 1000);
+            }, 12 * 60 * 60 * 1000);
         });
 
         // Contact Form Handler
