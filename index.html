@@ -207,7 +207,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Top Performing Mutual Funds</h2>
-                <p class="section-subtitle">Real-time top 10 performers of the 'Day'</p>
+                <p class="section-subtitle">Top 10 performers of the 'Day'</p>
             </div>
 
             <!-- Loading State -->
@@ -1161,11 +1161,31 @@
         function displayTopPerformingFunds(funds) {
             const grid = document.getElementById('topPerformingGrid');
             
-            grid.style.display = 'grid';
-            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(400px, 1fr))';
-            grid.style.gap = '30px';
+            grid.style.display = 'block';
+            grid.style.maxWidth = '100%';
+            grid.style.overflowX = 'auto';
             
-            grid.innerHTML = funds.map((fund, index) => {
+            // Create table header
+            let tableHTML = `
+                <div style="background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
+                                <th style="padding: 15px; text-align: left; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">Rank</th>
+                                <th style="padding: 15px; text-align: left; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1); min-width: 300px;">Fund Name</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">NAV</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">Risk</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">1Y Return</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">3Y Return</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px; border-right: 1px solid rgba(255,255,255,0.1);">5Y Return</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 14px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            // Add rows
+            tableHTML += funds.map((fund, index) => {
                 const { scheme, details } = fund;
                 const navData = details.data || [];
                 const latestNav = navData[0];
@@ -1173,92 +1193,71 @@
                 // Calculate returns
                 const returns = calculateReturns(navData);
                 
-                // Get fund category for risk and other details
-                const category = scheme.schemeCategory || 'Equity';
+                // Get fund category for risk and other details  
+                const category = scheme.schemeName || 'Equity'; // Use scheme name for categorization
                 const fundDetails = getFundDetails(category, navData);
 
+                const rowBg = index % 2 === 0 ? '#ffffff' : '#f8fafc';
+
                 return `
-                    <div class="fund-card" style="background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; transition: all 0.3s ease;">
-                        <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 20px; color: white;">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                <h3 style="margin: 0; font-size: 16px; line-height: 1.4; flex: 1;">${scheme.schemeName}</h3>
-                                <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 10px;">Rank ${index + 1}</span>
+                    <tr style="background: ${rowBg}; transition: all 0.2s ease;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='${rowBg}'">
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <span style="display: inline-block; width: 35px; height: 35px; background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; border-radius: 50%; line-height: 35px; font-weight: 700; font-size: 14px;">${index + 1}</span>
+                        </td>
+                        <td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">
+                            <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px; font-size: 14px;">${scheme.schemeName}</div>
+                            <div style="font-size: 12px; color: #94a3b8;">${details.meta?.fund_house || 'N/A'}</div>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 3px;">
+                                <span style="display: inline-block; padding: 2px 8px; background: #f1f5f9; border-radius: 4px; margin-right: 5px;">
+                                    ${fundDetails.fundSize}
+                                </span>
+                                <span>Min SIP: ${fundDetails.minSIP}</span>
                             </div>
-                            <p style="margin: 5px 0 0 0; font-size: 13px; opacity: 0.9;">${details.meta?.fund_house || 'N/A'}</p>
-                        </div>
-
-                        <div style="padding: 20px;">
-                            <!-- NAV and Date -->
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9;">
-                                <div>
-                                    <p style="color: #94a3b8; font-size: 12px; margin: 0 0 5px 0;">Current NAV</p>
-                                    <p style="color: #1e293b; font-size: 20px; font-weight: 700; margin: 0;">₹${latestNav?.nav || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p style="color: #94a3b8; font-size: 12px; margin: 0 0 5px 0;">Date</p>
-                                    <p style="color: #1e293b; font-size: 14px; font-weight: 600; margin: 0;">${latestNav?.date || 'N/A'}</p>
-                                </div>
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <div style="font-weight: 700; color: #1e293b; font-size: 16px;">₹${latestNav?.nav || 'N/A'}</div>
+                            <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">${latestNav?.date || 'N/A'}</div>
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <span style="padding: 4px 12px; background: ${fundDetails.risk === 'High' ? '#fee2e2' : fundDetails.risk === 'Low' ? '#dcfce7' : '#fef3c7'}; color: ${fundDetails.risk === 'High' ? '#dc2626' : fundDetails.risk === 'Low' ? '#16a34a' : '#ca8a04'}; border-radius: 12px; font-size: 12px; font-weight: 600;">${fundDetails.risk}</span>
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <div style="font-weight: 700; font-size: 16px; color: ${returns.oneYear >= 0 ? '#10b981' : '#ef4444'};">
+                                ${returns.oneYear}%
                             </div>
-
-                            <!-- Fund Details -->
-                            <div style="margin-bottom: 15px;">
-                                <h4 style="color: #dc2626; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">Fund Details</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
-                                    <div>
-                                        <span style="color: #94a3b8;">Risk:</span>
-                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.risk}</span>
-                                    </div>
-                                    <div>
-                                        <span style="color: #94a3b8;">Min SIP:</span>
-                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.minSIP}</span>
-                                    </div>
-                                    <div>
-                                        <span style="color: #94a3b8;">Fund Size:</span>
-                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.fundSize}</span>
-                                    </div>
-                                    <div>
-                                        <span style="color: #94a3b8;">Started:</span>
-                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.fundStarted}</span>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    <span style="color: #94a3b8; font-size: 13px;">Expense Ratio:</span>
-                                    <span style="color: #1e293b; font-weight: 600; margin-left: 5px; font-size: 13px;">${fundDetails.expenseRatio}</span>
-                                </div>
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <div style="font-weight: 700; font-size: 16px; color: ${returns.threeYear >= 0 ? '#10b981' : '#ef4444'};">
+                                ${returns.threeYear}%
                             </div>
-
-                            <!-- Returns -->
-                            <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
-                                <h4 style="color: #dc2626; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">Returns</h4>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                                    <div style="text-align: center;">
-                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">1 Year</p>
-                                        <p style="color: ${returns.oneYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.oneYear}%</p>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">3 Year</p>
-                                        <p style="color: ${returns.threeYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.threeYear}%</p>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">5 Year</p>
-                                        <p style="color: ${returns.fiveYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.fiveYear}%</p>
-                                    </div>
-                                </div>
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                            <div style="font-weight: 700; font-size: 16px; color: ${returns.fiveYear >= 0 ? '#10b981' : '#ef4444'};">
+                                ${returns.fiveYear}%
                             </div>
-
-                            <!-- View Details Button -->
+                        </td>
+                        <td style="padding: 15px; text-align: center; border-bottom: 1px solid #e2e8f0;">
                             <button 
                                 onclick="viewTopPerformingFundDetails('${scheme.schemeCode}')" 
-                                style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;"
-                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220,38,38,0.4)'"
+                                style="padding: 8px 16px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 13px;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(220,38,38,0.4)'"
                                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                             >
-                                <i class="fas fa-chart-line"></i> View Full Details
+                                <i class="fas fa-eye"></i> View
                             </button>
-                        </div>
-                    </div>
+                        </td>
+                    </tr>
                 `;
             }).join('');
+
+            // Close table
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            grid.innerHTML = tableHTML;
         }
 
         function calculateReturns(navData) {
