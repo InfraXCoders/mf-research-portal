@@ -343,7 +343,7 @@ function showNotification(message, type = 'info') {
         position: fixed;
         top: 80px;
         right: 20px;
-        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#dc2626'};
         color: white;
         padding: 12px 20px;
         border-radius: 8px;

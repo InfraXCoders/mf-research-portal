@@ -19,8 +19,7 @@
             <div class="nav-links">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#about" class="nav-link">About</a>
-                <a href="#results" class="nav-link">Analysis</a>
-                <a href="#top-performing" class="nav-link">Top Performing Mutual Funds</a>
+                <a href="#top-performing" class="nav-link">Top MF</a>
                 <a href="#compare" class="nav-link">Compare</a>
                 <a href="#calculators" class="nav-link">Calculators</a>
                 <a href="#learning" class="nav-link">Learning</a>
@@ -221,11 +220,6 @@
             <div id="topPerformingGrid" style="display: none; max-width: 1400px; margin: 0 auto;">
                 <!-- Funds will be populated by JavaScript -->
             </div>
-
-            <!-- Last Updated -->
-            <div id="lastUpdated" style="text-align: center; margin-top: 30px; color: #94a3b8; font-size: 14px; display: none;">
-                <i class="fas fa-clock"></i> Last updated: <span id="updateTime"></span>
-            </div>
         </div>
     </section>
 
@@ -380,7 +374,7 @@
                         <div style="padding: 20px; background: #f8fafc; text-align: center; border-top: 1px solid #e2e8f0;">
                             <div style="margin-bottom: 15px; font-size: 12px; color: #64748b;">
                                 <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
-                                Real-time NAV data from MFApi.in. Returns calculated from historical NAV data. Fund Size, Expense Ratio, Min SIP Amount, and Exit Load are estimated based on fund category or industry standards due to API limitations.
+                                Real-time NAV data from MFApi.in. Returns calculated from historical NAV data. Fund Size, Expense Ratio, and Min SIP Amount are estimated based on fund category or industry standards due to API limitations.
                             </div>
                             <button 
                                 class="btn btn-outline" 
@@ -1041,8 +1035,6 @@
         async function loadTopPerformingFunds() {
             const loading = document.getElementById('topPerformingLoading');
             const grid = document.getElementById('topPerformingGrid');
-            const lastUpdated = document.getElementById('lastUpdated');
-            const updateTime = document.getElementById('updateTime');
 
             try {
                 loading.style.display = 'block';
@@ -1088,8 +1080,6 @@
 
                 // Update last fetch time
                 lastFetchTime = new Date();
-                updateTime.textContent = lastFetchTime.toLocaleString();
-                lastUpdated.style.display = 'block';
 
                 loading.style.display = 'none';
                 grid.style.display = 'grid';
@@ -1171,9 +1161,6 @@
                                 <div style="margin-top: 10px;">
                                     <span style="color: #94a3b8; font-size: 13px;">Expense Ratio:</span>
                                     <span style="color: #1e293b; font-weight: 600; margin-left: 5px; font-size: 13px;">${fundDetails.expenseRatio}</span>
-                                </div>
-                                <div style="margin-top: 8px; font-size: 12px; color: #64748b; line-height: 1.4;">
-                                    ${fundDetails.exitLoad}
                                 </div>
                             </div>
 
@@ -1266,9 +1253,7 @@
                 ? new Date(navData[navData.length - 1].date.split('-').reverse().join('-')).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
                 : 'N/A';
 
-            const exitLoad = 'Exit load of 1% if redeemed within 1 year.';
-
-            return { risk, minSIP, expenseRatio, fundSize, fundStarted, exitLoad };
+            return { risk, minSIP, expenseRatio, fundSize, fundStarted };
         }
 
         function viewTopPerformingFundDetails(schemeCode) {
@@ -1716,11 +1701,7 @@
                         return 'Equity Fund';
                     })
                 },
-                { 
-                    parameter: 'Exit Load', 
-                    values: fundDetails.map(() => 'Exit load of 1% if redeemed within 1 year.')
-                },
-                
+
                 // Returns Section
                 { 
                     parameter: '1Y', 
