@@ -1031,12 +1031,30 @@
         // Top Performing Funds Functionality
         let topPerformingFunds = [];
         let lastFetchTime = null;
+        const CACHE_DURATION = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
 
         async function loadTopPerformingFunds() {
             const loading = document.getElementById('topPerformingLoading');
             const grid = document.getElementById('topPerformingGrid');
 
+            // Check if we have cached data that's still valid (less than 12 hours old)
+            const cachedData = localStorage.getItem('topPerformingFunds');
+            const cachedTime = localStorage.getItem('topPerformingFundsTime');
+            
+            if (cachedData && cachedTime) {
+                const timeSinceCache = Date.now() - parseInt(cachedTime);
+                if (timeSinceCache < CACHE_DURATION) {
+                    console.log('📦 Loading from cache (valid for ' + Math.round((CACHE_DURATION - timeSinceCache) / 1000 / 60 / 60) + ' more hours)');
+                    topPerformingFunds = JSON.parse(cachedData);
+                    displayTopPerformingFunds(topPerformingFunds);
+                    loading.style.display = 'none';
+                    grid.style.display = 'grid';
+                    return;
+                }
+            }
+
             try {
+                console.log('🔄 Cache expired or not found, fetching fresh data...');
                 loading.style.display = 'block';
                 grid.style.display = 'none';
 
@@ -1114,6 +1132,11 @@
                         }
                     }
                 }
+
+                // Save to cache
+                localStorage.setItem('topPerformingFunds', JSON.stringify(topPerformingFunds));
+                localStorage.setItem('topPerformingFundsTime', Date.now().toString());
+                console.log('💾 Data cached for 12 hours');
 
                 // Display the funds
                 displayTopPerformingFunds(topPerformingFunds);
@@ -1307,8 +1330,8 @@
         window.addEventListener('apiDataLoaded', function() {
             loadTopPerformingFunds();
             
-            // Refresh every hour
-            setInterval(loadTopPerformingFunds, 60 * 60 * 1000);
+            // Refresh every 12 hours
+            setInterval(loadTopPerformingFunds, 12 * 60 * 60 * 1000);
         });
 
         // Contact Form Handler
