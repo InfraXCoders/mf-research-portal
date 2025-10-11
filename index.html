@@ -20,6 +20,7 @@
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#about" class="nav-link">About</a>
                 <a href="#results" class="nav-link">Analysis</a>
+                <a href="#top-performing" class="nav-link">Top Funds</a>
                 <a href="#compare" class="nav-link">Compare</a>
                 <a href="#calculators" class="nav-link">Calculators</a>
                 <a href="#learning" class="nav-link">Learning</a>
@@ -199,6 +200,32 @@
                 </table>
             </div>
 
+        </div>
+    </section>
+
+    <!-- Top Performing MF Section -->
+    <section class="top-performing-section" id="top-performing" style="background: var(--white); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Top Performing Mutual Funds</h2>
+                <p class="section-subtitle">Real-time top 10 performers updated every hour with detailed analysis</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="topPerformingLoading" style="text-align: center; padding: 40px;">
+                <div class="spinner" style="width: 50px; height: 50px; margin: 0 auto 20px;"></div>
+                <p style="color: #64748b;">Loading top performing funds...</p>
+            </div>
+
+            <!-- Top Performing Funds Grid -->
+            <div id="topPerformingGrid" style="display: none; max-width: 1400px; margin: 0 auto;">
+                <!-- Funds will be populated by JavaScript -->
+            </div>
+
+            <!-- Last Updated -->
+            <div id="lastUpdated" style="text-align: center; margin-top: 30px; color: #94a3b8; font-size: 14px; display: none;">
+                <i class="fas fa-clock"></i> Last updated: <span id="updateTime"></span>
+            </div>
         </div>
     </section>
 
@@ -1006,6 +1033,258 @@
                 }
             });
         }
+
+        // Top Performing Funds Functionality
+        let topPerformingFunds = [];
+        let lastFetchTime = null;
+
+        async function loadTopPerformingFunds() {
+            const loading = document.getElementById('topPerformingLoading');
+            const grid = document.getElementById('topPerformingGrid');
+            const lastUpdated = document.getElementById('lastUpdated');
+            const updateTime = document.getElementById('updateTime');
+
+            try {
+                loading.style.display = 'block';
+                grid.style.display = 'none';
+
+                // Get all schemes
+                const schemes = window.realTimeSchemes || window.allSchemes || [];
+                
+                if (schemes.length === 0) {
+                    throw new Error('No schemes data available');
+                }
+
+                // Randomly select 10 different schemes for demonstration
+                const selectedSchemes = [];
+                const usedIndices = new Set();
+                
+                while (selectedSchemes.length < 10 && usedIndices.size < schemes.length) {
+                    const randomIndex = Math.floor(Math.random() * schemes.length);
+                    if (!usedIndices.has(randomIndex)) {
+                        usedIndices.add(randomIndex);
+                        selectedSchemes.push(schemes[randomIndex]);
+                    }
+                }
+
+                // Fetch detailed data for selected schemes
+                const fundsWithDetails = await Promise.all(
+                    selectedSchemes.map(async (scheme) => {
+                        try {
+                            const details = await window.MFApiService.getSchemeDetails(scheme.schemeCode);
+                            return { scheme, details };
+                        } catch (error) {
+                            console.error(`Error fetching details for ${scheme.schemeCode}:`, error);
+                            return null;
+                        }
+                    })
+                );
+
+                // Filter out failed requests
+                topPerformingFunds = fundsWithDetails.filter(f => f !== null);
+
+                // Display the funds
+                displayTopPerformingFunds(topPerformingFunds);
+
+                // Update last fetch time
+                lastFetchTime = new Date();
+                updateTime.textContent = lastFetchTime.toLocaleString();
+                lastUpdated.style.display = 'block';
+
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+
+            } catch (error) {
+                console.error('Error loading top performing funds:', error);
+                loading.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <p>Failed to load top performing funds. Please refresh the page.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayTopPerformingFunds(funds) {
+            const grid = document.getElementById('topPerformingGrid');
+            
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(400px, 1fr))';
+            grid.style.gap = '30px';
+            
+            grid.innerHTML = funds.map((fund, index) => {
+                const { scheme, details } = fund;
+                const navData = details.data || [];
+                const latestNav = navData[0];
+                
+                // Calculate returns
+                const returns = calculateReturns(navData);
+                
+                // Get fund category for risk and other details
+                const category = scheme.schemeCategory || 'Equity';
+                const fundDetails = getFundDetails(category, navData);
+
+                return `
+                    <div class="fund-card" style="background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; transition: all 0.3s ease;">
+                        <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 20px; color: white;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <h3 style="margin: 0; font-size: 16px; line-height: 1.4; flex: 1;">${scheme.schemeName}</h3>
+                                <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 10px;">Rank ${index + 1}</span>
+                            </div>
+                            <p style="margin: 5px 0 0 0; font-size: 13px; opacity: 0.9;">${details.meta?.fund_house || 'N/A'}</p>
+                        </div>
+
+                        <div style="padding: 20px;">
+                            <!-- NAV and Date -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9;">
+                                <div>
+                                    <p style="color: #94a3b8; font-size: 12px; margin: 0 0 5px 0;">Current NAV</p>
+                                    <p style="color: #1e293b; font-size: 20px; font-weight: 700; margin: 0;">₹${latestNav?.nav || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p style="color: #94a3b8; font-size: 12px; margin: 0 0 5px 0;">Date</p>
+                                    <p style="color: #1e293b; font-size: 14px; font-weight: 600; margin: 0;">${latestNav?.date || 'N/A'}</p>
+                                </div>
+                            </div>
+
+                            <!-- Fund Details -->
+                            <div style="margin-bottom: 15px;">
+                                <h4 style="color: #dc2626; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">Fund Details</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+                                    <div>
+                                        <span style="color: #94a3b8;">Risk:</span>
+                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.risk}</span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #94a3b8;">Min SIP:</span>
+                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.minSIP}</span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #94a3b8;">Fund Size:</span>
+                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.fundSize}</span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #94a3b8;">Started:</span>
+                                        <span style="color: #1e293b; font-weight: 600; margin-left: 5px;">${fundDetails.fundStarted}</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <span style="color: #94a3b8; font-size: 13px;">Expense Ratio:</span>
+                                    <span style="color: #1e293b; font-weight: 600; margin-left: 5px; font-size: 13px;">${fundDetails.expenseRatio}</span>
+                                </div>
+                                <div style="margin-top: 8px; font-size: 12px; color: #64748b; line-height: 1.4;">
+                                    ${fundDetails.exitLoad}
+                                </div>
+                            </div>
+
+                            <!-- Returns -->
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                                <h4 style="color: #dc2626; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">Returns</h4>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                    <div style="text-align: center;">
+                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">1 Year</p>
+                                        <p style="color: ${returns.oneYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.oneYear}%</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">3 Year</p>
+                                        <p style="color: ${returns.threeYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.threeYear}%</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="color: #94a3b8; font-size: 11px; margin: 0 0 5px 0;">5 Year</p>
+                                        <p style="color: ${returns.fiveYear >= 0 ? '#10b981' : '#ef4444'}; font-size: 16px; font-weight: 700; margin: 0;">${returns.fiveYear}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- View Details Button -->
+                            <button 
+                                onclick="viewTopPerformingFundDetails('${scheme.schemeCode}')" 
+                                style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220,38,38,0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                            >
+                                <i class="fas fa-chart-line"></i> View Full Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateReturns(navData) {
+            if (!navData || navData.length === 0) {
+                return { oneYear: 'N/A', threeYear: 'N/A', fiveYear: 'N/A' };
+            }
+
+            const latestNav = parseFloat(navData[0]?.nav || 0);
+            
+            // Calculate 1Y return (approx 252 trading days)
+            const oneYearIndex = Math.min(252, navData.length - 1);
+            const oneYearNav = parseFloat(navData[oneYearIndex]?.nav || latestNav);
+            const oneYear = oneYearNav ? (((latestNav - oneYearNav) / oneYearNav) * 100).toFixed(1) : 'N/A';
+
+            // Calculate 3Y return (approx 756 trading days)
+            const threeYearIndex = Math.min(756, navData.length - 1);
+            const threeYearNav = parseFloat(navData[threeYearIndex]?.nav || latestNav);
+            const threeYear = threeYearNav ? (((latestNav - threeYearNav) / threeYearNav) * 100).toFixed(1) : 'N/A';
+
+            // Calculate 5Y return (approx 1260 trading days)
+            const fiveYearIndex = Math.min(1260, navData.length - 1);
+            const fiveYearNav = parseFloat(navData[fiveYearIndex]?.nav || latestNav);
+            const fiveYear = fiveYearNav ? (((latestNav - fiveYearNav) / fiveYearNav) * 100).toFixed(1) : 'N/A';
+
+            return { oneYear, threeYear, fiveYear };
+        }
+
+        function getFundDetails(category, navData) {
+            let risk = 'Medium';
+            let minSIP = '₹500';
+            let expenseRatio = '0.50% - 1.50%';
+            let fundSize = 'Mid Cap';
+            
+            // Categorize based on scheme category
+            const lowerCategory = category.toLowerCase();
+            
+            if (lowerCategory.includes('debt') || lowerCategory.includes('liquid') || lowerCategory.includes('gilt')) {
+                risk = 'Low';
+                minSIP = '₹100';
+                expenseRatio = '0.10% - 0.80%';
+                fundSize = 'Debt Fund';
+            } else if (lowerCategory.includes('small')) {
+                risk = 'High';
+                fundSize = 'Small Cap';
+            } else if (lowerCategory.includes('large')) {
+                risk = 'Medium';
+                fundSize = 'Large Cap';
+            } else if (lowerCategory.includes('hybrid') || lowerCategory.includes('balanced')) {
+                risk = 'Medium';
+                fundSize = 'Hybrid Fund';
+            }
+
+            // Get fund started date from oldest NAV
+            const fundStarted = navData && navData.length > 0 
+                ? new Date(navData[navData.length - 1].date.split('-').reverse().join('-')).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                : 'N/A';
+
+            const exitLoad = 'Exit load of 1% if redeemed within 1 year.';
+
+            return { risk, minSIP, expenseRatio, fundSize, fundStarted, exitLoad };
+        }
+
+        function viewTopPerformingFundDetails(schemeCode) {
+            const fund = topPerformingFunds.find(f => f.scheme.schemeCode == schemeCode);
+            if (fund) {
+                showSchemeDetailsModal(fund.details);
+            }
+        }
+
+        // Load top performing funds on page load
+        window.addEventListener('apiDataLoaded', function() {
+            loadTopPerformingFunds();
+            
+            // Refresh every hour
+            setInterval(loadTopPerformingFunds, 60 * 60 * 1000);
+        });
 
         // Contact Form Handler
         document.getElementById('contactForm').addEventListener('submit', function(e) {

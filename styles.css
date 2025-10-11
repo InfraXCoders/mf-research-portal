@@ -1539,6 +1539,19 @@ body {
     }
 }
 
+/* Top Performing Funds Card Styles */
+.fund-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.top-performing-section .spinner {
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
 /* Hero Chart Animations */
 .chart-container::before {
     content: '';
