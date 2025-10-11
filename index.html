@@ -1072,8 +1072,48 @@
                     })
                 );
 
-                // Filter out failed requests
-                topPerformingFunds = fundsWithDetails.filter(f => f !== null);
+                // Filter out failed requests and old/inactive funds
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                
+                topPerformingFunds = fundsWithDetails.filter(f => {
+                    if (!f || !f.details || !f.details.data || f.details.data.length === 0) {
+                        return false;
+                    }
+                    
+                    // Check if NAV is recent (within last 7 days)
+                    const latestNavDate = f.details.data[0].date;
+                    const [day, month, year] = latestNavDate.split('-');
+                    const navDate = new Date(`${year}-${month}-${day}`);
+                    
+                    return navDate >= sevenDaysAgo;
+                });
+                
+                // If we don't have enough recent funds, fetch more
+                if (topPerformingFunds.length < 10) {
+                    console.log(`Only ${topPerformingFunds.length} recent funds found, fetching more...`);
+                    // Keep trying until we get 10 recent funds or run out of schemes
+                    while (topPerformingFunds.length < 10 && usedIndices.size < schemes.length) {
+                        const randomIndex = Math.floor(Math.random() * schemes.length);
+                        if (!usedIndices.has(randomIndex)) {
+                            usedIndices.add(randomIndex);
+                            try {
+                                const details = await window.MFApiService.getSchemeDetails(schemes[randomIndex].schemeCode);
+                                if (details && details.data && details.data.length > 0) {
+                                    const latestNavDate = details.data[0].date;
+                                    const [day, month, year] = latestNavDate.split('-');
+                                    const navDate = new Date(`${year}-${month}-${day}`);
+                                    
+                                    if (navDate >= sevenDaysAgo) {
+                                        topPerformingFunds.push({ scheme: schemes[randomIndex], details });
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error fetching additional fund:', error);
+                            }
+                        }
+                    }
+                }
 
                 // Display the funds
                 displayTopPerformingFunds(topPerformingFunds);
