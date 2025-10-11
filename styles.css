@@ -1628,6 +1628,99 @@ body {
     filter: drop-shadow(0 0 8px currentColor);
 }
 
+/* Mobile Optimization Enhancements */
+@media (max-width: 768px) {
+    /* Touch interactions */
+    * {
+        -webkit-tap-highlight-color: rgba(220, 38, 38, 0.2);
+    }
+    
+    /* Larger touch targets */
+    .nav-link {
+        padding: 15px 20px;
+        font-size: 16px;
+        min-height: 48px;
+    }
+    
+    .mobile-menu-toggle {
+        min-width: 48px;
+        min-height: 48px;
+    }
+    
+    /* Hero adjustments */
+    .hero-content {
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 28px !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 15px;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    /* Search */
+    .search-box {
+        font-size: 16px;
+        padding: 16px 50px 16px 50px;
+    }
+    
+    /* Tables - Horizontal scroll */
+    #topPerformingGrid,
+    .results-table-container,
+    #comparisonResults table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Top Performing Table */
+    .top-performing-section table td:nth-child(2) {
+        min-width: 220px;
+    }
+    
+    /* Forms - Prevent zoom on input focus */
+    input, textarea, select {
+        font-size: 16px !important;
+    }
+    
+    /* Buttons */
+    .btn {
+        min-height: 48px;
+        padding: 14px 20px;
+    }
+    
+    .btn-large {
+        min-height: 56px;
+        padding: 18px 28px;
+    }
+    
+    /* Modal */
+    .modal-content {
+        width: 95%;
+        max-height: 85vh;
+        padding: 20px;
+    }
+    
+    /* Video grid */
+    #learningVideos {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Footer */
+    .footer-content {
+        text-align: center;
+    }
+}
+
 /* Print Styles */
 @media print {
     .header,
