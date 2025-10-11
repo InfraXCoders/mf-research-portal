@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1e293b">
     <title>Investment Calculator - MF Research Portal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -96,13 +99,99 @@
             padding: 30px 40px;
         }
         
+        /* Mobile Calculator Selector */
+        .mobile-calc-selector {
+            display: none;
+        }
+        
         @media (max-width: 768px) {
+            /* Improve touch */
+            * {
+                -webkit-tap-highlight-color: rgba(30, 41, 59, 0.2);
+            }
+            
             .page-container {
                 grid-template-columns: 1fr;
             }
             
             .sidebar {
                 display: none;
+            }
+            
+            /* Mobile Calculator Selector */
+            .mobile-calc-selector {
+                display: block;
+                background: #1e293b;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .mobile-calc-selector select {
+                width: 100%;
+                padding: 14px 16px;
+                font-size: 16px;
+                border: 2px solid #334155;
+                background: #1e293b;
+                color: white;
+                border-radius: 8px;
+                min-height: 48px;
+            }
+            
+            .main-content {
+                padding: 0 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            /* Forms */
+            .form-group input {
+                font-size: 16px !important;
+                padding: 14px !important;
+                min-height: 48px !important;
+            }
+            
+            .form-group label {
+                font-size: 14px;
+            }
+            
+            /* Buttons */
+            .btn-primary {
+                width: 100%;
+                min-height: 48px;
+                font-size: 16px;
+                padding: 14px;
+            }
+            
+            /* Results */
+            .result-value {
+                font-size: 1.8rem !important;
+            }
+            
+            /* Breakdown Table */
+            .breakdown-table {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .breakdown-table table {
+                min-width: 600px;
+                font-size: 12px;
+            }
+            
+            .breakdown-table th,
+            .breakdown-table td {
+                padding: 8px 6px;
+            }
+            
+            /* Charts */
+            .chart-container {
+                height: 250px;
+            }
+            
+            svg {
+                max-width: 100%;
             }
         }
         
@@ -429,6 +518,18 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Calculator Selector -->
+    <div class="mobile-calc-selector">
+        <select id="mobileCalcSelect" onchange="switchTab(this.value)">
+            <option value="sip">📈 SIP Calculator</option>
+            <option value="lumpsum">💰 Lumpsum Calculator</option>
+            <option value="swp">💵 SWP Calculator</option>
+            <option value="annual-sip">📊 Annual SIP Calculator</option>
+            <option value="step-up">📈 Step-up SIP Calculator</option>
+            <option value="loan-emi">🏠 Loan EMI Calculator</option>
+        </select>
+    </div>
+
     <div class="page-container">
         <!-- Sidebar -->
         <div class="sidebar">
@@ -1212,6 +1313,17 @@
             const buttonIndex = type === 'sip' ? 0 : type === 'lumpsum' ? 1 : type === 'swp' ? 2 : -1;
             if (buttonIndex >= 0 && buttons[buttonIndex]) {
                 buttons[buttonIndex].classList.add('active');
+            }
+            
+            // Update mobile selector
+            const mobileSelect = document.getElementById('mobileCalcSelect');
+            if (mobileSelect) {
+                mobileSelect.value = type;
+            }
+            
+            // Scroll to top on mobile for better UX
+            if (window.innerWidth <= 768) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
             
             // Calculate default for the selected calculator
