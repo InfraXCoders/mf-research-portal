@@ -37,119 +37,389 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Dynamic Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    Advanced <span class="gradient-text">Mutual Fund</span> Research
-                </h1>
-                <p class="hero-subtitle">
-                    Analyze, compare, and track mutual fund performance with our comprehensive research tools. 
-                    Make informed investment decisions with real-time data and insights.
-                </p>
-                <div class="hero-actions">
-                    <a href="#learning" class="btn btn-outline btn-large" style="text-decoration: none;">
-                        <i class="fas fa-play"></i>
-                        Watch Demo
-                    </a>
+        <div class="hero-slider">
+            <!-- Slide 1: Welcome to MF Research Portal -->
+            <div class="hero-slide active" data-slide="1">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="slide-badge">
+                            <i class="fas fa-rocket"></i>
+                            <span>Welcome</span>
+                        </div>
+                        <h1 class="hero-title">
+                            Welcome to <span class="gradient-text">MF Research Portal</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Your complete investment journey starts here. From mutual funds to stocks, 
+                            get expert financial guidance and smart consulting to grow your wealth at 
+                            compounding interest rates.
+                        </p>
+                        <div class="welcome-features">
+                            <div class="welcome-feature">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Smart Investment Guidance</span>
+                            </div>
+                            <div class="welcome-feature">
+                                <i class="fas fa-coins"></i>
+                                <span>Mutual Funds & Stocks</span>
+                            </div>
+                            <div class="welcome-feature">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Expert Consulting</span>
+                            </div>
+                            <div class="welcome-feature">
+                                <i class="fas fa-seedling"></i>
+                                <span>Wealth Growth</span>
+                            </div>
+                        </div>
+                        <div class="welcome-stats">
+                            <div class="welcome-stat">
+                                <span class="stat-number">10,000+</span>
+                                <span class="stat-text">Active Investors</span>
+                            </div>
+                            <div class="welcome-stat">
+                                <span class="stat-number">₹50Cr+</span>
+                                <span class="stat-text">Assets Managed</span>
+                            </div>
+                            <div class="welcome-stat">
+                                <span class="stat-number">15%+</span>
+                                <span class="stat-text">Average Returns</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <a href="#top-performing" class="btn btn-primary btn-large">
+                                <i class="fas fa-play"></i>
+                                Start Your Journey
+                            </a>
+                            <a href="#learning" class="btn btn-outline btn-large">
+                                <i class="fas fa-graduation-cap"></i>
+                                Learn Investing
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="welcome-dashboard">
+                            <div class="investment-journey">
+                                <div class="journey-step">
+                                    <div class="step-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h4>Start Investing</h4>
+                                        <p>Begin your financial journey</p>
+                                    </div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="journey-step">
+                                    <div class="step-icon">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h4>Build Portfolio</h4>
+                                        <p>Diversify your investments</p>
+                                    </div>
+                                </div>
+                                <div class="journey-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="journey-step">
+                                    <div class="step-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h4>Grow Wealth</h4>
+                                        <p>Compound your returns</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wealth-growth-chart">
+                                <div class="growth-title">Wealth Growth Trajectory</div>
+                                <div class="growth-bars">
+                                    <div class="growth-bar" style="height: 20%;">
+                                        <span>Year 1</span>
+                                    </div>
+                                    <div class="growth-bar" style="height: 40%;">
+                                        <span>Year 2</span>
+                                    </div>
+                                    <div class="growth-bar" style="height: 65%;">
+                                        <span>Year 3</span>
+                                    </div>
+                                    <div class="growth-bar" style="height: 85%;">
+                                        <span>Year 4</span>
+                                    </div>
+                                    <div class="growth-bar" style="height: 100%;">
+                                        <span>Year 5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="chart-container">
-                    <svg viewBox="0 0 400 300" style="width: 100%; height: 100%;" id="heroChart">
-                        <!-- Background Grid -->
-                        <defs>
-                            <linearGradient id="chartGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
-                            </linearGradient>
-                            <linearGradient id="chartGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.2" />
-                                <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0" />
-                            </linearGradient>
-                            <linearGradient id="chartGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2" />
-                                <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0" />
-                            </linearGradient>
-                            <filter id="glow">
-                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                <feMerge> 
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
+
+            <!-- Slide 2: Today's Market Highlights -->
+            <div class="hero-slide" data-slide="2">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="slide-badge">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Live News</span>
+                        </div>
+                        <h1 class="hero-title-large">
+                            Today's <span class="gradient-text">Market Highlights</span>
+                        </h1>
                         
-                        <!-- Grid Lines -->
-                        <line x1="50" y1="250" x2="350" y2="250" stroke="#e2e8f0" stroke-width="1"/>
-                        <line x1="50" y1="200" x2="350" y2="200" stroke="#e2e8f0" stroke-width="1"/>
-                        <line x1="50" y1="150" x2="350" y2="150" stroke="#e2e8f0" stroke-width="1"/>
-                        <line x1="50" y1="100" x2="350" y2="100" stroke="#e2e8f0" stroke-width="1"/>
-                        <line x1="50" y1="50" x2="350" y2="50" stroke="#e2e8f0" stroke-width="1"/>
+                        <!-- Market Indicators under title -->
+                        <div class="market-indicators-inline">
+                            <div class="indicator positive">
+                                <span class="label">NSE Nifty 50</span>
+                                <span class="index-value">24,567.89</span>
+                                <span class="value">+1.2%</span>
+                            </div>
+                            <div class="indicator positive">
+                                <span class="label">BSE Sensex</span>
+                                <span class="index-value">80,123.45</span>
+                                <span class="value">+1.1%</span>
+                            </div>
+                            <div class="indicator negative">
+                                <span class="label">Bank Nifty</span>
+                                <span class="index-value">52,345.67</span>
+                                <span class="value">-0.3%</span>
+                            </div>
+                        </div>
                         
-                        <!-- Chart Lines - Real Top Performing Funds (5Y Returns) -->
-                        <!-- Quant Small Cap Fund - 38.2% CAGR (5Y) -->
-                        <polyline
-                            fill="url(#chartGradient1)"
-                            stroke="#10b981"
-                            stroke-width="3"
-                            points="50,250 110,200 170,140 230,90 290,50 350,20"
-                            filter="url(#glow)"
-                            class="chart-line-1"
-                        />
+                        <!-- Live Stock Ticker -->
+                        <div class="live-ticker">
+                            <div class="ticker-item positive">
+                                <span class="stock-name">RELIANCE</span>
+                                <span class="stock-price">₹2,847.50</span>
+                                <span class="stock-change">+2.1%</span>
+                            </div>
+                            <div class="ticker-item positive">
+                                <span class="stock-name">TCS</span>
+                                <span class="stock-price">₹3,421.80</span>
+                                <span class="stock-change">+1.8%</span>
+                            </div>
+                            <div class="ticker-item negative">
+                                <span class="stock-name">HDFC</span>
+                                <span class="stock-price">₹1,456.20</span>
+                                <span class="stock-change">-0.5%</span>
+                            </div>
+                        </div>
                         
-                        <!-- Nippon India Small Cap - 32.5% CAGR (5Y) -->
-                        <polyline
-                            fill="url(#chartGradient2)"
-                            stroke="#dc2626"
-                            stroke-width="2.5"
-                            points="50,250 110,210 170,160 230,110 290,70 350,40"
-                            filter="url(#glow)"
-                            class="chart-line-2"
-                        />
-                        
-                        <!-- HDFC Balanced Advantage - 16.8% CAGR (5Y) -->
-                        <polyline
-                            fill="url(#chartGradient3)"
-                            stroke="#f59e0b"
-                            stroke-width="2"
-                            points="50,250 110,230 170,205 230,175 290,150 350,125"
-                            filter="url(#glow)"
-                            class="chart-line-3"
-                        />
-                        
-                        <!-- Time Period Labels on X-axis -->
-                        <text x="50" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">0Y</text>
-                        <text x="110" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">1Y</text>
-                        <text x="170" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">2Y</text>
-                        <text x="230" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">3Y</text>
-                        <text x="290" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">4Y</text>
-                        <text x="350" y="270" text-anchor="middle" font-size="11" fill="#64748b" font-weight="600">5Y</text>
-                        
-                        <!-- Data Points with Hover Effects -->
-                        <circle cx="350" cy="20" r="5" fill="#10b981" class="data-point" data-value="38.2%"/>
-                        <circle cx="350" cy="40" r="4" fill="#dc2626" class="data-point" data-value="32.5%"/>
-                        <circle cx="350" cy="125" r="3" fill="#f59e0b" class="data-point" data-value="16.8%"/>
-                        
-                        <!-- Y-axis Label -->
-                        <text x="30" y="150" text-anchor="middle" font-size="12" fill="#64748b" transform="rotate(-90 30 150)">Returns (%)</text>
-                        
-                        <!-- Title -->
-                        <text x="200" y="25" text-anchor="middle" font-size="15" fill="#1e293b" font-weight="700">Top Performing Funds (5Y CAGR)</text>
-                        
-                        <!-- Legend with Real Fund Names -->
-                        <rect x="200" y="50" width="145" height="70" fill="rgba(255,255,255,0.95)" rx="8"/>
-                        <circle cx="210" cy="65" r="4" fill="#10b981"/>
-                        <text x="220" y="69" font-size="10" fill="#1e293b">Quant Small Cap (38.2%)</text>
-                        <circle cx="210" cy="82" r="3" fill="#dc2626"/>
-                        <text x="220" y="86" font-size="10" fill="#1e293b">Nippon Small Cap (32.5%)</text>
-                        <circle cx="210" cy="99" r="2" fill="#f59e0b"/>
-                        <text x="220" y="103" font-size="10" fill="#1e293b">HDFC Balanced (16.8%)</text>
-                        <text x="272" y="117" font-size="9" fill="#94a3b8">*Historical returns</text>
-                    </svg>
+                        <div class="hero-actions">
+                            <a href="#top-performing" class="btn btn-primary btn-large">
+                                <i class="fas fa-chart-bar"></i>
+                                View Top Performers
+                            </a>
+                            <a href="#bse-stocks" class="btn btn-outline btn-large">
+                                <i class="fas fa-eye"></i>
+                                Market Analysis
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="market-highlights-dashboard">
+                            <div class="financial-news-grid" id="rss-news-container">
+                                <!-- RSS News will be loaded here dynamically -->
+                                <div class="news-loading">
+                                    <div class="loading-spinner"></div>
+                                    <p>Loading latest financial news...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Slide 3: Research & Comparison Tools -->
+            <div class="hero-slide" data-slide="3">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="slide-badge">
+                            <i class="fas fa-search"></i>
+                            <span>Research & Analysis</span>
+                        </div>
+                        <h1 class="hero-title">
+                            Advanced <span class="gradient-text">Research</span> & <span class="gradient-text">Comparison</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Comprehensive research tools with real-time data, performance analysis, 
+                            and intelligent fund comparison to optimize your investment strategy.
+                        </p>
+                        <div class="features-preview">
+                            <div class="feature-item">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Portfolio Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>Fund Comparison</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-trending-up"></i>
+                                <span>Performance Tracking</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Risk Assessment</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-calculator"></i>
+                                <span>ROI Calculator</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Performance Analysis</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <a href="#compare" class="btn btn-primary btn-large">
+                                <i class="fas fa-balance-scale"></i>
+                                Compare Funds
+                            </a>
+                            <a href="#calculators" class="btn btn-outline btn-large">
+                                <i class="fas fa-calculator"></i>
+                                Use Calculators
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="enhanced-dashboard">
+                            <div class="large-analytics-chart">
+                                <div class="chart-container">
+                                    <svg viewBox="0 0 600 300" style="width: 100%; height: 100%;">
+                                        <defs>
+                                            <linearGradient id="analyticsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.4" />
+                                                <stop offset="50%" style="stop-color:#dc2626;stop-opacity:0.2" />
+                                                <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0" />
+                                            </linearGradient>
+                                            <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#e5e7eb;stop-opacity:0.3" />
+                                                <stop offset="100%" style="stop-color:#e5e7eb;stop-opacity:0.1" />
+                                            </linearGradient>
+                                        </defs>
+                                        
+                                        <!-- Grid Lines -->
+                                        <line x1="80" y1="50" x2="520" y2="50" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                        <line x1="80" y1="100" x2="520" y2="100" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                        <line x1="80" y1="150" x2="520" y2="150" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                        <line x1="80" y1="200" x2="520" y2="200" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                        <line x1="80" y1="250" x2="520" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                        
+                                        <!-- Vertical Grid Lines -->
+                                        <line x1="140" y1="50" x2="140" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="200" y1="50" x2="200" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="260" y1="50" x2="260" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="320" y1="50" x2="320" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="380" y1="50" x2="380" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="440" y1="50" x2="440" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        <line x1="500" y1="50" x2="500" y2="250" stroke="#e5e7eb" stroke-width="1" opacity="0.3"/>
+                                        
+                                        <!-- Main Performance Line -->
+                                        <polyline
+                                            fill="url(#analyticsGradient)"
+                                            stroke="#dc2626"
+                                            stroke-width="4"
+                                            points="80,270 140,220 200,180 260,120 320,80 380,60 440,50 500,45"
+                                        />
+                                        
+                                        <!-- Data Points -->
+                                        <circle cx="80" cy="270" r="5" fill="#dc2626"/>
+                                        <circle cx="140" cy="220" r="5" fill="#dc2626"/>
+                                        <circle cx="200" cy="180" r="5" fill="#dc2626"/>
+                                        <circle cx="260" cy="120" r="5" fill="#dc2626"/>
+                                        <circle cx="320" cy="80" r="5" fill="#dc2626"/>
+                                        <circle cx="380" cy="60" r="5" fill="#dc2626"/>
+                                        <circle cx="440" cy="50" r="5" fill="#dc2626"/>
+                                        <circle cx="500" cy="45" r="8" fill="#dc2626" stroke="#ffffff" stroke-width="3"/>
+                                        
+                                        <!-- Secondary Trend Line (Risk-Adjusted Returns) -->
+                                        <polyline
+                                            fill="none"
+                                            stroke="#f59e0b"
+                                            stroke-width="3"
+                                            stroke-dasharray="8,8"
+                                            points="80,260 140,210 200,170 260,130 320,90 380,70 440,60 500,55"
+                                        />
+                                        
+                                        <!-- Chart Title -->
+                                        <text x="300" y="30" text-anchor="middle" font-size="18" fill="#1e293b" font-weight="700">Portfolio Performance Analysis</text>
+                                        
+                                        <!-- Y-axis Labels -->
+                                        <text x="70" y="55" font-size="12" fill="#6b7280" text-anchor="end">100%</text>
+                                        <text x="70" y="105" font-size="12" fill="#6b7280" text-anchor="end">80%</text>
+                                        <text x="70" y="155" font-size="12" fill="#6b7280" text-anchor="end">60%</text>
+                                        <text x="70" y="205" font-size="12" fill="#6b7280" text-anchor="end">40%</text>
+                                        <text x="70" y="255" font-size="12" fill="#6b7280" text-anchor="end">20%</text>
+                                        
+                                        <!-- X-axis Labels -->
+                                        <text x="80" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Jan</text>
+                                        <text x="140" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Mar</text>
+                                        <text x="200" y="275" font-size="11" fill="#6b7280" text-anchor="middle">May</text>
+                                        <text x="260" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Jul</text>
+                                        <text x="320" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Sep</text>
+                                        <text x="380" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Nov</text>
+                                        <text x="440" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Dec</text>
+                                        <text x="500" y="275" font-size="11" fill="#6b7280" text-anchor="middle">Jan</text>
+                                        
+                                        <!-- Legend -->
+                                        <rect x="100" y="15" width="16" height="4" fill="#dc2626"/>
+                                        <text x="120" y="18" font-size="12" fill="#374151">Total Returns</text>
+                                        
+                                        <rect x="220" y="15" width="16" height="4" fill="#f59e0b" stroke-dasharray="3,3"/>
+                                        <text x="240" y="18" font-size="12" fill="#374151">Risk-Adjusted</text>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="fund-comparison-section">
+                                <div class="fund-comparison">
+                                    <div class="fund-item">
+                                        <div class="fund-name">Fund A</div>
+                                        <div class="fund-performance">
+                                            <div class="performance-bar" style="width: 85%"></div>
+                                            <span>85%</span>
+                                        </div>
+                                    </div>
+                                    <div class="fund-item">
+                                        <div class="fund-name">Fund B</div>
+                                        <div class="fund-performance">
+                                            <div class="performance-bar" style="width: 72%"></div>
+                                            <span>72%</span>
+                                        </div>
+                                    </div>
+                                    <div class="fund-item">
+                                        <div class="fund-name">Fund C</div>
+                                        <div class="fund-performance">
+                                            <div class="performance-bar" style="width: 68%"></div>
+                                            <span>68%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Dots -->
+        <div class="hero-navigation">
+            <button class="nav-dot active" data-slide="1"></button>
+            <button class="nav-dot" data-slide="2"></button>
+            <button class="nav-dot" data-slide="3"></button>
+        </div>
+
+        <!-- Auto-play Controls -->
+        <div class="hero-controls">
+            <button class="control-btn" id="playPauseBtn">
+                <i class="fas fa-pause"></i>
+            </button>
         </div>
     </section>
 
@@ -1047,7 +1317,146 @@
 
     <script src="api-config.js?v=1759931600"></script>
     <script src="api-service.js?v=1759931600"></script>
+    <script src="rss-service.js?v=<?php echo time(); ?>"></script>
     <script src="script.js?v=1759931600"></script>
+    
+    <script>
+        // Dynamic Hero Slider
+        class HeroSlider {
+            constructor() {
+                this.currentSlide = 1;
+                this.totalSlides = 3;
+                this.autoPlayInterval = null;
+                this.isPlaying = true;
+                this.slideInterval = 5000; // 5 seconds
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.startAutoPlay();
+                this.updateSlide(1);
+            }
+            
+            bindEvents() {
+                // Navigation dots
+                document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        this.goToSlide(index + 1);
+                    });
+                });
+                
+                // Play/Pause button
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                if (playPauseBtn) {
+                    playPauseBtn.addEventListener('click', () => {
+                        this.togglePlayPause();
+                    });
+                }
+                
+                // Pause on hover
+                const heroSection = document.querySelector('.hero');
+                if (heroSection) {
+                    heroSection.addEventListener('mouseenter', () => {
+                        this.pauseAutoPlay();
+                    });
+                    
+                    heroSection.addEventListener('mouseleave', () => {
+                        if (this.isPlaying) {
+                            this.startAutoPlay();
+                        }
+                    });
+                }
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        this.previousSlide();
+                    } else if (e.key === 'ArrowRight') {
+                        this.nextSlide();
+                    } else if (e.key === ' ') {
+                        e.preventDefault();
+                        this.togglePlayPause();
+                    }
+                });
+            }
+            
+            goToSlide(slideNumber) {
+                if (slideNumber < 1 || slideNumber > this.totalSlides) return;
+                
+                this.currentSlide = slideNumber;
+                this.updateSlide(slideNumber);
+            }
+            
+            nextSlide() {
+                const nextSlide = this.currentSlide === this.totalSlides ? 1 : this.currentSlide + 1;
+                this.goToSlide(nextSlide);
+            }
+            
+            previousSlide() {
+                const prevSlide = this.currentSlide === 1 ? this.totalSlides : this.currentSlide - 1;
+                this.goToSlide(prevSlide);
+            }
+            
+            updateSlide(slideNumber) {
+                // Update slides
+                document.querySelectorAll('.hero-slide').forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    if (index + 1 === slideNumber) {
+                        slide.classList.add('active');
+                    } else if (index + 1 < slideNumber) {
+                        slide.classList.add('prev');
+                    }
+                });
+                
+                // Update navigation dots
+                document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index + 1 === slideNumber);
+                });
+            }
+            
+            startAutoPlay() {
+                this.isPlaying = true;
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, this.slideInterval);
+                
+                // Update play/pause button
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                if (playPauseBtn) {
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            }
+            
+            pauseAutoPlay() {
+                this.isPlaying = false;
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+                
+                // Update play/pause button
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                if (playPauseBtn) {
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            }
+            
+            togglePlayPause() {
+                if (this.isPlaying) {
+                    this.pauseAutoPlay();
+                } else {
+                    this.startAutoPlay();
+                }
+            }
+        }
+        
+        // Initialize hero slider when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new HeroSlider();
+        });
+    </script>
     
     <script>
         // Mobile Menu Toggle
