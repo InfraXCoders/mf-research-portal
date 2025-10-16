@@ -2954,12 +2954,23 @@ body {
     .market-indicators-inline {
         flex-direction: column;
         gap: var(--spacing-2);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-bottom: var(--spacing-4);
     }
     
     .indicator {
         min-width: auto;
         width: 100%;
         padding: var(--spacing-3);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-2);
     }
     
     /* Live Ticker Mobile */
@@ -2967,6 +2978,9 @@ body {
         flex-direction: column;
         gap: var(--spacing-2);
         margin-bottom: var(--spacing-4);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .ticker-item {
@@ -2974,6 +2988,13 @@ body {
         width: 100%;
         justify-content: space-between;
         padding: var(--spacing-2);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-2);
     }
     
     .features-preview,
@@ -3157,30 +3178,55 @@ body {
         grid-template-columns: 1fr;
         gap: var(--spacing-3);
         margin: var(--spacing-4) 0;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .welcome-feature {
         padding: var(--spacing-3);
         text-align: center;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-2);
     }
     
     .welcome-stats {
         grid-template-columns: 1fr;
         gap: var(--spacing-3);
         margin: var(--spacing-4) 0;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .welcome-stat {
         padding: var(--spacing-3);
         text-align: center;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-2);
     }
     
     .stat-number {
         font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-1);
     }
     
     .stat-text {
         font-size: var(--font-size-sm);
+        color: var(--gray-600);
+        font-weight: 500;
     }
     
     /* Investment Journey Mobile */
@@ -3188,16 +3234,28 @@ body {
         flex-direction: column;
         gap: var(--spacing-4);
         margin: var(--spacing-4) 0;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .journey-step {
         flex-direction: column;
         text-align: center;
         padding: var(--spacing-3);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-3);
     }
     
     .step-icon {
         margin-bottom: var(--spacing-2);
+        font-size: var(--font-size-xl);
+        color: var(--primary-color);
     }
     
     .journey-arrow {
@@ -3208,21 +3266,34 @@ body {
     .wealth-growth-chart {
         margin: var(--spacing-4) 0;
         padding: var(--spacing-3);
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
     .growth-title {
         font-size: var(--font-size-lg);
         margin-bottom: var(--spacing-3);
+        font-weight: 600;
+        color: var(--gray-900);
     }
     
     .growth-bars {
         flex-direction: column;
         gap: var(--spacing-2);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .growth-bar {
         height: 8px;
         margin-bottom: var(--spacing-2);
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        border-radius: var(--border-radius-sm);
     }
     
     /* Combined Dashboard Mobile */
@@ -3230,36 +3301,61 @@ body {
         flex-direction: column;
         gap: var(--spacing-4);
         margin: var(--spacing-4) 0;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .analytics-chart {
         width: 100%;
         height: 200px;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .comparison-chart {
         width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .fund-comparison {
         flex-direction: column;
         gap: var(--spacing-2);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .fund-item {
         padding: var(--spacing-2);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: var(--spacing-2);
     }
     
     .fund-name {
         font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--gray-700);
     }
     
     .fund-performance {
         font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--primary-color);
     }
     
     .performance-bar {
         height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        border-radius: var(--border-radius-sm);
     }
     
     /* Enhanced Dashboard Mobile */
@@ -3267,15 +3363,33 @@ body {
         flex-direction: column;
         gap: var(--spacing-4);
         margin: var(--spacing-4) 0;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .large-analytics-chart {
         width: 100%;
         height: 250px;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: var(--spacing-3);
     }
     
     .fund-comparison-section {
         width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: var(--spacing-3);
+        margin-top: var(--spacing-3);
     }
     
     .news-card.featured-news {
@@ -3328,35 +3442,51 @@ body {
     
     /* Market Indicators Mobile */
     .market-indicators-inline .indicator {
-        padding: var(--spacing-2);
+        padding: var(--spacing-3);
         min-width: auto;
+        width: 100%;
+        margin-bottom: var(--spacing-2);
     }
     
     .market-indicators-inline .indicator .label {
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: var(--spacing-1);
     }
     
     .market-indicators-inline .indicator .index-value {
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: var(--spacing-1);
     }
     
     .market-indicators-inline .indicator .value {
-        font-size: var(--font-size-xs);
-        padding: var(--spacing-1);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        padding: var(--spacing-1) var(--spacing-2);
+        border-radius: var(--border-radius-sm);
     }
     
     /* Live Ticker Mobile */
     .ticker-item .stock-name {
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--gray-700);
     }
     
     .ticker-item .stock-price {
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-sm);
+        font-weight: 700;
+        color: var(--gray-900);
     }
     
     .ticker-item .stock-change {
         font-size: var(--font-size-xs);
-        padding: var(--spacing-1);
+        font-weight: 600;
+        padding: var(--spacing-1) var(--spacing-2);
+        border-radius: var(--border-radius-sm);
     }
     
     /* Hero Content Full Mobile */
