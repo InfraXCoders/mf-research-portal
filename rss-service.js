@@ -206,42 +206,42 @@ class RSSService {
             {
                 title: "Nifty 50 Gains 1.2% as Banking Stocks Rally",
                 description: "Strong Q3 results drive investor confidence in banking sector with HDFC Bank and ICICI Bank leading the gains.",
-                link: "#",
+                link: "https://economictimes.indiatimes.com/markets/stocks/news",
                 pubDate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
                 source: "Economic Times"
             },
             {
                 title: "Mutual Fund AUM Crosses ₹50 Lakh Crore Milestone",
                 description: "Indian mutual fund industry achieves historic milestone with strong SIP inflows and retail participation.",
-                link: "#",
+                link: "https://www.business-standard.com/markets/mutual-funds",
                 pubDate: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
                 source: "Business Standard"
             },
             {
                 title: "SEBI Introduces New ESG Fund Guidelines",
                 description: "Market regulator announces enhanced disclosure norms for ESG funds to improve transparency and investor protection.",
-                link: "#",
+                link: "https://www.moneycontrol.com/news/business/markets",
                 pubDate: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
                 source: "Moneycontrol"
             },
             {
                 title: "SIP Investments Hit Record ₹18,000 Crore",
                 description: "Systematic Investment Plans reach new monthly high as retail investors continue to invest in mutual funds.",
-                link: "#",
+                link: "https://www.cnbctv18.com/market/",
                 pubDate: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
                 source: "CNBC TV18"
             },
             {
                 title: "RBI Maintains Repo Rate at 6.5%",
                 description: "Central bank keeps interest rates unchanged citing inflation concerns and global economic uncertainties.",
-                link: "#",
+                link: "https://www.financialexpress.com/market/",
                 pubDate: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(),
                 source: "Financial Express"
             },
             {
                 title: "TCS Reports 12% Revenue Growth in Q3",
                 description: "IT major TCS posts strong quarterly results with robust deal pipeline and digital transformation demand.",
-                link: "#",
+                link: "https://economictimes.indiatimes.com/markets/stocks/earnings",
                 pubDate: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
                 source: "Economic Times"
             }
@@ -266,7 +266,7 @@ class RSSService {
                 description: "Latest financial news and market updates",
                 time: "Recently",
                 source: "Financial News",
-                url: "#",
+                url: "https://economictimes.indiatimes.com/markets",
                 featured: formatted.length === 0
             });
         }
@@ -340,7 +340,7 @@ class RSSService {
         if (!newsContainer) return;
 
         newsContainer.innerHTML = newsItems.map((item, index) => `
-            <div class="news-card ${item.featured ? 'featured-news' : ''}">
+            <div class="news-card ${item.featured ? 'featured-news' : ''}" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
                 <div class="news-image">
                     <img src="${this.getNewsImage(item.title, index)}" alt="${item.title}" onerror="this.style.display='none'">
                     <div class="news-overlay">
