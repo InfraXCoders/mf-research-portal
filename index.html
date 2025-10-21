@@ -40,8 +40,124 @@
     <!-- Dynamic Hero Section -->
     <section class="hero" id="home">
         <div class="hero-slider">
-            <!-- Slide 1: Welcome to MF Research Portal -->
+            <!-- Slide 1: First Time Investor - Start Your Journey -->
             <div class="hero-slide active" data-slide="1">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="slide-badge">
+                            <i class="fas fa-seedling"></i>
+                            <span>New Investor</span>
+                        </div>
+                        <h1 class="hero-title">
+                            Are You a <span class="gradient-text">First-Time Investor</span>?
+                        </h1>
+                        <p class="hero-subtitle">
+                            Don't worry! We'll guide you through every step of your investment journey. 
+                            Start with as little as ₹500 and let us build a personalized portfolio 
+                            that grows with your financial goals.
+                        </p>
+                        <div class="first-time-features">
+                            <div class="first-time-feature">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <div class="feature-content">
+                                    <h4>We'll Build Your Portfolio</h4>
+                                    <p>Our experts create a personalized investment plan just for you</p>
+                                </div>
+                            </div>
+                            <div class="first-time-feature">
+                                <i class="fas fa-graduation-cap"></i>
+                                <div class="feature-content">
+                                    <h4>Learn as You Invest</h4>
+                                    <p>Get educated about investing while your money grows</p>
+                                </div>
+                            </div>
+                            <div class="first-time-feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <div class="feature-content">
+                                    <h4>Start Small & Safe</h4>
+                                    <p>Begin with ₹500 SIP and gradually increase your investments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="investment-benefits">
+                            <div class="benefit-item">
+                                <i class="fas fa-rupee-sign"></i>
+                                <span>Start with just ₹500</span>
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Expert portfolio management</span>
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-clock"></i>
+                                <span>24/7 support & guidance</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <a href="#top-performing" class="btn btn-primary btn-large">
+                                <i class="fas fa-rocket"></i>
+                                Start My Investment Journey
+                            </a>
+                            <a href="#learning" class="btn btn-outline btn-large">
+                                <i class="fas fa-question-circle"></i>
+                                I'm New to Investing
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="first-time-dashboard">
+                            <div class="investment-path">
+                                <div class="path-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Tell Us Your Goals</h4>
+                                        <p>Share your financial objectives and risk appetite</p>
+                                    </div>
+                                </div>
+                                <div class="path-arrow">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="path-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>We Create Your Portfolio</h4>
+                                        <p>Our experts build a diversified investment plan</p>
+                                    </div>
+                                </div>
+                                <div class="path-arrow">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="path-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>Start Investing</h4>
+                                        <p>Begin with small amounts and watch your wealth grow</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="investment-calculator-preview">
+                                <div class="calculator-title">Your Potential Growth</div>
+                                <div class="calculator-example">
+                                    <div class="example-input">
+                                        <span>Monthly SIP: ₹5,000</span>
+                                    </div>
+                                    <div class="example-result">
+                                        <span class="result-amount">₹12,50,000</span>
+                                        <span class="result-period">in 10 years</span>
+                                    </div>
+                                </div>
+                                <div class="growth-indicator">
+                                    <i class="fas fa-trending-up"></i>
+                                    <span>15% annual returns</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Welcome to MF Research Portal -->
+            <div class="hero-slide" data-slide="2">
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="slide-badge">
@@ -161,8 +277,8 @@
                 </div>
             </div>
 
-            <!-- Slide 2: Today's Market Highlights -->
-            <div class="hero-slide" data-slide="2">
+            <!-- Slide 3: Today's Market Highlights -->
+            <div class="hero-slide" data-slide="3">
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="slide-badge">
@@ -236,8 +352,8 @@
                 </div>
             </div>
 
-            <!-- Slide 3: Research & Comparison Tools -->
-            <div class="hero-slide" data-slide="3">
+            <!-- Slide 4: Research & Comparison Tools -->
+            <div class="hero-slide" data-slide="4">
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="slide-badge">
@@ -413,6 +529,7 @@
             <button class="nav-dot active" data-slide="1"></button>
             <button class="nav-dot" data-slide="2"></button>
             <button class="nav-dot" data-slide="3"></button>
+            <button class="nav-dot" data-slide="4"></button>
         </div>
 
         <!-- Auto-play Controls -->
@@ -1325,7 +1442,7 @@
         class HeroSlider {
             constructor() {
                 this.currentSlide = 1;
-                this.totalSlides = 3;
+                this.totalSlides = 4;
                 this.autoPlayInterval = null;
                 this.isPlaying = true;
                 this.slideInterval = 5000; // 5 seconds
