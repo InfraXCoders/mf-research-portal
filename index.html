@@ -79,22 +79,52 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="investment-benefits">
-                            <div class="benefit-item">
-                                <i class="fas fa-rupee-sign"></i>
-                                <span>Start with just ₹500</span>
-                            </div>
-                            <div class="benefit-item">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Expert portfolio management</span>
-                            </div>
-                            <div class="benefit-item">
-                                <i class="fas fa-clock"></i>
-                                <span>24/7 support & guidance</span>
-                            </div>
+                    
+                    
+                    <!-- 15-15-15 Rule Highlight -->
+                    <div class="rule-highlight">
+                        <div class="rule-badge">
+                            <i class="fas fa-magic"></i>
+                            <span>15-15-15 Rule</span>
                         </div>
+                        <div class="rule-content">
+                            <h4>Turn ₹15,000/month into ₹1 Crore!</h4>
+                            <p>Invest ₹15,000 monthly for 15 years at 15% returns = <strong>₹1+ Crore</strong></p>
+                            <div class="rule-numbers">
+                                <div class="rule-number">
+                                    <span class="number">₹15K</span>
+                                    <span class="label">Monthly</span>
+                                </div>
+                                <div class="rule-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="rule-number">
+                                    <span class="number">15</span>
+                                    <span class="label">Years</span>
+                                </div>
+                                <div class="rule-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="rule-number">
+                                    <span class="number">15%</span>
+                                    <span class="label">Returns</span>
+                                </div>
+                                <div class="rule-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="rule-number result">
+                                    <span class="number">₹1Cr+</span>
+                                    <span class="label">Wealth</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline btn-small" onclick="show151515Rule()">
+                                <i class="fas fa-info-circle"></i>
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
                         <div class="hero-actions">
-                            <a href="#top-performing" class="btn btn-primary btn-large">
+                            <a href="#investment-journey" class="btn btn-primary btn-large" onclick="showInvestmentJourney()">
                                 <i class="fas fa-rocket"></i>
                                 Start My Investment Journey
                             </a>
@@ -139,10 +169,10 @@
                                 <div class="calculator-title">Your Potential Growth</div>
                                 <div class="calculator-example">
                                     <div class="example-input">
-                                        <span>Monthly SIP: ₹5,000</span>
+                                        <span>Monthly SIP: ₹1,000</span>
                                     </div>
                                     <div class="example-result">
-                                        <span class="result-amount">₹12,50,000</span>
+                                        <span class="result-amount">₹2,50,000</span>
                                         <span class="result-period">in 10 years</span>
                                     </div>
                                 </div>
@@ -151,6 +181,24 @@
                                     <span>15% annual returns</span>
                                 </div>
                             </div>
+                            
+                            <!-- Investment Benefits - Compact Format -->
+                            <div class="investment-benefits-compact">
+                                <div class="benefit-item">
+                                    <i class="fas fa-rupee-sign"></i>
+                                    <span>Start with just ₹500</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Expert portfolio management</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>24/7 support & guidance</span>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -537,6 +585,575 @@
             <button class="control-btn" id="playPauseBtn">
                 <i class="fas fa-pause"></i>
             </button>
+        </div>
+    </section>
+
+    <!-- Investment Journey Section -->
+    <section class="investment-journey-section" id="investment-journey" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Start Your Investment Journey
+                </h2>
+                <p class="section-subtitle">
+                    Choose your investment amount and see how your wealth can grow over time with our expert portfolio management
+                </p>
+            </div>
+
+            <!-- Investment Tiers -->
+            <div class="investment-tiers">
+                <div class="tier-card" data-amount="5000">
+                    <div class="tier-header">
+                        <div class="tier-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Starter Plan</h3>
+                        <div class="tier-amount">₹5,000/month</div>
+                    </div>
+                    <div class="tier-content">
+                        <div class="portfolio-breakdown">
+                            <h4>Portfolio Allocation</h4>
+                            <div class="allocation-chart">
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Large Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 50%; background: #1e3a8a;"></div>
+                                    </div>
+                                    <span class="allocation-percent">50%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Mid Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 30%; background: #3b82f6;"></div>
+                                    </div>
+                                    <span class="allocation-percent">30%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Debt Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 20%; background: #10b981;"></div>
+                                    </div>
+                                    <span class="allocation-percent">20%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="growth-projection">
+                            <h4>Growth Projection</h4>
+                            <div class="projection-chart">
+                                <div class="projection-item">
+                                    <span class="projection-period">5 Years</span>
+                                    <span class="projection-amount">₹4.2 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">10 Years</span>
+                                    <span class="projection-amount">₹12.8 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">15 Years</span>
+                                    <span class="projection-amount">₹28.5 Lakhs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tier-actions">
+                        <a href="#contact" class="btn btn-primary">
+                            Choose This Plan
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tier-card featured" data-amount="10000">
+                    <div class="tier-badge">Most Popular</div>
+                    <div class="tier-header">
+                        <div class="tier-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Growth Plan</h3>
+                        <div class="tier-amount">₹10,000/month</div>
+                    </div>
+                    <div class="tier-content">
+                        <div class="portfolio-breakdown">
+                            <h4>Portfolio Allocation</h4>
+                            <div class="allocation-chart">
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Large Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 45%; background: #1e3a8a;"></div>
+                                    </div>
+                                    <span class="allocation-percent">45%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Mid Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 35%; background: #3b82f6;"></div>
+                                    </div>
+                                    <span class="allocation-percent">35%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Small Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 15%; background: #8b5cf6;"></div>
+                                    </div>
+                                    <span class="allocation-percent">15%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Debt Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 5%; background: #10b981;"></div>
+                                    </div>
+                                    <span class="allocation-percent">5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="growth-projection">
+                            <h4>Growth Projection</h4>
+                            <div class="projection-chart">
+                                <div class="projection-item">
+                                    <span class="projection-period">5 Years</span>
+                                    <span class="projection-amount">₹8.9 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">10 Years</span>
+                                    <span class="projection-amount">₹28.7 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">15 Years</span>
+                                    <span class="projection-amount">₹68.2 Lakhs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tier-actions">
+                        <a href="#contact" class="btn btn-primary">
+                            Choose This Plan
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tier-card" data-amount="25000">
+                    <div class="tier-header">
+                        <div class="tier-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3>Premium Plan</h3>
+                        <div class="tier-amount">₹25,000/month</div>
+                    </div>
+                    <div class="tier-content">
+                        <div class="portfolio-breakdown">
+                            <h4>Portfolio Allocation</h4>
+                            <div class="allocation-chart">
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Large Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 40%; background: #1e3a8a;"></div>
+                                    </div>
+                                    <span class="allocation-percent">40%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Mid Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 30%; background: #3b82f6;"></div>
+                                    </div>
+                                    <span class="allocation-percent">30%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">Small Cap Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 20%; background: #8b5cf6;"></div>
+                                    </div>
+                                    <span class="allocation-percent">20%</span>
+                                </div>
+                                <div class="allocation-item">
+                                    <span class="allocation-label">International Funds</span>
+                                    <div class="allocation-bar">
+                                        <div class="allocation-fill" style="width: 10%; background: #f59e0b;"></div>
+                                    </div>
+                                    <span class="allocation-percent">10%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="growth-projection">
+                            <h4>Growth Projection</h4>
+                            <div class="projection-chart">
+                                <div class="projection-item">
+                                    <span class="projection-period">5 Years</span>
+                                    <span class="projection-amount">₹23.0 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">10 Years</span>
+                                    <span class="projection-amount">₹75.3 Lakhs</span>
+                                </div>
+                                <div class="projection-item">
+                                    <span class="projection-period">15 Years</span>
+                                    <span class="projection-amount">₹1.87 Crores</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tier-actions">
+                        <a href="#contact" class="btn btn-primary">
+                            Choose This Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Calculator -->
+            <div class="investment-calculator">
+                <div class="calculator-header">
+                    <h3>Custom Investment Calculator</h3>
+                    <p>Calculate your potential returns with different investment amounts</p>
+                </div>
+                <div class="calculator-content">
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <label for="monthly-sip">Monthly SIP Amount</label>
+                            <div class="input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="monthly-sip" value="10000" min="500" max="100000" step="500">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="investment-period">Investment Period</label>
+                            <select id="investment-period">
+                                <option value="5">5 Years</option>
+                                <option value="10" selected>10 Years</option>
+                                <option value="15">15 Years</option>
+                                <option value="20">20 Years</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="expected-returns">Expected Returns</label>
+                            <select id="expected-returns">
+                                <option value="12">12% (Conservative)</option>
+                                <option value="15" selected>15% (Moderate)</option>
+                                <option value="18">18% (Aggressive)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calculator-results">
+                        <div class="result-card">
+                            <div class="result-label">Total Investment</div>
+                            <div class="result-value" id="total-investment">₹12,00,000</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Expected Value</div>
+                            <div class="result-value" id="expected-value">₹28,70,000</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Gains</div>
+                            <div class="result-value" id="total-gains">₹16,70,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Trajectory Chart -->
+            <div class="growth-trajectory">
+                <h3>Your Wealth Growth Journey</h3>
+                <div class="trajectory-chart">
+                    <svg viewBox="0 0 800 400" class="growth-chart">
+                        <defs>
+                            <linearGradient id="growthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Grid lines -->
+                        <g class="grid-lines">
+                            <line x1="50" y1="50" x2="750" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="100" x2="750" y2="100" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="150" x2="750" y2="150" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="200" x2="750" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="250" x2="750" y2="250" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="300" x2="750" y2="300" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="50" y1="350" x2="750" y2="350" stroke="#e5e7eb" stroke-width="1"/>
+                        </g>
+                        <!-- Y-axis labels -->
+                        <g class="y-labels">
+                            <text x="30" y="60" text-anchor="end" class="chart-label">₹50L</text>
+                            <text x="30" y="110" text-anchor="end" class="chart-label">₹40L</text>
+                            <text x="30" y="160" text-anchor="end" class="chart-label">₹30L</text>
+                            <text x="30" y="210" text-anchor="end" class="chart-label">₹20L</text>
+                            <text x="30" y="260" text-anchor="end" class="chart-label">₹10L</text>
+                            <text x="30" y="310" text-anchor="end" class="chart-label">₹5L</text>
+                            <text x="30" y="360" text-anchor="end" class="chart-label">₹0</text>
+                        </g>
+                        <!-- X-axis labels -->
+                        <g class="x-labels">
+                            <text x="100" y="390" text-anchor="middle" class="chart-label">Year 1</text>
+                            <text x="250" y="390" text-anchor="middle" class="chart-label">Year 3</text>
+                            <text x="400" y="390" text-anchor="middle" class="chart-label">Year 5</text>
+                            <text x="550" y="390" text-anchor="middle" class="chart-label">Year 7</text>
+                            <text x="700" y="390" text-anchor="middle" class="chart-label">Year 10</text>
+                        </g>
+                        <!-- Growth curve -->
+                        <path d="M 100 350 Q 200 320 300 280 Q 400 240 500 200 Q 600 160 700 120" 
+                              stroke="#1e3a8a" stroke-width="3" fill="none"/>
+                        <path d="M 100 350 Q 200 320 300 280 Q 400 240 500 200 Q 600 160 700 120" 
+                              stroke="url(#growthGradient)" stroke-width="8" fill="none" opacity="0.3"/>
+                        <!-- Data points -->
+                        <circle cx="100" cy="350" r="4" fill="#1e3a8a"/>
+                        <circle cx="300" cy="280" r="4" fill="#1e3a8a"/>
+                        <circle cx="500" cy="200" r="4" fill="#1e3a8a"/>
+                        <circle cx="700" cy="120" r="4" fill="#1e3a8a"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="journey-actions">
+                <button class="btn btn-primary btn-large" onclick="startInvestmentProcess()">
+                    <i class="fas fa-rocket"></i>
+                    Start My Investment Journey
+                </button>
+                <button class="btn btn-outline btn-large" onclick="hideInvestmentJourney()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 15-15-15 Rule Section -->
+    <section class="rule-151515-section" id="rule-151515" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-magic"></i>
+                    The 15-15-15 Rule: Your Path to ₹1 Crore
+                </h2>
+                <p class="section-subtitle">
+                    Discover the most powerful wealth-building strategy that turns small monthly investments into life-changing wealth
+                </p>
+            </div>
+
+            <!-- Rule Explanation -->
+            <div class="rule-explanation">
+                <div class="rule-visual">
+                    <div class="rule-formula">
+                        <div class="formula-item">
+                            <div class="formula-icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="formula-content">
+                                <h3>₹15,000</h3>
+                                <p>Monthly SIP</p>
+                            </div>
+                        </div>
+                        <div class="formula-plus">×</div>
+                        <div class="formula-item">
+                            <div class="formula-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="formula-content">
+                                <h3>15</h3>
+                                <p>Years</p>
+                            </div>
+                        </div>
+                        <div class="formula-plus">×</div>
+                        <div class="formula-item">
+                            <div class="formula-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="formula-content">
+                                <h3>15%</h3>
+                                <p>Annual Returns</p>
+                            </div>
+                        </div>
+                        <div class="formula-equals">=</div>
+                        <div class="formula-result">
+                            <div class="result-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="result-content">
+                                <h3>₹1+ Crore</h3>
+                                <p>Wealth Created</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-details">
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h4>Simple & Powerful</h4>
+                            <p>No complex strategies needed. Just consistent monthly investments in good mutual funds.</p>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h4>Time is Your Friend</h4>
+                            <p>Start early and let compounding work its magic. Every year matters in wealth creation.</p>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h4>Discipline Over Timing</h4>
+                            <p>Don't try to time the market. Regular investments work better than perfect timing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Timeline -->
+            <div class="growth-timeline">
+                <h3>Your Wealth Growth Journey</h3>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-year">Year 5</div>
+                        <div class="timeline-investment">₹9,00,000 Invested</div>
+                        <div class="timeline-value">₹14,50,000 Value</div>
+                        <div class="timeline-gain">+₹5,50,000 Gain</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">Year 10</div>
+                        <div class="timeline-investment">₹18,00,000 Invested</div>
+                        <div class="timeline-value">₹45,00,000 Value</div>
+                        <div class="timeline-gain">+₹27,00,000 Gain</div>
+                    </div>
+                    <div class="timeline-item highlight">
+                        <div class="timeline-year">Year 15</div>
+                        <div class="timeline-investment">₹27,00,000 Invested</div>
+                        <div class="timeline-value">₹1,00,00,000+ Value</div>
+                        <div class="timeline-gain">+₹73,00,000+ Gain</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Different Scenarios -->
+            <div class="scenario-comparison">
+                <h3>What If You Start Later?</h3>
+                <div class="scenario-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h4>Start at 25</h4>
+                            <span class="scenario-badge best">Best</span>
+                        </div>
+                        <div class="scenario-content">
+                            <div class="scenario-amount">₹1.2+ Crores</div>
+                            <div class="scenario-details">
+                                <p>₹15,000/month for 15 years</p>
+                                <p>Total Investment: ₹27 Lakhs</p>
+                                <p>Wealth Created: ₹1.2+ Crores</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h4>Start at 30</h4>
+                            <span class="scenario-badge good">Good</span>
+                        </div>
+                        <div class="scenario-content">
+                            <div class="scenario-amount">₹60+ Lakhs</div>
+                            <div class="scenario-details">
+                                <p>₹15,000/month for 10 years</p>
+                                <p>Total Investment: ₹18 Lakhs</p>
+                                <p>Wealth Created: ₹60+ Lakhs</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h4>Start at 35</h4>
+                            <span class="scenario-badge late">Late</span>
+                        </div>
+                        <div class="scenario-content">
+                            <div class="scenario-amount">₹30+ Lakhs</div>
+                            <div class="scenario-details">
+                                <p>₹15,000/month for 5 years</p>
+                                <p>Total Investment: ₹9 Lakhs</p>
+                                <p>Wealth Created: ₹30+ Lakhs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fund Recommendations -->
+            <div class="fund-recommendations">
+                <h3>Recommended Fund Allocation</h3>
+                <div class="fund-allocation">
+                    <div class="fund-category">
+                        <div class="fund-header">
+                            <h4>Large Cap Funds</h4>
+                            <span class="fund-percentage">40%</span>
+                        </div>
+                        <div class="fund-description">
+                            <p>Stable, consistent returns from top companies</p>
+                            <div class="fund-examples">
+                                <span>HDFC Top 100</span>
+                                <span>Axis Bluechip</span>
+                                <span>ICICI Prudential Bluechip</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fund-category">
+                        <div class="fund-header">
+                            <h4>Mid Cap Funds</h4>
+                            <span class="fund-percentage">35%</span>
+                        </div>
+                        <div class="fund-description">
+                            <p>Growth potential from emerging companies</p>
+                            <div class="fund-examples">
+                                <span>HDFC Mid Cap Opportunities</span>
+                                <span>Axis Midcap</span>
+                                <span>ICICI Prudential Midcap</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fund-category">
+                        <div class="fund-header">
+                            <h4>Small Cap Funds</h4>
+                            <span class="fund-percentage">15%</span>
+                        </div>
+                        <div class="fund-description">
+                            <p>High growth potential, higher risk</p>
+                            <div class="fund-examples">
+                                <span>HDFC Small Cap</span>
+                                <span>Axis Small Cap</span>
+                                <span>ICICI Prudential Smallcap</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fund-category">
+                        <div class="fund-header">
+                            <h4>Debt Funds</h4>
+                            <span class="fund-percentage">10%</span>
+                        </div>
+                        <div class="fund-description">
+                            <p>Stability and liquidity</p>
+                            <div class="fund-examples">
+                                <span>HDFC Corporate Bond</span>
+                                <span>Axis Short Term</span>
+                                <span>ICICI Prudential Short Term</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="rule-actions">
+                <a href="#contact" class="btn btn-primary btn-large">
+                    <i class="fas fa-rocket"></i>
+                    Start My 15-15-15 Journey
+                </a>
+                <button class="btn btn-outline btn-large" onclick="hide151515Rule()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Investment Plans
+                </button>
+            </div>
         </div>
     </section>
 
@@ -1572,6 +2189,109 @@
         // Initialize hero slider when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             new HeroSlider();
+        });
+
+        // Investment Journey Functions
+        function showInvestmentJourney() {
+            const section = document.getElementById('investment-journey');
+            if (section) {
+                section.style.display = 'block';
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function hideInvestmentJourney() {
+            const section = document.getElementById('investment-journey');
+            if (section) {
+                section.style.display = 'none';
+                document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function selectInvestmentTier(amount) {
+            // Update calculator with selected amount
+            const sipInput = document.getElementById('monthly-sip');
+            if (sipInput) {
+                sipInput.value = amount;
+                updateCalculator();
+            }
+            
+            // Show success message
+            alert(`Great choice! You've selected the ₹${amount.toLocaleString()}/month investment plan. Let's calculate your potential returns.`);
+        }
+
+        function startInvestmentProcess() {
+            alert('Investment process will be implemented here. This would typically redirect to a registration or onboarding flow.');
+        }
+
+        // 15-15-15 Rule Functions
+        function show151515Rule() {
+            const section = document.getElementById('rule-151515');
+            if (section) {
+                section.style.display = 'block';
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function hide151515Rule() {
+            const section = document.getElementById('rule-151515');
+            if (section) {
+                section.style.display = 'none';
+                document.getElementById('investment-journey').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function start151515Rule() {
+            // Set calculator to 15-15-15 values
+            const sipInput = document.getElementById('monthly-sip');
+            const periodSelect = document.getElementById('investment-period');
+            const returnsSelect = document.getElementById('expected-returns');
+            
+            if (sipInput) sipInput.value = 15000;
+            if (periodSelect) periodSelect.value = 15;
+            if (returnsSelect) returnsSelect.value = 15;
+            
+            // Update calculator
+            updateCalculator();
+            
+            // Show investment journey section
+            hide151515Rule();
+            showInvestmentJourney();
+            
+            alert('Perfect! You\'ve selected the 15-15-15 Rule. Let\'s set up your investment plan with ₹15,000/month for 15 years at 15% returns!');
+        }
+
+        function updateCalculator() {
+            const monthlySip = parseFloat(document.getElementById('monthly-sip').value) || 10000;
+            const period = parseInt(document.getElementById('investment-period').value) || 10;
+            const returns = parseFloat(document.getElementById('expected-returns').value) || 15;
+            
+            const totalInvestment = monthlySip * 12 * period;
+            const monthlyRate = returns / 100 / 12;
+            const months = period * 12;
+            
+            // SIP Future Value Formula: FV = P * [((1 + r)^n - 1) / r] * (1 + r)
+            const futureValue = monthlySip * (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+            const gains = futureValue - totalInvestment;
+            
+            // Update display
+            document.getElementById('total-investment').textContent = `₹${Math.round(totalInvestment).toLocaleString()}`;
+            document.getElementById('expected-value').textContent = `₹${Math.round(futureValue).toLocaleString()}`;
+            document.getElementById('total-gains').textContent = `₹${Math.round(gains).toLocaleString()}`;
+        }
+
+        // Initialize calculator event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const sipInput = document.getElementById('monthly-sip');
+            const periodSelect = document.getElementById('investment-period');
+            const returnsSelect = document.getElementById('expected-returns');
+            
+            if (sipInput) sipInput.addEventListener('input', updateCalculator);
+            if (periodSelect) periodSelect.addEventListener('change', updateCalculator);
+            if (returnsSelect) returnsSelect.addEventListener('change', updateCalculator);
+            
+            // Initial calculation
+            updateCalculator();
         });
     </script>
     
