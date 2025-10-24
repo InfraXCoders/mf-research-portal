@@ -3224,8 +3224,8 @@ html, body {
     }
     
     .hero-slide {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        text-align: left;
         padding: var(--spacing-4) var(--spacing-3);
         min-height: 100vh;
         justify-content: center;
@@ -3233,10 +3233,11 @@ html, body {
     }
     
     .hero-content {
-        flex-direction: column;
-        gap: var(--spacing-6);
+        flex-direction: row;
+        gap: var(--spacing-4);
         width: 100%;
         touch-action: pan-y;
+        align-items: center;
     }
     
     /* Mobile Navigation Dots */
@@ -3298,32 +3299,38 @@ html, body {
     
     .hero-text {
         order: 1;
-        width: 100%;
-        text-align: center;
+        width: 50%;
+        text-align: left;
+        padding-right: var(--spacing-4);
     }
     
     .hero-visual {
         order: 2;
-        margin-top: var(--spacing-4);
-        width: 100%;
+        width: 50%;
+        text-align: center;
+        margin-top: 0;
     }
     
-    /* Hero Title Mobile */
+    /* Hero Title Mobile - Horizontal Layout */
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         line-height: 1.2;
-        margin-bottom: var(--spacing-4);
+        margin-bottom: var(--spacing-3);
+        text-align: left;
     }
     
     .hero-title-large {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         line-height: 1.2;
-        margin-bottom: var(--spacing-4);
+        margin-bottom: var(--spacing-3);
+        text-align: left;
     }
     
     .hero-subtitle {
-        font-size: var(--font-size-base);
-        margin-bottom: var(--spacing-4);
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: var(--spacing-3);
+        text-align: left;
     }
     
     .hero-subtitle-large {
