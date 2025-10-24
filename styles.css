@@ -243,6 +243,11 @@ body {
     align-items: center;
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    margin: 0;
+    padding: var(--spacing-8) 0;
 }
 
 .hero-title {
@@ -1799,12 +1804,36 @@ body {
     filter: drop-shadow(0 0 8px currentColor);
 }
 
+/* Reset top spacing */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Hero Section Container */
+.hero {
+    width: 100%;
+    overflow: visible;
+    position: relative;
+    margin-top: 0;
+    padding-top: 0;
+    top: 0;
+}
+
 /* Dynamic Hero Slider */
 .hero-slider {
     position: relative;
     flex: 1;
     display: flex;
     align-items: center;
+    width: 100%;
+    overflow: visible;
+    min-height: 100vh;
 }
 
 .hero-slide {
@@ -1818,6 +1847,9 @@ body {
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
 }
 
 .hero-slide.active {
@@ -3187,6 +3219,8 @@ body {
     .hero-slider {
         min-height: 100vh;
         padding: var(--spacing-4) 0;
+        touch-action: pan-y;
+        overflow: hidden;
     }
     
     .hero-slide {
@@ -3195,12 +3229,71 @@ body {
         padding: var(--spacing-4) var(--spacing-3);
         min-height: 100vh;
         justify-content: center;
+        touch-action: pan-y;
     }
     
     .hero-content {
         flex-direction: column;
         gap: var(--spacing-6);
         width: 100%;
+        touch-action: pan-y;
+    }
+    
+    /* Mobile Navigation Dots */
+    .hero-nav-dots {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .nav-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 12px;
+        min-height: 12px;
+    }
+    
+    .nav-dot.active {
+        background: var(--primary-color);
+        transform: scale(1.2);
+    }
+    
+    /* Mobile Controls */
+    .hero-controls {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 100;
+    }
+    
+    .control-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(30, 58, 138, 0.9);
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        min-width: 48px;
+        min-height: 48px;
     }
     
     .hero-text {
