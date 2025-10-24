@@ -2498,25 +2498,25 @@ html, body {
 /* Investment Benefits in Hero Visual (Right Side) */
 .first-time-dashboard .investment-benefits {
     background: white;
-    padding: 18px;
+    padding: 12px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin: 12px 0;
+    margin: 8px 0;
     border: 2px solid rgba(30, 58, 138, 0.1);
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .first-time-dashboard .investment-benefits .benefit-item {
     background: rgba(30, 58, 138, 0.05);
     border: 1px solid rgba(30, 58, 138, 0.1);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     color: var(--text-dark);
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: all 0.3s ease;
 }
 
@@ -2538,7 +2538,7 @@ html, body {
 }
 
 .first-time-dashboard .investment-benefits .benefit-item span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-dark);
 }
@@ -2645,32 +2645,34 @@ html, body {
 .first-time-dashboard {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-6);
-    padding: var(--spacing-4);
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
     background: var(--white);
     border-radius: var(--border-radius-lg);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    margin: 0 auto;
 }
 
 .investment-path {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-2);
 }
 
 .path-step {
     display: flex;
     align-items: center;
-    gap: var(--spacing-4);
-    padding: var(--spacing-4);
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
     background: var(--background-light);
     border-radius: var(--border-radius-md);
     border-left: 4px solid var(--primary-color);
 }
 
 .step-number {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     background: var(--primary-color);
     color: var(--white);
     border-radius: 50%;
@@ -2678,12 +2680,12 @@ html, body {
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
 .step-content h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-1);
@@ -2706,15 +2708,15 @@ html, body {
 .investment-calculator-preview {
     background: linear-gradient(135deg, var(--success-color), #10b981);
     color: var(--white);
-    padding: var(--spacing-4);
+    padding: var(--spacing-3);
     border-radius: var(--border-radius-lg);
     text-align: center;
 }
 
 .calculator-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
 }
 
 .calculator-example {
