@@ -1,4 +1,4 @@
-# MF Research Portal
+# Financial Safar
 
 A modern, responsive mutual fund research and analysis platform built with HTML5, CSS3, and JavaScript. This website provides comprehensive tools for analyzing mutual fund performance, comparing funds, and making informed investment decisions.
 

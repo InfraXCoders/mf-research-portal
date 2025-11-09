@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 async function initializeApp() {
-    console.log('🚀 Initializing MF Research Portal...');
+    console.log('🚀 Initializing Financial Safar...');
     
     // Get DOM elements first
     getDOMElements();

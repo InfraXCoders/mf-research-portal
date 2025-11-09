@@ -379,7 +379,7 @@ async function getTopGainers() {
 
 ## 💡 Recommendation
 
-**For your MF Research Portal, I recommend:**
+**For your Financial Safar, I recommend:**
 
 1. **Start with Yahoo Finance API** - It's the closest equivalent to mfapi.in for stocks
 2. **Add stock comparison feature** similar to your current MF comparison
