@@ -960,6 +960,14 @@
                         <input type="number" id="loan-rate" value="8.5" min="1" max="20" step="0.1" placeholder="Interest rate">
                     </div>
                     
+                    <div class="form-group">
+                        <label>
+                            <span>EMI Start Date</span>
+                            <span>:</span>
+                        </label>
+                        <input type="date" id="loan-start-date">
+                    </div>
+                    
                     <button class="calculate-btn" onclick="calculateLoanEMI()">
                         <i class="fas fa-calculator"></i> Calculate
                     </button>
@@ -1014,7 +1022,14 @@
                         </svg>
                     </div>
                     
-                    <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.3rem;"><i class="fas fa-table"></i> Year-wise EMI Breakdown</h3>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px;">
+                        <h3 style="color: #1e293b; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-table"></i> EMI Breakdown
+                        </h3>
+                        <button onclick="downloadLoanBreakdown()" style="border: none; background: linear-gradient(135deg, #166534 0%, #15803d 100%); color: white; font-weight: 600; padding: 10px 18px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 8px 20px rgba(22, 101, 52, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                            <i class="fas fa-file-excel"></i> Download Excel
+                        </button>
+                    </div>
                     <div class="breakdown-grid">
                         <div class="breakdown-table-container">
                             <table class="breakdown-table">
@@ -1704,6 +1719,17 @@
             const principal = parseFloat(document.getElementById('loan-amount').value) || 2000000;
             const years = parseInt(document.getElementById('loan-years').value) || 20;
             const annualRate = parseFloat(document.getElementById('loan-rate').value) || 8.5;
+            const startDateInput = document.getElementById('loan-start-date');
+            let startDate = new Date();
+            
+            if (startDateInput) {
+                if (startDateInput.value) {
+                    startDate = new Date(startDateInput.value);
+                } else {
+                    const iso = startDate.toISOString().split('T')[0];
+                    startDateInput.value = iso;
+                }
+            }
             
             const months = years * 12;
             const monthlyRate = annualRate / 12 / 100;
@@ -1720,7 +1746,7 @@
             document.getElementById('loan-total').textContent = 'Rs. ' + formatNumber(totalPayment);
             
             // Generate breakdown
-            const breakdownData = generateLoanBreakdown(principal, emi, annualRate, years);
+            const breakdownData = generateLoanBreakdown(principal, emi, annualRate, years, startDate);
             
             // Generate pie chart
             generatePieChart('loan-pie-chart', principal, totalInterest, '#3b82f6', '#ef4444');
@@ -1730,16 +1756,22 @@
         }
         
         // Generate Loan EMI year-wise breakdown
-        function generateLoanBreakdown(principal, emi, rate, totalYears) {
+        function generateLoanBreakdown(principal, emi, rate, totalYears, startDate) {
             const tbody = document.getElementById('loan-breakdown-tbody');
             const monthlyRate = rate / 12 / 100;
             let outstanding = principal;
             let html = '';
             const chartData = [];
+            let currentDate = new Date(startDate);
+            const exportData = [];
             
             for (let year = 1; year <= totalYears; year++) {
                 let yearPrincipal = 0;
                 let yearInterest = 0;
+                let monthlyRows = [];
+                let monthlyData = [];
+                let yearStartDate = null;
+                let yearEndDate = null;
                 
                 for (let month = 0; month < 12; month++) {
                     const interest = outstanding * monthlyRate;
@@ -1748,8 +1780,40 @@
                     yearPrincipal += principalPaid;
                     yearInterest += interest;
                     outstanding -= principalPaid;
+
+                    if (outstanding < 0) {
+                        outstanding = 0;
+                    }
                     
-                    if (outstanding < 0) outstanding = 0;
+                    const paymentDate = new Date(currentDate);
+                    if (!yearStartDate) {
+                        yearStartDate = new Date(paymentDate);
+                    }
+                    yearEndDate = new Date(paymentDate);
+                    
+                    monthlyRows.push(`
+                        <tr class="monthly-detail" data-year="${year}">
+                            <td>${formatDate(paymentDate)}</td>
+                            <td>${formatNumber(emi)}</td>
+                            <td>${formatNumber(principalPaid)}</td>
+                            <td>${formatNumber(interest)}</td>
+                            <td>${formatNumber(outstanding)}</td>
+                        </tr>
+                    `);
+                    
+                    monthlyData.push({
+                        paymentDate: formatDate(paymentDate),
+                        monthlyEmi: formatNumber(emi),
+                        principalPaid: formatNumber(principalPaid),
+                        interestPaid: formatNumber(interest),
+                        outstanding: formatNumber(outstanding)
+                    });
+                    
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    
+                    if (outstanding <= 0) {
+                        break;
+                    }
                 }
                 
                 chartData.push({
@@ -1758,19 +1822,74 @@
                     value: outstanding
                 });
                 
+                exportData.push({
+                    year,
+                    startDate: yearStartDate ? formatDate(yearStartDate) : '',
+                    endDate: yearEndDate ? formatDate(yearEndDate) : '',
+                    monthlyEmi: formatNumber(emi),
+                    principalPaid: formatNumber(yearPrincipal),
+                    interestPaid: formatNumber(yearInterest),
+                    outstanding: formatNumber(outstanding),
+                    monthly: monthlyData
+                });
+                
                 html += `
-                    <tr>
-                        <td><strong>Year ${year}</strong></td>
-                        <td>${formatNumber(emi)}</td>
-                        <td>${formatNumber(yearPrincipal)}</td>
-                        <td>${formatNumber(yearInterest)}</td>
-                        <td><strong>${formatNumber(outstanding)}</strong></td>
+                    <tr class="year-summary">
+                        <td>
+                            <button class="loan-toggle" type="button" data-year="${year}" aria-expanded="false" aria-controls="monthly-row-${year}">+</button>
+                            <div>
+                                <strong>Year ${year}</strong>
+                                <div class="year-range">${yearStartDate ? formatDate(yearStartDate) : ''} - ${yearEndDate ? formatDate(yearEndDate) : ''}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="breakdown-main-value">${formatNumber(emi)}</div>
+                            <span class="breakdown-label">Monthly EMI</span>
+                        </td>
+                        <td>
+                            <div class="breakdown-main-value">${formatNumber(yearPrincipal)}</div>
+                            <span class="breakdown-label">Principal Paid</span>
+                        </td>
+                        <td>
+                            <div class="breakdown-main-value">${formatNumber(yearInterest)}</div>
+                            <span class="breakdown-label">Interest Paid</span>
+                        </td>
+                        <td>
+                            <div class="breakdown-main-value">${formatNumber(outstanding)}</div>
+                            <span class="breakdown-label">Outstanding</span>
+                        </td>
                     </tr>
+                    <tr class="monthly-row monthly-header" data-year="${year}">
+                        <th>Payment Date</th>
+                        <th>Monthly EMI</th>
+                        <th>Principal Paid</th>
+                        <th>Interest Paid</th>
+                        <th>Outstanding</th>
+                    </tr>
+                    ${monthlyRows.join('')}
                 `;
+                
+                if (outstanding <= 0) {
+                    break;
+                }
             }
             
             tbody.innerHTML = html;
+            prepareLoanToggleButtons();
+            window.loanBreakdownExport = exportData;
             return chartData;
+        }
+
+        function prepareLoanToggleButtons() {
+            document.querySelectorAll('.loan-toggle').forEach(button => {
+                button.textContent = '+';
+                button.setAttribute('aria-expanded', 'false');
+            });
+            
+            document.querySelectorAll('.monthly-row, .monthly-detail').forEach(row => {
+                row.classList.remove('open');
+                row.style.display = 'none';
+            });
         }
         
         // Calculate Annual SIP
@@ -1938,6 +2057,63 @@
             return Math.round(num).toLocaleString('en-IN');
         }
         
+        function formatDate(date) {
+            if (!(date instanceof Date) || isNaN(date)) return '';
+            return date.toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+        
+        function csvEscape(value) {
+            if (value === null || value === undefined) return '""';
+            const str = value.toString();
+            return `"${str.replace(/"/g, '""')}"`;
+        }
+        
+        function downloadLoanBreakdown() {
+            const exportData = window.loanBreakdownExport;
+            if (!exportData || !exportData.length) {
+                alert('Please calculate the Loan EMI breakdown before downloading.');
+                return;
+            }
+            
+            let csv = 'Year,Start Date,End Date,Monthly EMI,Principal Paid,Interest Paid,Outstanding,Payment Date,Monthly EMI (Month),Principal Paid (Month),Interest Paid (Month),Outstanding (Month)\n';
+            
+            exportData.forEach(summary => {
+                summary.monthly.forEach((monthEntry, index) => {
+                    const row = [
+                        index === 0 ? `Year ${summary.year}` : '',
+                        index === 0 ? summary.startDate : '',
+                        index === 0 ? summary.endDate : '',
+                        index === 0 ? summary.monthlyEmi : '',
+                        index === 0 ? summary.principalPaid : '',
+                        index === 0 ? summary.interestPaid : '',
+                        index === 0 ? summary.outstanding : '',
+                        monthEntry.paymentDate,
+                        monthEntry.monthlyEmi,
+                        monthEntry.principalPaid,
+                        monthEntry.interestPaid,
+                        monthEntry.outstanding
+                    ];
+                    
+                    csv += row.map(csvEscape).join(',') + '\n';
+                });
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const filename = `emi-breakdown-${new Date().toISOString().slice(0,10)}.csv`;
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
         // Auto-calculate on input
         document.addEventListener('DOMContentLoaded', function() {
             // SIP inputs
@@ -1973,12 +2149,33 @@
             });
             
             // Loan EMI inputs
-            ['loan-amount', 'loan-years', 'loan-rate'].forEach(id => {
+            ['loan-amount', 'loan-years', 'loan-rate', 'loan-start-date'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', calculateLoanEMI);
                 }
             });
+
+            const loanBreakdownTable = document.getElementById('loan-breakdown-tbody');
+            if (loanBreakdownTable) {
+                loanBreakdownTable.addEventListener('click', function(event) {
+                    const toggle = event.target.closest('.loan-toggle');
+                    if (!toggle) return;
+
+                    const year = toggle.getAttribute('data-year');
+                    const headerRow = loanBreakdownTable.querySelector(`.monthly-header[data-year="${year}"]`);
+                    const detailRows = loanBreakdownTable.querySelectorAll(`.monthly-detail[data-year="${year}"]`);
+                    if (!headerRow || detailRows.length === 0) return;
+
+                    const isOpen = !headerRow.classList.contains('open');
+                    [headerRow, ...detailRows].forEach(row => {
+                        row.classList.toggle('open', isOpen);
+                        row.style.display = isOpen ? 'table-row' : 'none';
+                    });
+                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    toggle.textContent = isOpen ? '−' : '+';
+                });
+            }
             
             // Annual SIP inputs
             ['annual-sip-amount', 'annual-sip-years', 'annual-sip-return'].forEach(id => {
