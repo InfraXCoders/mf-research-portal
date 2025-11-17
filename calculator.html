@@ -442,6 +442,18 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
         
+        /* Override for loan tenure input in flex container */
+        .form-group #loan-tenure {
+            width: auto !important;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .form-group #loan-tenure-unit {
+            width: auto !important;
+            flex-shrink: 0;
+        }
+        
         .calculate-btn {
             width: 100%;
             padding: 15px;
@@ -971,10 +983,16 @@
                     
                     <div class="form-group">
                         <label>
-                            <span>Loan Tenure (years)</span>
+                            <span>Loan Tenure</span>
                             <span>:</span>
                         </label>
-                        <input type="number" id="loan-years" value="20" min="1" max="30" placeholder="Enter tenure">
+                        <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+                            <input type="number" id="loan-tenure" value="20" min="1" max="30" step="1" placeholder="Enter tenure in years">
+                            <select id="loan-tenure-unit" style="min-width: 120px;">
+                                <option value="years">Years</option>
+                                <option value="months">Months</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -1732,7 +1750,8 @@
         // Calculate Loan EMI
         function calculateLoanEMI() {
             const principal = parseFloat(document.getElementById('loan-amount').value) || 2000000;
-            const years = parseInt(document.getElementById('loan-years').value) || 20;
+            const tenureValue = parseFloat(document.getElementById('loan-tenure').value) || 20;
+            const tenureUnit = document.getElementById('loan-tenure-unit').value || 'years';
             const annualRate = parseFloat(document.getElementById('loan-rate').value) || 8.5;
             const startDateInput = document.getElementById('loan-start-date');
             let startDate = new Date();
@@ -1746,7 +1765,15 @@
                 }
             }
             
-            const months = years * 12;
+            // Convert to months
+            const months = tenureUnit === 'months' ? Math.floor(tenureValue) : Math.floor(tenureValue * 12);
+            const years = months / 12;
+            
+            if (months <= 0) {
+                alert('Please enter a valid loan tenure.');
+                return;
+            }
+            
             const monthlyRate = annualRate / 12 / 100;
             
             // EMI = [P x R x (1+R)^N] / [(1+R)^N-1]
@@ -1761,7 +1788,7 @@
             document.getElementById('loan-total').textContent = 'Rs. ' + formatNumber(totalPayment);
             
             // Generate breakdown
-            const breakdownData = generateLoanBreakdown(principal, emi, annualRate, years, startDate);
+            const breakdownData = generateLoanBreakdown(principal, emi, annualRate, months, startDate);
             
             // Generate pie chart
             generatePieChart('loan-pie-chart', principal, totalInterest, '#3b82f6', '#ef4444');
@@ -1770,8 +1797,8 @@
             generateLineGraph('loan-line-graph', breakdownData, 'Loan Repayment', 'Principal', 'Interest');
         }
         
-        // Generate Loan EMI year-wise breakdown
-        function generateLoanBreakdown(principal, emi, rate, totalYears, startDate) {
+        // Generate Loan EMI breakdown (supports both years and months)
+        function generateLoanBreakdown(principal, emi, rate, totalMonths, startDate) {
             const tbody = document.getElementById('loan-breakdown-tbody');
             const monthlyRate = rate / 12 / 100;
             let outstanding = principal;
@@ -1780,20 +1807,31 @@
             let currentDate = new Date(startDate);
             const exportData = [];
             
-            for (let year = 1; year <= totalYears; year++) {
-                let yearPrincipal = 0;
-                let yearInterest = 0;
+            // Calculate number of periods (years or periods for loans < 12 months)
+            const totalYears = Math.ceil(totalMonths / 12);
+            let monthCount = 0;
+            
+            for (let period = 1; period <= totalYears; period++) {
+                let periodPrincipal = 0;
+                let periodInterest = 0;
                 let monthlyRows = [];
                 let monthlyData = [];
-                let yearStartDate = null;
-                let yearEndDate = null;
+                let periodStartDate = null;
+                let periodEndDate = null;
                 
-                for (let month = 0; month < 12; month++) {
+                // Determine months in this period (12 for full years, remainder for last period)
+                const monthsInPeriod = period === totalYears ? (totalMonths - monthCount) : 12;
+                
+                for (let month = 0; month < monthsInPeriod; month++) {
+                    if (monthCount >= totalMonths || outstanding <= 0) {
+                        break;
+                    }
+                    
                     const interest = outstanding * monthlyRate;
                     const principalPaid = emi - interest;
                     
-                    yearPrincipal += principalPaid;
-                    yearInterest += interest;
+                    periodPrincipal += principalPaid;
+                    periodInterest += interest;
                     outstanding -= principalPaid;
 
                     if (outstanding < 0) {
@@ -1801,13 +1839,13 @@
                     }
                     
                     const paymentDate = new Date(currentDate);
-                    if (!yearStartDate) {
-                        yearStartDate = new Date(paymentDate);
+                    if (!periodStartDate) {
+                        periodStartDate = new Date(paymentDate);
                     }
-                    yearEndDate = new Date(paymentDate);
+                    periodEndDate = new Date(paymentDate);
                     
                     monthlyRows.push(`
-                        <tr class="monthly-detail" data-year="${year}">
+                        <tr class="monthly-detail" data-year="${period}">
                             <td>${formatDate(paymentDate)}</td>
                             <td>${formatNumber(emi)}</td>
                             <td>${formatNumber(principalPaid)}</td>
@@ -1825,6 +1863,7 @@
                     });
                     
                     currentDate.setMonth(currentDate.getMonth() + 1);
+                    monthCount++;
                     
                     if (outstanding <= 0) {
                         break;
@@ -1832,18 +1871,29 @@
                 }
                 
                 chartData.push({
-                    year: year,
+                    year: period,
                     invested: principal - outstanding,
                     value: outstanding
                 });
                 
+                // Determine period label
+                let periodLabel = '';
+                if (totalMonths < 12) {
+                    periodLabel = `Period (${totalMonths} ${totalMonths === 1 ? 'Month' : 'Months'})`;
+                } else if (monthsInPeriod < 12) {
+                    periodLabel = `Year ${period} (${monthsInPeriod} ${monthsInPeriod === 1 ? 'Month' : 'Months'})`;
+                } else {
+                    periodLabel = `Year ${period}`;
+                }
+                
                 exportData.push({
-                    year,
-                    startDate: yearStartDate ? formatDate(yearStartDate) : '',
-                    endDate: yearEndDate ? formatDate(yearEndDate) : '',
+                    year: period,
+                    periodLabel: periodLabel,
+                    startDate: periodStartDate ? formatDate(periodStartDate) : '',
+                    endDate: periodEndDate ? formatDate(periodEndDate) : '',
                     monthlyEmi: formatNumber(emi),
-                    principalPaid: formatNumber(yearPrincipal),
-                    interestPaid: formatNumber(yearInterest),
+                    principalPaid: formatNumber(periodPrincipal),
+                    interestPaid: formatNumber(periodInterest),
                     outstanding: formatNumber(outstanding),
                     monthly: monthlyData
                 });
@@ -1851,10 +1901,10 @@
                 html += `
                     <tr class="year-summary">
                         <td>
-                            <button class="loan-toggle" type="button" data-year="${year}" aria-expanded="false" aria-controls="monthly-row-${year}">+</button>
+                            <button class="loan-toggle" type="button" data-year="${period}" aria-expanded="false" aria-controls="monthly-row-${period}">+</button>
                             <div>
-                                <strong>Year ${year}</strong>
-                                <div class="year-range">${yearStartDate ? formatDate(yearStartDate) : ''} - ${yearEndDate ? formatDate(yearEndDate) : ''}</div>
+                                <strong>${periodLabel}</strong>
+                                <div class="year-range">${periodStartDate ? formatDate(periodStartDate) : ''} - ${periodEndDate ? formatDate(periodEndDate) : ''}</div>
                             </div>
                         </td>
                         <td>
@@ -1862,11 +1912,11 @@
                             <span class="breakdown-label">Monthly EMI</span>
                         </td>
                         <td>
-                            <div class="breakdown-main-value">${formatNumber(yearPrincipal)}</div>
+                            <div class="breakdown-main-value">${formatNumber(periodPrincipal)}</div>
                             <span class="breakdown-label">Principal Paid</span>
                         </td>
                         <td>
-                            <div class="breakdown-main-value">${formatNumber(yearInterest)}</div>
+                            <div class="breakdown-main-value">${formatNumber(periodInterest)}</div>
                             <span class="breakdown-label">Interest Paid</span>
                         </td>
                         <td>
@@ -1874,7 +1924,7 @@
                             <span class="breakdown-label">Outstanding</span>
                         </td>
                     </tr>
-                    <tr class="monthly-row monthly-header" data-year="${year}">
+                    <tr class="monthly-row monthly-header" data-year="${period}">
                         <th>Payment Date</th>
                         <th>Monthly EMI</th>
                         <th>Principal Paid</th>
@@ -1884,7 +1934,7 @@
                     ${monthlyRows.join('')}
                 `;
                 
-                if (outstanding <= 0) {
+                if (outstanding <= 0 || monthCount >= totalMonths) {
                     break;
                 }
             }
@@ -2099,7 +2149,7 @@
             exportData.forEach(summary => {
                 summary.monthly.forEach((monthEntry, index) => {
                     const row = [
-                        index === 0 ? `Year ${summary.year}` : '',
+                        index === 0 ? (summary.periodLabel || `Year ${summary.year}`) : '',
                         index === 0 ? summary.startDate : '',
                         index === 0 ? summary.endDate : '',
                         index === 0 ? summary.monthlyEmi : '',
@@ -2164,12 +2214,32 @@
             });
             
             // Loan EMI inputs
-            ['loan-amount', 'loan-years', 'loan-rate', 'loan-start-date'].forEach(id => {
+            ['loan-amount', 'loan-tenure', 'loan-rate', 'loan-start-date'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', calculateLoanEMI);
                 }
             });
+            
+            // Loan tenure unit change handler
+            const loanTenureUnit = document.getElementById('loan-tenure-unit');
+            const loanTenureInput = document.getElementById('loan-tenure');
+            if (loanTenureUnit && loanTenureInput) {
+                loanTenureUnit.addEventListener('change', function() {
+                    // Update max value based on unit
+                    if (this.value === 'months') {
+                        loanTenureInput.max = 360; // 30 years in months
+                        loanTenureInput.placeholder = 'Enter tenure in months';
+                    } else {
+                        loanTenureInput.max = 30;
+                        loanTenureInput.placeholder = 'Enter tenure in years';
+                    }
+                    // Recalculate if there's a value
+                    if (loanTenureInput.value) {
+                        calculateLoanEMI();
+                    }
+                });
+            }
 
             const loanBreakdownTable = document.getElementById('loan-breakdown-tbody');
             if (loanBreakdownTable) {
