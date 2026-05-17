@@ -74,9 +74,8 @@ function initStatCounters() {
     const counters = document.querySelectorAll('.stat-number[data-count]');
 
     const format = (n, target) => {
-        if (target >= 100000) return (n / 100000).toFixed(1).replace('.0','') + ' L+';
-        if (target >= 1000)   return (n / 1000).toFixed(0) + '+';
-        return n + '+';
+        if (target >= 10000) return Math.floor(n).toLocaleString('en-IN');
+        return Math.floor(n).toString();
     };
 
     const animateCounter = el => {
